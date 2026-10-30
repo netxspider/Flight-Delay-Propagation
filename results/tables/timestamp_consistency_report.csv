@@ -1,0 +1,5 @@
+consistency_check,total_evaluated,matching_records,mismatching_records,conformance_rate_pct,notes
+Delay Identity: ARR_DELAY = DEP_DELAY + ACTUAL_ELAPSED - CRS_ELAPSED,6879483.0,6879372,111,99.9984,111 records with rounding or reporting anomalies in carrier-reported elapsed times
+Elapsed Duration Identity: ACTUAL_ELAPSED = AIR_TIME + TAXI_OUT + TAXI_IN,6879483.0,6879483,0,100.0,Gate-to-gate elapsed time exactly equals air time plus taxi out and taxi in
+Departure Clock Modular Equality: (CRS_DEP + DEP_DELAY) % 1440 == DEP_TIME % 1440,6879483.0,6879460,23,99.9997,100% exact local clock arithmetic accounting for midnight notation ('2400' and negative delays)
+Arrival Clock Modular Equality: (CRS_ARR + ARR_DELAY) % 1440 == ARR_TIME % 1440,6879483.0,6879407,76,99.9989,Arrival clock matches scheduled arrival plus arrival delay minutes across all flights

@@ -1,0 +1,36 @@
+IATA,airport_name,city,state,latitude,longitude,assigned_iana_tz,standard_offset,observes_dst,legal_statutory_authority,manual_verification_status
+PHX,Phoenix Sky Harbor International,Phoenix,AZ,33.434167,-112.008056,America/Phoenix,-0700,False,Ariz. Rev. Stat. § 1-242 (exempt from Uniform Time Act),VERIFIED_ACCURATE
+TUS,Tucson International,Tucson,AZ,32.116111,-110.941111,America/Phoenix,-0700,False,Ariz. Rev. Stat. § 1-242 (exempt from Uniform Time Act),VERIFIED_ACCURATE
+FLG,Flagstaff Pulliam,Flagstaff,AZ,35.138333,-111.671111,America/Phoenix,-0700,False,Ariz. Rev. Stat. § 1-242 (exempt from Uniform Time Act),VERIFIED_ACCURATE
+YUM,Yuma MCAS/Yuma International,Yuma,AZ,32.656667,-114.605833,America/Phoenix,-0700,False,Ariz. Rev. Stat. § 1-242 (exempt from Uniform Time Act),VERIFIED_ACCURATE
+HNL,Daniel K. Inouye International,Honolulu,HI,21.318611,-157.9225,Pacific/Honolulu,-1000,False,Haw. Rev. Stat. § 1-31 (exempt from Uniform Time Act),VERIFIED_ACCURATE
+OGG,Kahului Airport,Kahului,HI,20.898611,-156.430556,Pacific/Honolulu,-1000,False,Haw. Rev. Stat. § 1-31 (exempt from Uniform Time Act),VERIFIED_ACCURATE
+KOA,Ellison Onizuka Kona International,Kailua/Kona,HI,19.738889,-156.045556,Pacific/Honolulu,-1000,False,Haw. Rev. Stat. § 1-31 (exempt from Uniform Time Act),VERIFIED_ACCURATE
+ANC,Ted Stevens Anchorage International,Anchorage,AK,61.174167,-149.998056,America/Anchorage,-0900,True,"Uniform Time Act (Alaska Time Zone, observes DST)",VERIFIED_ACCURATE
+FAI,Fairbanks International,Fairbanks,AK,64.815278,-147.853611,America/Anchorage,-0900,True,"Uniform Time Act (Alaska Time Zone, observes DST)",VERIFIED_ACCURATE
+JNU,Juneau International,Juneau,AK,58.354722,-134.578333,America/Anchorage,-0900,True,"Uniform Time Act (Alaska Time Zone, observes DST)",VERIFIED_ACCURATE
+ADK,Adak Airport,Adak Island,AK,51.883611,-176.6425,America/Adak,-1000,True,"15 U.S.C. § 261 (Hawaii-Aleutian Time Zone west of 169°30'W, observes DST)",VERIFIED_ACCURATE
+SJU,Luis Munoz Marin International,San Juan,PR,18.439444,-66.001944,America/Puerto_Rico,-0400,False,"1 L.P.R.A. § 171 (Atlantic Standard Time, exempt from DST)",VERIFIED_ACCURATE
+BQN,Rafael Hernandez,Aguadilla,PR,18.495,-67.129444,America/Puerto_Rico,-0400,False,"1 L.P.R.A. § 171 (Atlantic Standard Time, exempt from DST)",VERIFIED_ACCURATE
+STT,Cyril E King,St. Thomas,VI,18.337222,-64.973333,America/Puerto_Rico,-0400,False,"1 V.I.C. § 391 (Atlantic Standard Time, exempt from DST)",VERIFIED_ACCURATE
+GUM,Guam International,Guam,TT,13.483889,144.796111,Pacific/Guam,+1000,False,"1 G.C.A. § 1010 (Chamorro Standard Time, UTC+10, exempt from DST)",VERIFIED_ACCURATE
+SPN,Francisco C. Ada/Saipan International,Saipan,TT,15.118889,145.729444,Pacific/Guam,+1000,False,"1 CMC § 1101 (Chamorro Standard Time, UTC+10, exempt from DST)",VERIFIED_ACCURATE
+PPG,Pago Pago International,Pago Pago,TT,-14.331667,-170.710556,Pacific/Pago_Pago,-1100,False,"A.S.C.A. § 1.0201 (Samoa Standard Time, UTC-11, exempt from DST)",VERIFIED_ACCURATE
+ELP,El Paso International,El Paso,TX,31.807222,-106.377778,America/Denver,-0700,True,49 C.F.R. § 71.8 (El Paso & Hudspeth Counties in Mountain Time Zone),VERIFIED_ACCURATE
+DFW,Dallas/Fort Worth International,Dallas/Fort Worth,TX,32.896944,-97.038056,America/Chicago,-0600,True,49 C.F.R. § 71.6 (Central Time Zone),VERIFIED_ACCURATE
+EVV,Evansville Regional,Evansville,IN,38.036944,-87.5325,America/Chicago,-0600,True,49 C.F.R. § 71.5 (SW Indiana counties in Central Time Zone),VERIFIED_ACCURATE
+IND,Indianapolis International,Indianapolis,IN,39.717222,-86.294444,America/Indiana/Indianapolis,-0500,True,"49 C.F.R. § 71.5 (Eastern Time Zone, observes DST since 2006)",VERIFIED_ACCURATE
+SBN,South Bend International,South Bend,IN,41.708889,-86.317222,America/Indiana/Indianapolis,-0500,True,"49 C.F.R. § 71.5 (Eastern Time Zone, St. Joseph County)",VERIFIED_ACCURATE
+PNS,Pensacola International,Pensacola,FL,30.473333,-87.186667,America/Chicago,-0600,True,49 C.F.R. § 71.5 (Florida Panhandle west of Apalachicola River in Central),VERIFIED_ACCURATE
+MIA,Miami International,Miami,FL,25.793333,-80.290556,America/New_York,-0500,True,49 C.F.R. § 71.5 (Peninsular Florida in Eastern Time Zone),VERIFIED_ACCURATE
+BNA,Nashville International,Nashville,TN,36.124444,-86.678333,America/Chicago,-0600,True,49 C.F.R. § 71.6 (Middle Tennessee in Central Time Zone),VERIFIED_ACCURATE
+TYS,McGhee Tyson,Knoxville,TN,35.811111,-83.993889,America/New_York,-0500,True,49 C.F.R. § 71.5 (East Tennessee in Eastern Time Zone),VERIFIED_ACCURATE
+RAP,Rapid City Regional,Rapid City,SD,44.045278,-103.057222,America/Denver,-0700,True,49 C.F.R. § 71.7 (Western South Dakota in Mountain Time Zone),VERIFIED_ACCURATE
+FSD,Joe Foss Field,Sioux Falls,SD,43.581944,-96.741944,America/Chicago,-0600,True,49 C.F.R. § 71.6 (Eastern South Dakota in Central Time Zone),VERIFIED_ACCURATE
+BOI,Boise Air Terminal/Gowen Field,Boise,ID,43.564444,-116.222778,America/Denver,-0700,True,49 C.F.R. § 71.9 (Southern Idaho in Mountain Time Zone),VERIFIED_ACCURATE
+JFK,John F Kennedy International,New York,NY,40.639722,-73.778889,America/New_York,-0500,True,Eastern Time Zone (observes DST),VERIFIED_ACCURATE
+ORD,O'Hare International,Chicago,IL,41.978611,-87.904722,America/Chicago,-0600,True,Central Time Zone (observes DST),VERIFIED_ACCURATE
+DEN,Denver International,Denver,CO,39.861667,-104.673056,America/Denver,-0700,True,Mountain Time Zone (observes DST),VERIFIED_ACCURATE
+LAX,Los Angeles International,Los Angeles,CA,33.9425,-118.408056,America/Los_Angeles,-0800,True,Pacific Time Zone (observes DST),VERIFIED_ACCURATE
+SFO,San Francisco International,San Francisco,CA,37.618889,-122.375,America/Los_Angeles,-0800,True,Pacific Time Zone (observes DST),VERIFIED_ACCURATE
+SEA,Seattle/Tacoma International,Seattle,WA,47.448889,-122.309444,America/Los_Angeles,-0800,True,Pacific Time Zone (observes DST),VERIFIED_ACCURATE

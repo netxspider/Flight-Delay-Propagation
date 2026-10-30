@@ -125,3 +125,4 @@ if __name__ == "__main__":
     df = build_airport_reference()
     print("\nSample enriched airport metadata:")
     print(df[['AIRPORT_ID', 'AIRPORT', 'DISPLAY_AIRPORT_NAME', 'AIRPORT_STATE_CODE', 'LATITUDE', 'LONGITUDE', 'IANA_TIMEZONE', 'OBSERVES_DST']].head(10).to_string())
+
