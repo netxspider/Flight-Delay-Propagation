@@ -1,0 +1,192 @@
+{
+  "analysis_timestamp": "2026-10-30T15:25:34Z",
+  "dataset": "data/processed/flight_rotation_pairs.parquet",
+  "sample_size": 6768487,
+  "target_analysis": {
+    "total_pairs": 6768487.0,
+    "count_del15": 1490586.0,
+    "count_ontime": 5277901.0,
+    "pct_del15": 22.0224,
+    "mean_arr_delay": 7.7757,
+    "median_arr_delay": -6.0,
+    "std_arr_delay": 57.2957,
+    "min_arr_delay": -128.0,
+    "q25_arr_delay": -15.0,
+    "q75_arr_delay": 11.0,
+    "p90_arr_delay": 47.0,
+    "p95_arr_delay": 87.0,
+    "p99_arr_delay": 214.0,
+    "max_arr_delay": 4336.0,
+    "count_early": 4125664.0,
+    "count_exact_zero": 117010.0,
+    "count_minor_delay": 1035227.0,
+    "count_delayed_15_plus": 1490586.0,
+    "iqr_arr_delay": 26.0,
+    "imbalance_ratio_ontime_to_delayed": 3.54
+  },
+  "delay_propagation": {
+    "p_next_del_given_prev_del": 50.19,
+    "p_next_del_given_prev_ontime": 13.97,
+    "relative_risk": 3.59,
+    "odds_ratio": 6.2
+  },
+  "turnaround_buffer": {
+    "deficit_pairs": 382937,
+    "deficit_delay_rate": 99.5,
+    "non_deficit_delay_rate": 17.38,
+    "deficit_mean_delay": 121.86,
+    "non_deficit_mean_delay": 0.93
+  },
+  "aircraft_patterns": {
+    "active_aircraft_count": 6124,
+    "gini_coefficient": 0.289,
+    "top_20_pct_delay_share": 34.67,
+    "consecutive_delay_progression": [
+      {
+        "consecutive_delays_prior": 0,
+        "pair_count": 5768036,
+        "pct_of_pairs": 85.22,
+        "next_del15_rate": 14.26,
+        "next_mean_delay": -0.13,
+        "next_median_delay": -8.0,
+        "next_p90_delay": 24.0
+      },
+      {
+        "consecutive_delays_prior": 1,
+        "pair_count": 612913,
+        "pct_of_pairs": 9.06,
+        "next_del15_rate": 62.54,
+        "next_mean_delay": 47.44,
+        "next_median_delay": 25.0,
+        "next_p90_delay": 123.0
+      },
+      {
+        "consecutive_delays_prior": 2,
+        "pair_count": 244011,
+        "pct_of_pairs": 3.61,
+        "next_del15_rate": 71.43,
+        "next_mean_delay": 58.61,
+        "next_median_delay": 36.0,
+        "next_p90_delay": 141.0
+      },
+      {
+        "consecutive_delays_prior": 3,
+        "pair_count": 143527,
+        "pct_of_pairs": 2.12,
+        "next_del15_rate": 76.94,
+        "next_mean_delay": 69.63,
+        "next_median_delay": 44.0,
+        "next_p90_delay": 156.0
+      }
+    ]
+  },
+  "feature_correlations": {
+    "top_spearman_predictors_for_delay": [
+      {
+        "feature": "NEXT_ARR_DELAY",
+        "pearson_with_NEXT_ARR_DELAY": 1.0,
+        "spearman_with_NEXT_ARR_DELAY": 1.0,
+        "pearson_with_NEXT_ARR_DEL15": 0.5871,
+        "spearman_with_NEXT_ARR_DEL15": 0.7192
+      },
+      {
+        "feature": "NEXT_ARR_DEL15",
+        "pearson_with_NEXT_ARR_DELAY": 0.5871,
+        "spearman_with_NEXT_ARR_DELAY": 0.7192,
+        "pearson_with_NEXT_ARR_DEL15": 1.0,
+        "spearman_with_NEXT_ARR_DEL15": 1.0
+      },
+      {
+        "feature": "PREV_AIRCRAFT_CONSECUTIVE_DEL15",
+        "pearson_with_NEXT_ARR_DELAY": 0.3195,
+        "spearman_with_NEXT_ARR_DELAY": 0.4085,
+        "pearson_with_NEXT_ARR_DEL15": 0.4221,
+        "spearman_with_NEXT_ARR_DEL15": 0.4511
+      },
+      {
+        "feature": "IS_TURNAROUND_DEFICIT",
+        "pearson_with_NEXT_ARR_DELAY": 0.4909,
+        "spearman_with_NEXT_ARR_DELAY": 0.3779,
+        "pearson_with_NEXT_ARR_DEL15": 0.4595,
+        "spearman_with_NEXT_ARR_DEL15": 0.4595
+      },
+      {
+        "feature": "PREV_ARR_DEL15",
+        "pearson_with_NEXT_ARR_DELAY": 0.2735,
+        "spearman_with_NEXT_ARR_DELAY": 0.3252,
+        "pearson_with_NEXT_ARR_DEL15": 0.3622,
+        "spearman_with_NEXT_ARR_DEL15": 0.3622
+      },
+      {
+        "feature": "PREV_ARR_DELAY",
+        "pearson_with_NEXT_ARR_DELAY": 0.3244,
+        "spearman_with_NEXT_ARR_DELAY": 0.3228,
+        "pearson_with_NEXT_ARR_DEL15": 0.2662,
+        "spearman_with_NEXT_ARR_DEL15": 0.3134
+      },
+      {
+        "feature": "PREV_AIRCRAFT_CUMULATIVE_ARR_DELAY_TODAY",
+        "pearson_with_NEXT_ARR_DELAY": 0.3815,
+        "spearman_with_NEXT_ARR_DELAY": 0.2895,
+        "pearson_with_NEXT_ARR_DEL15": 0.3441,
+        "spearman_with_NEXT_ARR_DEL15": 0.2969
+      },
+      {
+        "feature": "PREV_DEP_DELAY",
+        "pearson_with_NEXT_ARR_DELAY": 0.2969,
+        "spearman_with_NEXT_ARR_DELAY": 0.2827,
+        "pearson_with_NEXT_ARR_DEL15": 0.229,
+        "spearman_with_NEXT_ARR_DEL15": 0.2697
+      },
+      {
+        "feature": "NEXT_CRS_DEP_HOUR",
+        "pearson_with_NEXT_ARR_DELAY": 0.1175,
+        "spearman_with_NEXT_ARR_DELAY": 0.1778,
+        "pearson_with_NEXT_ARR_DEL15": 0.1752,
+        "spearman_with_NEXT_ARR_DEL15": 0.1786
+      },
+      {
+        "feature": "NEXT_MONTH",
+        "pearson_with_NEXT_ARR_DELAY": 0.0149,
+        "spearman_with_NEXT_ARR_DELAY": 0.0306,
+        "pearson_with_NEXT_ARR_DEL15": 0.0184,
+        "spearman_with_NEXT_ARR_DEL15": 0.0182
+      },
+      {
+        "feature": "NEXT_DAY_OF_WEEK",
+        "pearson_with_NEXT_ARR_DELAY": 0.0237,
+        "spearman_with_NEXT_ARR_DELAY": 0.0302,
+        "pearson_with_NEXT_ARR_DEL15": 0.0294,
+        "spearman_with_NEXT_ARR_DEL15": 0.0294
+      },
+      {
+        "feature": "NEXT_DISTANCE",
+        "pearson_with_NEXT_ARR_DELAY": -0.0169,
+        "spearman_with_NEXT_ARR_DELAY": -0.0199,
+        "pearson_with_NEXT_ARR_DEL15": 0.0031,
+        "spearman_with_NEXT_ARR_DEL15": 0.0134
+      },
+      {
+        "feature": "NEXT_CRS_ELAPSED_TIME",
+        "pearson_with_NEXT_ARR_DELAY": -0.0159,
+        "spearman_with_NEXT_ARR_DELAY": -0.0349,
+        "pearson_with_NEXT_ARR_DEL15": 0.007,
+        "spearman_with_NEXT_ARR_DEL15": 0.0161
+      },
+      {
+        "feature": "SCHEDULED_TURNAROUND_BUFFER_MINUTES",
+        "pearson_with_NEXT_ARR_DELAY": -0.0199,
+        "spearman_with_NEXT_ARR_DELAY": -0.1563,
+        "pearson_with_NEXT_ARR_DEL15": -0.0192,
+        "spearman_with_NEXT_ARR_DEL15": -0.1362
+      },
+      {
+        "feature": "ESTIMATED_REMAINING_TURNAROUND_MINUTES",
+        "pearson_with_NEXT_ARR_DELAY": -0.0377,
+        "spearman_with_NEXT_ARR_DELAY": -0.3387,
+        "pearson_with_NEXT_ARR_DEL15": -0.0338,
+        "spearman_with_NEXT_ARR_DEL15": -0.3261
+      }
+    ]
+  }
+}

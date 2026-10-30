@@ -1,0 +1,3 @@
+prior_state,next_ontime_count,next_delayed_count,subsequent_delay_rate_pct
+On-Time (PREV_DEL15 = 0),4528318,735329,13.97
+Delayed (PREV_DEL15 = 1),749583,755257,50.19

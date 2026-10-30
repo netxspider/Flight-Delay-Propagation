@@ -1,0 +1,2 @@
+total_pairs,count_del15,count_ontime,pct_del15,mean_arr_delay,median_arr_delay,std_arr_delay,min_arr_delay,q25_arr_delay,q75_arr_delay,p90_arr_delay,p95_arr_delay,p99_arr_delay,max_arr_delay,count_early,count_exact_zero,count_minor_delay,count_delayed_15_plus,iqr_arr_delay,imbalance_ratio_ontime_to_delayed
+6768487.0,1490586.0,5277901.0,22.0224,7.7757,-6.0,57.2957,-128.0,-15.0,11.0,47.0,87.0,214.0,4336.0,4125664.0,117010.0,1035227.0,1490586.0,26.0,3.54

@@ -1,0 +1,8 @@
+buffer_bin,pair_count,pct_of_pairs,next_del15_rate,next_mean_delay,next_median_delay,prop_rate_if_prev_delayed,del_rate_if_prev_ontime
+1. Highly Constrained (< 45 min),1215531,17.96,32.18,21.14,0.0,84.01,20.09
+2. Short Turn (45-59 min),1611459,23.81,23.46,8.17,-5.0,74.64,11.75
+3. Standard Turn (60-74 min),1204319,17.79,21.87,6.04,-6.0,64.48,12.62
+4. Generous Turn (75-89 min),444824,6.57,19.79,4.06,-6.0,51.5,12.47
+5. Extended Turn (90-119 min),312241,4.61,19.08,3.62,-7.0,42.84,12.39
+6. Layover (120-179 min),196609,2.9,19.99,4.72,-7.0,37.76,13.0
+7. Long / Overnight (>= 180 min),1783504,26.35,15.2,1.48,-9.0,19.24,13.38

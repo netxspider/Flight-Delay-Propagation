@@ -1,0 +1,5 @@
+feature_1,feature_2,pearson_r,spearman_rho,risk,action
+PREV_ARR_DELAY,PREV_DEP_DELAY,0.967,0.706,High Collinearity,Retain PREV_ARR_DELAY as primary gate arrival marker
+NEXT_DISTANCE,NEXT_CRS_ELAPSED_TIME,0.983,0.981,Extreme Collinearity,Redundant physical block time proxy; retain either distance or block time
+PREV_AIRCRAFT_CONSECUTIVE_DEL15,PREV_AIRCRAFT_CUMULATIVE_ARR_DELAY_TODAY,0.683,0.543,Moderate Complementarity,Retain both (consecutive captures streak; cumulative captures severity)
+ESTIMATED_REMAINING_TURNAROUND_MINUTES,IS_TURNAROUND_DEFICIT,-0.07,-0.403,Non-linear Derivation,Deficit represents critical zero-crossing step change; retain both
