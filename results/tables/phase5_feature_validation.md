@@ -177,3 +177,66 @@ To maintain strict alignment with the approved course syllabus, the model famili
 1. **Preprocessing Fitting Protocol:** Scalers (e.g. `StandardScaler` for neural nets and SVM) and categorical encoders (e.g. `TargetEncoder` or `OneHotEncoder` for carrier and airport) must be **fitted strictly on `modeling_train.parquet`** and subsequently applied to validation and test datasets.
 2. **Ablation Experimentation:** Train baseline and non-linear models across Group A, Group B, and Group C to quantify the incremental value of aircraft operational history.
 3. **Evaluation Protocol:** Evaluate validation set performance using PR-AUC, ROC-AUC, Brier score, MAE, and MedAE before final unblinded testing on `modeling_test.parquet`.
+
+---
+
+## 8. Methodological Audit Verification (Checks 1 & 2)
+
+### Check 1: Duplicate DEP_UTC Timestamps & Deterministic Ordering Analysis
+
+An exhaustive audit of timestamp uniqueness across the 6,898,741 flight events in `aircraft_timeline.parquet` and the 6,768,487 modeling pairs in `flight_rotation_pairs.parquet` was performed:
+
+1. **Duplicate Groups Identified:**
+   - Evaluated combination: `(TAIL_NUM, CAST(FL_DATE AS DATE), DEP_UTC)`.
+   - Number of duplicate groups in entire 2025 timeline: **Exactly 1 duplicate group**.
+   - Total records belonging to this group: **2 records**.
+   - Maximum records sharing one timestamp: **2 records**.
+   - Exact records: Tail `N486WN` on `2025-12-31` at `16:43:00 UTC`:
+     - Leg 1: Flight WN 739 (PHX $\to$ LAS, `CRS_DEP_UTC = 16:45`, `IS_DIVERTED = 0`, `ARR_DELAY = -17.0`, `ARR_DEL15 = 0`).
+     - Leg 2: Flight WN 3159 (LAS $\to$ EUG, `CRS_DEP_UTC = 16:50`, `IS_DIVERTED = 1`, `ARR_DELAY = NULL`, `ARR_DEL15 = NULL`).
+2. **Modeling Population Impact:**
+   - In `flight_rotation_pairs.parquet`, duplicate groups for `(TAIL_NUM, NEXT_FL_DATE, NEXT_DEP_UTC)`: **0 groups (0 records)**.
+   - Leg 2 was a diverted operation marker (`IS_DIVERTED = 1`), which acts as an operational barrier; rotation pairs are never formed across diversions.
+3. **Deterministic Ordering Evaluation:**
+   - Baseline query ordering: `ORDER BY DEP_UTC`.
+   - Deterministic stable ordering: `ORDER BY DEP_UTC, CRS_DEP_UTC, OP_CARRIER_FL_NUM, ORIGIN, DEST`.
+   - The query in `src/features/feature_engineering.py` has been explicitly hardened with this deterministic ordering.
+4. **Row-by-Row Feature Comparison (6,898,741 Timeline Events & 6,768,487 Modeling Pairs):**
+   - `PREV_AIRCRAFT_DELAYED_FLIGHTS_TODAY`: **0 changed rows** (Max absolute difference = **0**).
+   - `PREV_AIRCRAFT_CONSECUTIVE_DEL15`: **0 changed rows** (Max absolute difference = **0**).
+   - `PREV_AIRCRAFT_CUMULATIVE_ARR_DELAY_TODAY`: **0 changed rows** (Max absolute difference = **0.0**).
+   - `PREV_AIRCRAFT_DELAY_RATE_TODAY`: **0 changed rows** (Max absolute difference = **0.0**).
+5. **Assessment:** **PASS**. Ties in `DEP_UTC` do not alter a single value across the entire modeling population.
+
+---
+
+### Check 2: Complete Consecutive-Delay Implementation Verification
+
+1. **Source Implementation:**
+   In [`src/rotation/reconstruct_rotations.py`](file:///Users/arnavraj/Downloads/flight-delay-propagation/src/rotation/reconstruct_rotations.py#L181-L183) and [#L247-L252](file:///Users/arnavraj/Downloads/flight-delay-propagation/src/rotation/reconstruct_rotations.py#L247-L252):
+   ```sql
+   -- Window lag lookback in timeline_windowed:
+   LAG(ARR_DEL15, 1) OVER (PARTITION BY TAIL_NUM, CAST(FL_DATE AS DATE) ORDER BY DEP_UTC) AS ROLLING_PREV_1,
+   LAG(ARR_DEL15, 2) OVER (PARTITION BY TAIL_NUM, CAST(FL_DATE AS DATE) ORDER BY DEP_UTC) AS ROLLING_PREV_2,
+   LAG(ARR_DEL15, 3) OVER (PARTITION BY TAIL_NUM, CAST(FL_DATE AS DATE) ORDER BY DEP_UTC) AS ROLLING_PREV_3,
+
+   -- Evaluated feature in valid_pairs:
+   CASE 
+       WHEN ROLLING_PREV_1 = 1 AND ROLLING_PREV_2 = 1 AND ROLLING_PREV_3 = 1 THEN 3
+       WHEN ROLLING_PREV_1 = 1 AND ROLLING_PREV_2 = 1 THEN 2
+       WHEN ROLLING_PREV_1 = 1 THEN 1
+       ELSE 0
+   END AS PREV_AIRCRAFT_CONSECUTIVE_DEL15
+   ```
+2. **Demonstrated Operational Properties:**
+   - **Prior Operations Only:** `LAG(..., k)` with $k \in \{1, 2, 3\}$ strictly accesses completed legs prior to the current row.
+   - **Target Flight Excluded:** The target flight is at offset 0 (`CURRENT ROW`) and is never referenced by `LAG`.
+   - **Standard 15-Minute Definition:** Uses BTS `ARR_DEL15` ($\ge 15$ min arrival delay indicator).
+   - **Daily Partition Reset:** `PARTITION BY TAIL_NUM, CAST(FL_DATE AS DATE)` guarantees that on the first flight of any calendar day, `ROLLING_PREV_1 = NULL != 1`, correctly evaluating to 0.
+   - **Invalid & Diverted Operations:** Diverted flights have `ARR_DEL15 = NULL`, so `NULL = 1` evaluates to `FALSE`, safely breaking any streak.
+   - **Cap of 3:** Commercial aircraft fly 4–6 legs daily; capping the streak at 3 prevents extreme tail-weighting while preserving ordinal cascade severity.
+3. **Traceable Aircraft Examples:**
+   - **Example 1 (Same-Day Consecutive Delay Streak):** Tail `N933EV` on `2025-02-21`. Across 6 legs, prior delays compound: streak evaluates as **0 $\to$ 1 $\to$ 2 $\to$ 3 $\to$ 3 $\to$ 3**.
+   - **Example 2 (Midnight / Date-Boundary Reset):** Tail `N933EV` transitioning from `2025-02-21` (ending with streak = 3) to `2025-02-22` (first leg cleanly resets to **0**).
+   - **Example 3 (On-Time Leg Resetting Streak):** Tail `N106HQ` on `2025-12-23`. Legs 0–2 accumulate consecutive delays (**0 $\to$ 1 $\to$ 2**). Leg 2 arrives early ($-13.0$ min, `ARR_DEL15 = 0`). On Leg 3, the prior completed flight was on time, so the streak immediately resets to **0**.
+4. **Assessment:** **PASS**. Implementation is fully verified, leak-free, bounded, and deterministic.
