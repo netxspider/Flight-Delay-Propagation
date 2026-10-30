@@ -1,0 +1,6 @@
+validation_check,passed,failed_count,details
+Physical Feasibility: Actual Ground Time >= 0 min,True,0,100% of pairs satisfy ARR_UTC_prev <= DEP_UTC_next (Zero negative ground times)
+Spatial Continuity: DEST_prev == ORIGIN_next,True,0,100% of pairs have identical turnaround airport
+Airframe Integrity: TAIL_NUM is non-null and identical,True,0,100% of pairs are mapped to the exact same physical aircraft
+Delayed Rotation Preservation: NEXT_CRS_DEP < PREV_ARR,True,0,"382,937 pairs (5.66%) preserved where incoming delay ate scheduled pushback"
+Turnaround Deficit Impact: PREV_ARR_DELAY > SCHEDULED_BUFFER,True,0,Delay rate under deficit: 99.5% vs no deficit: 17.38%

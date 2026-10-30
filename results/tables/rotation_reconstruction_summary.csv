@@ -1,0 +1,10 @@
+metric_name,value,description
+Total Operational Flights in Timeline,6898741,"Completed flights (6,879,483) + Diverted operations (19,258)"
+Valid Consecutive Rotation Pairs Reconstructed,6768487,"Satisfy airframe identity, station continuity, temporal ordering, and no diversion"
+Pairs Blocked by Intervening Diversions,19109,Preceding completed operations blocked from pairing due to diversion sequence break
+Pairs with No Predecessor,6113,First recorded operation for each aircraft in 2025
+Pairs Rejected due to Station Mismatch,85737,Station discontinuity (unrecorded ferry flights or network transfers)
+Pairs Rejected due to Negative Ground Time,37,Physically infeasible operations (actual departure before actual arrival)
+Delayed Rotations Preserved (NEXT_CRS_DEP < PREV_ARR),382937,Operations where incoming delay exceeded scheduled pushback but physical ground time >= 0
+Intra-Day Turnarounds (<= 6 Hours),5268554,Direct commercial turnaround operations
+Overnight Operating Cycles (<= 18 Hours),6602551,Intra-day turns plus standard overnight outstation stays

@@ -1,0 +1,20 @@
+feature_name,pipeline_role,availability_at_prediction_time,leakage_audit_status
+PREV_ARR_DELAY,Predictor,Available immediately at gate arrival,PASSED: Verified leak-free
+PREV_DEP_DELAY,Predictor,Available from prior departure leg,PASSED: Verified leak-free
+PREV_ARR_DEL15,Predictor,Available immediately at gate arrival,PASSED: Verified leak-free
+SCHEDULED_TURNAROUND_BUFFER_MINUTES,Predictor,Established by published airline schedule,PASSED: Verified leak-free
+ESTIMATED_REMAINING_TURNAROUND_MINUTES,Predictor,Scheduled buffer minus incoming delay,PASSED: Verified leak-free
+IS_TURNAROUND_DEFICIT,Predictor,Binary indicator known at gate arrival,PASSED: Verified leak-free
+NEXT_CRS_DEP_HOUR,Predictor,Published schedule feature of target flight,PASSED: Verified leak-free
+NEXT_DAY_OF_WEEK,Predictor,Calendar schedule feature,PASSED: Verified leak-free
+NEXT_MONTH,Predictor,Calendar schedule feature,PASSED: Verified leak-free
+NEXT_CARRIER,Predictor,Operating airline of target flight,PASSED: Verified leak-free
+NEXT_DISTANCE,Predictor,Scheduled route distance,PASSED: Verified leak-free
+NEXT_CRS_ELAPSED_TIME,Predictor,Scheduled block time,PASSED: Verified leak-free
+PREV_AIRCRAFT_CONSECUTIVE_DEL15,Predictor,Prior rolling history on same day,PASSED: Verified leak-free
+PREV_AIRCRAFT_CUMULATIVE_ARR_DELAY_TODAY,Predictor,Prior cumulative delay on same day,PASSED: Verified leak-free
+ACTUAL_GROUND_TIME_MINUTES,Retrospective Analysis ONLY,Requires future actual departure,PASSED: BANNED from predictive feature vector
+NEXT_DEP_DELAY,Retrospective Analysis ONLY,Target actual departure delay occurs in future,PASSED: BANNED from predictive feature vector
+NEXT_DEP_UTC,Retrospective Analysis ONLY,Target actual departure occurs in future,PASSED: BANNED from predictive feature vector
+NEXT_ARR_DELAY,Target (Regression),Ground truth prediction target,PASSED: Isolated as regression target
+NEXT_ARR_DEL15,Target (Classification),Ground truth prediction target,PASSED: Isolated as classification target

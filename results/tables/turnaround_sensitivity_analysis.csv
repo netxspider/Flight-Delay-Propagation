@@ -1,0 +1,5 @@
+ground_time_horizon,pair_count,pct_of_valid_pairs,next_flight_arr_del15_pct,next_flight_mean_arr_delay,operational_characterization
+Short Intra-Day Turnaround (<= 6 Hours),5268554,77.84,23.82,8.35,Tightly coupled turnaround operations; direct delay propagation window
+Extended Operating Day (<= 12 Hours),6356513,93.91,21.88,6.8,Full operating day including extended maintenance layovers and afternoon ground holds
+Overnight Operating Cycle (<= 18 Hours),6602551,97.55,21.87,7.21,Incorporates standard overnight outstation parking (6-14 hours); tests next-morning propagation
+Prolonged Ground Stays (> 18 Hours),165936,2.45,28.16,30.42,Multi-day hangar maintenance or reserve fleet parking; minimal operational delay propagation coupling
