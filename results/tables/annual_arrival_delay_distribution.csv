@@ -1,0 +1,2 @@
+completed_count,mean_arr_delay,median_arr_delay,std_arr_delay,min_arr_delay,p25_arr_delay,p75_arr_delay,p90_arr_delay,p95_arr_delay,p99_arr_delay,max_arr_delay,ontime_or_early_count,ontime_or_early_pct,delayed_15plus_count,delayed_15plus_pct
+6879484,8.5,-6.0,59.74,-128.0,-15.0,11.0,48.0,91.0,225.0,4336.0,4294636.0,62.43,1534638.0,22.31

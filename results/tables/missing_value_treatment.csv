@@ -1,0 +1,47 @@
+column_name,raw_null_count,raw_null_pct,category_a_treatment,semantic_reason_and_policy
+YEAR,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+QUARTER,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+MONTH,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+DAY_OF_MONTH,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+DAY_OF_WEEK,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+FL_DATE,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+OP_UNIQUE_CARRIER,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+OP_CARRIER_AIRLINE_ID,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+TAIL_NUM,12501.0,0.179,Verified 0 nulls,"Missing in 12,501 cancelled flights. Completed flights have 0 missing. Retain null in Category B; verified complete in Category A."
+OP_CARRIER_FL_NUM,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+ORIGIN_AIRPORT_ID,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+ORIGIN,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+ORIGIN_CITY_NAME,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+DEST_AIRPORT_ID,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+DEST,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+DEST_CITY_NAME,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+CRS_DEP_TIME,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+DEP_TIME,98170.0,1.402,Verified 0 nulls,"Missing in 98,170 cancelled flights. Retain null in Category B; complete in Category A."
+DEP_DELAY,98591.0,1.408,Verified 0 nulls,Missing in cancelled flights without pushback. Complete in Category A.
+DEP_DELAY_NEW,98591.0,1.408,Verified 0 nulls,Derived from DEP_DELAY. Complete in Category A.
+DEP_DEL15,98591.0,1.408,Verified 0 nulls,Derived from DEP_DELAY >= 15. Complete in Category A.
+DEP_DELAY_GROUP,98591.0,1.408,Verified 0 nulls,Derived 15-min interval group. Complete in Category A.
+DEP_TIME_BLK,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+TAXI_OUT,102183.0,1.459,Verified 0 nulls,Missing in cancelled flights without taxi. Complete in Category A.
+WHEELS_OFF,102183.0,1.459,Verified 0 nulls,Missing in cancelled flights without airborne status. Complete in Category A.
+WHEELS_ON,104608.0,1.494,Verified 0 nulls,"Missing in cancelled, diverted, and 1 Category D flight. Complete in Category A."
+TAXI_IN,104608.0,1.494,Verified 0 nulls,"Missing in cancelled, diverted, and 1 Category D flight. Complete in Category A."
+CRS_ARR_TIME,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+ARR_TIME,104608.0,1.494,Verified 0 nulls,"Missing in cancelled, diverted, and 1 Category D flight. Complete in Category A."
+ARR_DELAY,122135.0,1.744,Verified 0 nulls,"Primary target. Missing in cancelled, diverted, and 1 Category D flight. Complete in Category A."
+ARR_DELAY_NEW,122135.0,1.744,Verified 0 nulls,Derived from ARR_DELAY. Complete in Category A.
+ARR_DEL15,122135.0,1.744,Verified 0 nulls,Classification target. Complete in Category A.
+ARR_DELAY_GROUP,122135.0,1.744,Verified 0 nulls,Derived 15-min interval group. Complete in Category A.
+ARR_TIME_BLK,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+CANCELLED,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+CANCELLATION_CODE,6898743.0,98.531,Preserve structural NULL,"Populated only when CANCELLED=1.0 (A=Carrier, B=Weather, C=NAS, D=Security). Retain null for non-cancelled."
+DIVERTED,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+CRS_ELAPSED_TIME,2.0,0.0,Verified 0 nulls,Missing in 2 cancelled flights. Category D flight with negative duration excluded. Complete in Category A.
+ACTUAL_ELAPSED_TIME,122135.0,1.744,Verified 0 nulls,Missing in cancelled and diverted flights. Complete in Category A.
+AIR_TIME,122135.0,1.744,Verified 0 nulls,Missing in cancelled and diverted flights. Complete in Category A.
+DISTANCE,0.0,0.0,Verified 0 nulls,Complete in raw data (0 nulls). Retained and verified.
+CARRIER_DELAY,5466981.0,78.082,Preserve structural NULL,Structural missingness: reported only when ARR_DEL15=1.0. Retain NULL when ARR_DEL15=0.0. Never fill with zero.
+WEATHER_DELAY,5466981.0,78.082,Preserve structural NULL,Structural missingness: reported only when ARR_DEL15=1.0. Retain NULL when ARR_DEL15=0.0. Never fill with zero.
+NAS_DELAY,5466981.0,78.082,Preserve structural NULL,Structural missingness: reported only when ARR_DEL15=1.0. Retain NULL when ARR_DEL15=0.0. Never fill with zero.
+SECURITY_DELAY,5466981.0,78.082,Preserve structural NULL,Structural missingness: reported only when ARR_DEL15=1.0. Retain NULL when ARR_DEL15=0.0. Never fill with zero.
+LATE_AIRCRAFT_DELAY,5466981.0,78.082,Preserve structural NULL,Structural missingness: reported only when ARR_DEL15=1.0. Retain NULL when ARR_DEL15=0.0. Never fill with zero.

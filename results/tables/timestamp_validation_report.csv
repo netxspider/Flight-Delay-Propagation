@@ -1,0 +1,2 @@
+total_category_a_flights,count_crs_dep_2400,count_dep_2400,count_crs_arr_2400,count_arr_2400,count_scheduled_overnight,count_dep_delayed_past_midnight,count_dst_transition_ambiguous,failed_crs_dep_dt,failed_dep_dt
+6879483,1.0,743.0,2.0,3697.0,229236.0,41058.0,120.0,0.0,0.0

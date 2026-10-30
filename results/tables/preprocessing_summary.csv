@@ -1,0 +1,5 @@
+operational_category,record_count,percentage_of_total,inclusion_status,exclusion_reason
+Category A: Completed & Valid,6879483,98.256,Eligible for Rotation Reconstruction & Predictive Modeling,None (Target cohort)
+Category B: Cancelled Flights,102876,1.469,Preserved Separately (data/processed/cancelled_flights.parquet),Flight cancelled; no aircraft rotation continuity
+Category C: Diverted Flights,19258,0.275,Preserved Separately (data/processed/diverted_flights.parquet),Flight diverted; scheduled destination differs from landing airport
+Category D: Invalid / Incomplete,2,3e-05,Flagged and Excluded from Core Analysis,Missing arrival observation (YX 5859) or negative scheduled duration (OO 5262)
