@@ -1,0 +1,9 @@
+metric_or_condition,pair_count,pct_of_total_pairs,status_and_notes
+Condition 1: NEXT_CRS_DEP_UTC < PREV_ARR_UTC,382937,5.6576,Algebraic scheduled departure cutoff: incoming actual arrival occurred after scheduled pushback
+Condition 2: PREV_ARR_DELAY > SCHEDULED_TURNAROUND_BUFFER_MINUTES,382937,5.6576,Turnaround buffer deficit: incoming delay minutes strictly exceeded scheduled ground turn minutes
+Both Conditions Simultaneously Satisfied (Intersection),382937,5.6576,Exact mathematical identity: Condition 1 and Condition 2 are 100% coincident
+Satisfying ONLY Condition 1 (NEXT_CRS_DEP_UTC < PREV_ARR_UTC),0,0.0,Zero discrepancies: No record satisfies Condition 1 without satisfying Condition 2
+Satisfying ONLY Condition 2 (PREV_ARR_DELAY > BUFFER),0,0.0,Zero discrepancies: No record satisfies Condition 2 without satisfying Condition 1
+Records with Null or Invalid Inputs,0,0.0,"Zero null or malformed timing values across all 6,768,487 valid pairs"
+"Discrepant Phantom Value Cited in Audit Query (437,845)",437845,6.4689,"Unreconciled phantom figure: Does not exist in Parquet dataset. Closest operational analog is remaining buffer <= 5 min (435,164 pairs)"
+Reconciled True Turnaround Deficit Invariant,382937,5.6576,"Definitive reconciled total: Exactly 382,937 pairs (5.6576%) under all equivalent formal definitions"

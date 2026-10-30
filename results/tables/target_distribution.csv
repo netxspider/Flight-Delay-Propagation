@@ -1,0 +1,5 @@
+cohort,total_pairs,missing_target_count,count_on_time,count_delayed_15,arr_del15_pct,mean_arr_delay_min,std_arr_delay_min,min_arr_delay_min,p25_arr_delay_min,median_arr_delay_min,p75_arr_delay_min,p90_arr_delay_min,p99_arr_delay_min,max_arr_delay_min,mean_dep_delay_min,median_dep_delay_min
+All Valid Pairs,6768487,0.0,5277901.0,1490586.0,22.02,7.78,57.3,-128.0,-15.0,-6.0,11.0,47.0,214.0,4336.0,12.74,-2.0
+Excluding 3 DST Ambiguous,6768484,0.0,5277900.0,1490584.0,22.02,7.78,57.29,-128.0,-15.0,-6.0,11.0,47.0,214.0,4336.0,12.74,-2.0
+Turnaround Deficit Subgroup,382937,0.0,1922.0,381015.0,99.5,121.86,124.39,-29.0,58.0,89.0,143.0,221.0,723.0,3500.0,125.93,92.0
+Non-Deficit Subgroup,6385550,0.0,5275979.0,1109571.0,17.38,0.93,41.53,-128.0,-16.0,-7.0,6.0,29.0,139.0,4336.0,5.95,-3.0
