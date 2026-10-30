@@ -1,0 +1,228 @@
+{
+  "execution_timestamp": "2026-10-30T17:41:21Z",
+  "source_dataset": "data/processed/flight_rotation_pairs.parquet",
+  "total_records": 6768487,
+  "split_statistics": {
+    "Training (Jan\u2013Sep 2025)": {
+      "file": "modeling_train.parquet",
+      "file_size_mb": 136.59,
+      "row_count": 5065376,
+      "min_date": "2025-01-01",
+      "max_date": "2025-09-30",
+      "delayed_count": 1111200,
+      "ontime_count": 3954176,
+      "del15_rate_pct": 21.9372,
+      "mean_delay": 7.8144,
+      "std_delay": 57.5937,
+      "min_delay": -128.0,
+      "q25_delay": -15.0,
+      "median_delay": -6.0,
+      "q75_delay": 11.0,
+      "max_delay": 4336.0,
+      "unique_aircraft": 6002,
+      "unique_carriers": 14,
+      "unique_origins": 349,
+      "unique_dests": 349
+    },
+    "Validation (Oct\u2013Nov 2025)": {
+      "file": "modeling_validation.parquet",
+      "file_size_mb": 27.8,
+      "row_count": 1140909,
+      "min_date": "2025-10-01",
+      "max_date": "2025-11-30",
+      "delayed_count": 230521,
+      "ontime_count": 910388,
+      "del15_rate_pct": 20.205,
+      "mean_delay": 5.4094,
+      "std_delay": 52.1548,
+      "min_delay": -76.0,
+      "q25_delay": -16.0,
+      "median_delay": -7.0,
+      "q75_delay": 9.0,
+      "max_delay": 3500.0,
+      "unique_aircraft": 5822,
+      "unique_carriers": 14,
+      "unique_origins": 347,
+      "unique_dests": 347
+    },
+    "Test (Dec 2025)": {
+      "file": "modeling_test.parquet",
+      "file_size_mb": 12.37,
+      "row_count": 562202,
+      "min_date": "2025-12-01",
+      "max_date": "2025-12-31",
+      "delayed_count": 148865,
+      "ontime_count": 413337,
+      "del15_rate_pct": 26.4789,
+      "mean_delay": 12.2292,
+      "std_delay": 63.9132,
+      "min_delay": -97.0,
+      "q25_delay": -15.0,
+      "median_delay": -4.0,
+      "q75_delay": 16.0,
+      "max_delay": 2846.0,
+      "unique_aircraft": 5706,
+      "unique_carriers": 14,
+      "unique_origins": 343,
+      "unique_dests": 343
+    }
+  },
+  "validation_results": {
+    "row_reconciliation": {
+      "status": "PASSED",
+      "total_split_rows": 6768487,
+      "master_rotation_rows": 6768487,
+      "discrepancy": 0
+    },
+    "temporal_boundaries": {
+      "status": "PASSED",
+      "train_interval": "2025-01-01 to 2025-09-30",
+      "validation_interval": "2025-10-01 to 2025-11-30",
+      "test_interval": "2025-12-01 to 2025-12-31",
+      "train_val_gap_days": 1,
+      "val_test_gap_days": 1
+    },
+    "duplicate_targets": {
+      "status": "PASSED",
+      "duplicate_records": 0
+    },
+    "missing_values": {
+      "train": {
+        "total_null_entries": 0,
+        "status": "PASSED"
+      },
+      "validation": {
+        "total_null_entries": 0,
+        "status": "PASSED"
+      },
+      "test": {
+        "total_null_entries": 0,
+        "status": "PASSED"
+      }
+    },
+    "schema_consistency": {
+      "status": "PASSED",
+      "column_count": 25,
+      "column_names": [
+        "TAIL_NUM",
+        "NEXT_FL_DATE",
+        "NEXT_FL_NUM",
+        "NEXT_CRS_DEP_UTC",
+        "PREV_CRS_ARR_UTC",
+        "PREV_ARR_DELAY",
+        "PREV_DEP_DELAY",
+        "PREV_ARR_DEL15",
+        "PREV_DEP_DEL15",
+        "SCHEDULED_TURNAROUND_BUFFER",
+        "ESTIMATED_REMAINING_TURNAROUND_MINUTES",
+        "IS_TURNAROUND_DEFICIT",
+        "NEXT_CARRIER",
+        "NEXT_ORIGIN",
+        "NEXT_DEST",
+        "NEXT_DISTANCE",
+        "NEXT_CRS_DEP_HOUR",
+        "NEXT_DAY_OF_WEEK",
+        "NEXT_MONTH",
+        "PREV_AIRCRAFT_DELAYED_FLIGHTS_TODAY",
+        "PREV_AIRCRAFT_CONSECUTIVE_DEL15",
+        "PREV_AIRCRAFT_CUMULATIVE_ARR_DELAY_TODAY",
+        "PREV_AIRCRAFT_DELAY_RATE_TODAY",
+        "NEXT_ARR_DEL15",
+        "NEXT_ARR_DELAY"
+      ],
+      "column_types": [
+        "VARCHAR",
+        "DATE",
+        "BIGINT",
+        "TIMESTAMP",
+        "TIMESTAMP",
+        "FLOAT",
+        "FLOAT",
+        "INTEGER",
+        "INTEGER",
+        "FLOAT",
+        "FLOAT",
+        "INTEGER",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR",
+        "FLOAT",
+        "INTEGER",
+        "INTEGER",
+        "INTEGER",
+        "INTEGER",
+        "INTEGER",
+        "FLOAT",
+        "FLOAT",
+        "INTEGER",
+        "FLOAT"
+      ]
+    },
+    "banned_feature_leakage_audit": {
+      "status": "PASSED",
+      "banned_columns_found": []
+    },
+    "historical_feature_integrity": {
+      "status": "PASSED",
+      "out_of_bounds_count": 0
+    }
+  },
+  "feature_groups": {
+    "group_a_features": [
+      "PREV_ARR_DELAY",
+      "PREV_DEP_DELAY",
+      "PREV_ARR_DEL15",
+      "PREV_DEP_DEL15",
+      "SCHEDULED_TURNAROUND_BUFFER",
+      "ESTIMATED_REMAINING_TURNAROUND_MINUTES",
+      "IS_TURNAROUND_DEFICIT"
+    ],
+    "group_b_features": [
+      "PREV_ARR_DELAY",
+      "PREV_DEP_DELAY",
+      "PREV_ARR_DEL15",
+      "PREV_DEP_DEL15",
+      "SCHEDULED_TURNAROUND_BUFFER",
+      "ESTIMATED_REMAINING_TURNAROUND_MINUTES",
+      "IS_TURNAROUND_DEFICIT",
+      "NEXT_CARRIER",
+      "NEXT_ORIGIN",
+      "NEXT_DEST",
+      "NEXT_DISTANCE",
+      "NEXT_CRS_DEP_HOUR",
+      "NEXT_DAY_OF_WEEK",
+      "NEXT_MONTH"
+    ],
+    "group_c_features": [
+      "PREV_ARR_DELAY",
+      "PREV_DEP_DELAY",
+      "PREV_ARR_DEL15",
+      "PREV_DEP_DEL15",
+      "SCHEDULED_TURNAROUND_BUFFER",
+      "ESTIMATED_REMAINING_TURNAROUND_MINUTES",
+      "IS_TURNAROUND_DEFICIT",
+      "NEXT_CARRIER",
+      "NEXT_ORIGIN",
+      "NEXT_DEST",
+      "NEXT_DISTANCE",
+      "NEXT_CRS_DEP_HOUR",
+      "NEXT_DAY_OF_WEEK",
+      "NEXT_MONTH",
+      "PREV_AIRCRAFT_DELAYED_FLIGHTS_TODAY",
+      "PREV_AIRCRAFT_CONSECUTIVE_DEL15",
+      "PREV_AIRCRAFT_CUMULATIVE_ARR_DELAY_TODAY",
+      "PREV_AIRCRAFT_DELAY_RATE_TODAY"
+    ],
+    "metadata_columns": [
+      "TAIL_NUM",
+      "NEXT_FL_DATE",
+      "NEXT_FL_NUM",
+      "NEXT_CRS_DEP_UTC",
+      "PREV_CRS_ARR_UTC"
+    ],
+    "targets": [
+      "NEXT_ARR_DEL15",
+      "NEXT_ARR_DELAY"
+    ]
+  }
+}

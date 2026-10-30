@@ -1,0 +1,26 @@
+feature_name,feature_group,data_type,description,units_or_values,ablation_groups
+TAIL_NUM,Metadata,VARCHAR,Unique FAA aircraft registration tail number,e.g. N101DU,Metadata
+NEXT_FL_DATE,Metadata,DATE,Scheduled flight date of target flight,YYYY-MM-DD,Metadata
+NEXT_FL_NUM,Metadata,BIGINT,Published flight number of target flight,Integer,Metadata
+NEXT_CRS_DEP_UTC,Metadata,TIMESTAMP,Scheduled departure timestamp in UTC,UTC Timestamp,Metadata
+PREV_CRS_ARR_UTC,Metadata,TIMESTAMP,Scheduled arrival timestamp of preceding flight in UTC,UTC Timestamp,Metadata
+PREV_ARR_DELAY,Group A,FLOAT,Arrival delay of preceding flight leg (difference between actual and scheduled gate arrival),Minutes,"Group A, B, C"
+PREV_DEP_DELAY,Group A,FLOAT,Departure delay of preceding flight leg,Minutes,"Group A, B, C"
+PREV_ARR_DEL15,Group A,INTEGER,Binary indicator whether preceding flight arrived >= 15 minutes late,0 or 1,"Group A, B, C"
+PREV_DEP_DEL15,Group A,INTEGER,Binary indicator whether preceding flight departed >= 15 minutes late,0 or 1,"Group A, B, C"
+SCHEDULED_TURNAROUND_BUFFER,Group A,FLOAT,Scheduled ground turnaround buffer between preceding scheduled arrival and next scheduled departure,Minutes,"Group A, B, C"
+ESTIMATED_REMAINING_TURNAROUND_MINUTES,Group A,FLOAT,Estimated remaining turnaround buffer after absorbing preceding flight arrival delay,Minutes,"Group A, B, C"
+IS_TURNAROUND_DEFICIT,Group A,INTEGER,Binary flag indicating whether preceding arrival delay exceeds scheduled turnaround buffer (PREV_ARR_DELAY > SCHEDULED_BUFFER),0 or 1,"Group A, B, C"
+NEXT_CARRIER,Group B,VARCHAR,Operating airline code of target flight,IATA Carrier Code,"Group B, C"
+NEXT_ORIGIN,Group B,VARCHAR,Origin / turnaround station airport code for target flight,IATA Airport Code,"Group B, C"
+NEXT_DEST,Group B,VARCHAR,Destination airport code for target flight,IATA Airport Code,"Group B, C"
+NEXT_DISTANCE,Group B,FLOAT,Scheduled non-stop flight distance,Statute Miles,"Group B, C"
+NEXT_CRS_DEP_HOUR,Group B,INTEGER,Scheduled local departure hour of target flight,0 to 23,"Group B, C"
+NEXT_DAY_OF_WEEK,Group B,INTEGER,Day of the week of scheduled departure,1 (Mon) to 7 (Sun),"Group B, C"
+NEXT_MONTH,Group B,INTEGER,Month of scheduled departure,1 to 12,"Group B, C"
+PREV_AIRCRAFT_DELAYED_FLIGHTS_TODAY,Group C,INTEGER,Count of delayed flights (ARR_DEL15=1) completed by this aircraft on the same operating day prior to target flight,Non-negative count,Group C only
+PREV_AIRCRAFT_CONSECUTIVE_DEL15,Group C,INTEGER,Count of consecutive delayed flights (up to 3) immediately preceding target flight on the same day,"0, 1, 2, 3",Group C only
+PREV_AIRCRAFT_CUMULATIVE_ARR_DELAY_TODAY,Group C,FLOAT,Sum of arrival delay minutes across all flights operated by this aircraft on the same day prior to target flight,Signed minutes,Group C only
+PREV_AIRCRAFT_DELAY_RATE_TODAY,Group C,FLOAT,Proportion of prior flights today that arrived delayed (0.0 when target flight is first of the day),0.0 to 1.0,Group C only
+NEXT_ARR_DEL15,Target,INTEGER,"Binary classification target: 1 if target flight arrival delay >= 15 minutes, 0 otherwise",0 or 1,Classification Target
+NEXT_ARR_DELAY,Target,FLOAT,Continuous regression target: actual arrival delay minutes of target flight,Minutes,Regression Target
