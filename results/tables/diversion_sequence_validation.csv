@@ -1,0 +1,12 @@
+validation_metric,record_count,percentage_of_total,operational_interpretation
+Total Ingested Flights,7001619,100.000%,"Total raw flight operations in 2025 BTS reporting"
+Completed Flights (Category A),6879483,98.256%,"Completed, non-diverted operations eligible for primary rotation reconstruction"
+Diverted Flights (Category C),19258,0.275%,"Preserved as sequence-breaking markers in data/processed/diverted_flights.parquet"
+Diverted Flights with Preceding Operation,19243,99.922%,"Diverted operations preceded by an active flight for the same tail number"
+Diverted Flights with Following Operation,19231,99.860%,"Diverted operations followed by an active flight for the same tail number"
+False Candidate Pairs Blocked by Diversion Protocol,1352,0.020%,"CRITICAL FINDING: Exactly 1,352 false completed-flight pairs blocked across intervening diversions"
+Diversion Sequence-Breaking Validation Status,PASSED,100.000%,"Validation test confirmed: 0 false pairs can cross an intervening diverted operation"
+Cancellation Sequence Policy,DOCUMENTED,N/A,"Cancellations do not move aircraft; station continuity maintained; flagged with HAD_INTERVENING_CANCELLATION"
+Sample False Pair Blocked Case 1 (Tail N909AN at DFW),1,N/A,"AA 2289 arr DFW 15:38 UTC; AA 2078 dep DFW 16:43 UTC (DIVERTED); AA 1352 dep DFW next day. Blocked."
+Sample False Pair Blocked Case 2 (Tail N117SY at SFO),1,N/A,"OO 5838 arr SFO 03:14 UTC; OO 4695 dep SFO 03:48 UTC (DIVERTED); OO 5937 dep SFO 14:08 UTC. Blocked."
+Sample False Pair Blocked Case 3 (Tail N375HA at HNL),1,N/A,"HA 17 arr HNL 15:31 UTC; HA 22 dep HNL 23:34 UTC (DIVERTED); HA 20 dep HNL 00:01 UTC. Blocked."

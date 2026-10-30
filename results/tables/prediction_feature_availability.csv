@@ -1,0 +1,40 @@
+feature_name,lifecycle_phase,available_at_prediction_time,model_permission,mathematical_definition,operational_justification_and_leakage_risk
+PREV_ARR_DELAY,Turnaround / Gate Arrival,Yes,Permitted,ARR_TIME_prev - CRS_ARR_TIME_prev,Known immediately upon gate arrival of previous flight. Core delay propagation signal.
+PREV_DEP_DELAY,Preceding Flight Departure,Yes,Permitted,DEP_TIME_prev - CRS_DEP_TIME_prev,Known from departure of previous flight. Captures en-route delay absorption or amplification.
+PREV_ARR_DEL15,Turnaround / Gate Arrival,Yes,Permitted,1 if PREV_ARR_DELAY >= 15 else 0,Binary BTS delay threshold indicator of predecessor flight.
+PREV_CRS_ELAPSED_TIME,Scheduled Planning,Yes,Permitted,Scheduled gate-to-gate duration of previous flight,Established in advance by airline schedule. Captures flight stage length.
+PREV_ACTUAL_ELAPSED_TIME,Turnaround / Gate Arrival,Yes,Permitted,Actual gate-to-gate duration of previous flight,Observed upon previous gate arrival. Indicates en-route headwinds or holding patterns.
+PREV_DISTANCE,Scheduled Planning,Yes,Permitted,Great-circle distance of previous route,Static route characteristic.
+PREV_ORIGIN,Scheduled Planning,Yes,Permitted,Departure airport of previous flight,Identifies incoming origin hub congestion.
+PREV_DEST,Scheduled Planning,Yes,Permitted,Arrival airport of previous flight (= NEXT_ORIGIN),Turnaround station identifier.
+SCHEDULED_TURNAROUND_BUFFER,Scheduled Planning,Yes,Permitted,CRS_DEP_UTC_next - CRS_ARR_UTC_prev,Scheduled buffer between planned arrival and planned subsequent departure.
+ESTIMATED_REMAINING_TURNAROUND,Turnaround / Gate Arrival,Yes,Permitted,SCHEDULED_TURNAROUND_BUFFER - PREV_ARR_DELAY,Amount of turnaround buffer remaining after absorbing previous arrival delay.
+IS_SCHEDULED_TURNAROUND_DEFICIT,Turnaround / Gate Arrival,Yes,Permitted,1 if PREV_ARR_DELAY > SCHEDULED_TURNAROUND_BUFFER else 0,Indicates incoming delay completely wiped out scheduled ground turnaround window.
+NEXT_CRS_DEP_HOUR,Scheduled Planning,Yes,Permitted,Scheduled departure hour of target flight (0-23),Temporal schedule predictor; captures intra-day congestion peaks.
+NEXT_CRS_DEP_MINUTE_OF_DAY,Scheduled Planning,Yes,Permitted,Scheduled departure minute of target flight (0-1440),Continuous intra-day temporal coordinate.
+NEXT_DAY_OF_WEEK,Scheduled Planning,Yes,Permitted,Day of week of target flight (1=Mon..7=Sun),Captures weekend vs business travel demand patterns.
+NEXT_MONTH,Scheduled Planning,Yes,Permitted,Calendar month of target flight (1-12),Captures seasonal weather and holiday traffic patterns.
+NEXT_CARRIER,Scheduled Planning,Yes,Permitted,Reporting airline operating subsequent flight,Captures carrier turnaround procedures and fleet performance.
+NEXT_ORIGIN,Scheduled Planning,Yes,Permitted,Origin airport of target flight,Departure station characteristics and ground congestion.
+NEXT_DEST,Scheduled Planning,Yes,Permitted,Destination airport of target flight,Destination airspace and weather characteristics.
+NEXT_DISTANCE,Scheduled Planning,Yes,Permitted,Scheduled distance of target route,Planned flight length.
+NEXT_CRS_ELAPSED_TIME,Scheduled Planning,Yes,Permitted,Scheduled gate-to-gate duration of target flight,Planned block time; affects airline schedule padding.
+AIRCRAFT_CONSECUTIVE_DELAYED_FLIGHTS,Turnaround / Gate Arrival,Yes,Permitted,Count of immediately preceding delayed flights for this tail,Operational delay-chain momentum before target departure.
+AIRCRAFT_CUMULATIVE_DELAY_TODAY,Turnaround / Gate Arrival,Yes,Permitted,Sum of arrival delay minutes for this tail earlier in day,Accumulated operational stress on aircraft and crew before target departure.
+ACTUAL_GROUND_TIME,Subsequent Flight Post-Departure,No,BANNED - LEAKAGE,DEP_UTC_next - ARR_UTC_prev,Requires subsequent actual departure timestamp which occurs in the FUTURE relative to prediction time.
+NEXT_DEP_TIME,Subsequent Flight Departure,No,BANNED - LEAKAGE,Actual local departure timestamp of target flight,Occurs after prediction moment.
+NEXT_DEP_DELAY,Subsequent Flight Departure,No,BANNED - LEAKAGE,DEP_TIME_next - CRS_DEP_TIME_next,Direct target leakage; departure delay of target flight occurs after prediction moment.
+NEXT_DEP_DEL15,Subsequent Flight Departure,No,BANNED - LEAKAGE,1 if NEXT_DEP_DELAY >= 15 else 0,Binary departure delay of target flight; occurs after prediction moment.
+NEXT_TAXI_OUT,Subsequent Flight Airborne,No,BANNED - LEAKAGE,Taxi out duration of target flight,Occurs after gate departure.
+NEXT_WHEELS_OFF,Subsequent Flight Airborne,No,BANNED - LEAKAGE,Takeoff timestamp of target flight,Occurs after departure.
+NEXT_AIR_TIME,Subsequent Flight In-Flight,No,BANNED - LEAKAGE,Airborne duration of target flight,En-route operational measurement.
+NEXT_WHEELS_ON,Subsequent Flight Touchdown,No,BANNED - LEAKAGE,Touchdown timestamp of target flight,Occurs at destination arrival.
+NEXT_TAXI_IN,Subsequent Flight Gate Arrival,No,BANNED - LEAKAGE,Taxi in duration of target flight,Occurs at destination arrival.
+NEXT_ARR_TIME,Subsequent Flight Gate Arrival,No,BANNED - LEAKAGE,Gate arrival timestamp of target flight,Occurs at destination arrival.
+NEXT_ARR_DELAY,Subsequent Flight Gate Arrival,No,PREDICTION TARGET (Regression),ARR_TIME_next - CRS_ARR_TIME_next,Target variable to predict for regression task.
+NEXT_ARR_DEL15,Subsequent Flight Gate Arrival,No,PREDICTION TARGET (Classification),1 if NEXT_ARR_DELAY >= 15 else 0,Target variable to predict for binary classification task.
+NEXT_CARRIER_DELAY,Retrospective Post-Flight Audit,No,BANNED - LEAKAGE,Carrier delay cause minutes of target flight,Retrospective delay breakdown; populated only after arrival and only if delayed >= 15m.
+NEXT_WEATHER_DELAY,Retrospective Post-Flight Audit,No,BANNED - LEAKAGE,Weather delay cause minutes of target flight,Retrospective delay breakdown.
+NEXT_NAS_DELAY,Retrospective Post-Flight Audit,No,BANNED - LEAKAGE,NAS delay cause minutes of target flight,Retrospective delay breakdown.
+NEXT_SECURITY_DELAY,Retrospective Post-Flight Audit,No,BANNED - LEAKAGE,Security delay cause minutes of target flight,Retrospective delay breakdown.
+NEXT_LATE_AIRCRAFT_DELAY,Retrospective Post-Flight Audit,No,BANNED - LEAKAGE,Late aircraft delay cause minutes of target flight,Retrospective delay breakdown.

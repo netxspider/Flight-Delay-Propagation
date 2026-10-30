@@ -1,5 +1,10 @@
-consistency_check,total_evaluated,matching_records,mismatching_records,conformance_rate_pct,notes
-Delay Identity: ARR_DELAY = DEP_DELAY + ACTUAL_ELAPSED - CRS_ELAPSED,6879483.0,6879372,111,99.9984,111 records with rounding or reporting anomalies in carrier-reported elapsed times
-Elapsed Duration Identity: ACTUAL_ELAPSED = AIR_TIME + TAXI_OUT + TAXI_IN,6879483.0,6879483,0,100.0,Gate-to-gate elapsed time exactly equals air time plus taxi out and taxi in
-Departure Clock Modular Equality: (CRS_DEP + DEP_DELAY) % 1440 == DEP_TIME % 1440,6879483.0,6879460,23,99.9997,100% exact local clock arithmetic accounting for midnight notation ('2400' and negative delays)
-Arrival Clock Modular Equality: (CRS_ARR + ARR_DELAY) % 1440 == ARR_TIME % 1440,6879483.0,6879407,76,99.9989,Arrival clock matches scheduled arrival plus arrival delay minutes across all flights
+consistency_check,total_evaluated,matching_records,mismatching_records,conformance_or_occurrence_rate_pct,methodology_and_notes
+"Delay Identity: ARR_DELAY = DEP_DELAY + ACTUAL_ELAPSED - CRS_ELAPSED",6879483,6879372,111,99.9984,"Physical gate-to-gate duration identity; 111 records with carrier-reported rounding differences"
+"Elapsed Duration Identity: ACTUAL_ELAPSED = AIR_TIME + TAXI_OUT + TAXI_IN",6879483,6879483,0,100.0000,"Physical flight phase identity; gate-to-gate equals air time plus taxi out and in"
+"Departure Clock Modular Equality: (CRS_DEP + DEP_DELAY) % 1440 == DEP_TIME % 1440",6879483,6879460,23,99.9997,"Departure local clock arithmetic accounting for midnight '2400' notation and early pushes"
+"Arrival Clock Modular Equality: (CRS_ARR + ARR_DELAY) % 1440 == ARR_TIME % 1440",6879483,6879407,76,99.9989,"Arrival local clock arithmetic matching destination touchdown minutes"
+"Scheduled Overnight: Naive Local Clock Comparison (minute_arr < minute_dep)",6879483,229236,6650247,3.3322,"PREVIOUS NAIVE METHOD: Unreliable for time-zone crossing flights due to longitudinal clock offsets"
+"Scheduled Overnight: Destination Local Calendar Day Rollover (DATE_arr_local > DATE_dep_local)",6879483,223752,6655731,3.2525,"CORRECT LOCAL CALENDAR: Scheduled touchdown occurs on Day D+1 relative to origin local departure"
+"Scheduled Overnight: Genuine UTC Calendar Boundary Crossings (DATE_arr_utc > DATE_dep_utc)",6879483,1023851,5855632,14.8827,"CORRECT UTC CALENDAR: Flight operations crossing the 00:00 UTC universal midnight boundary"
+"Actual Arrival Rollover: Genuine UTC Actual Arrival Rollover (DATE_act_arr_utc > DATE_dep_utc)",6879483,1118523,5760960,16.2588,"CORRECT UTC ACTUAL: Actual flight operations landing on Day D+1 relative to departure in UTC"
+"Timezone Artifact Discrepancy (Naive Local vs UTC Calendar)",6879483,1246585,5632898,18.1203,"Discrepancy where naive local minute comparison diverges from true UTC calendar rollover"
