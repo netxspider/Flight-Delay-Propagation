@@ -14,8 +14,8 @@ Methodological Compliance & Rigor:
 6. Carrier & Airport Heterogeneity: Major operators and turnaround hub volumes
 7. Aircraft Fleet Concentration: Non-negative positive delay minutes, Gini coefficient (0.2890),
    and top 10%, 20%, 50% fleet shares
-8. Permitted Syllabus Models: Logistic Regression, Decision Trees, Random Forest, SVM, MLP,
-   Linear/Polynomial Regression (Strictly excluding out-of-syllabus gradient boosting)
+8. Permitted Syllabus Models: Logistic Regression, Decision Trees, Random Forest, SVM (SVC for Classification), MLP,
+   Linear/Multiple/Ridge/Lasso/Polynomial Regression (Strictly excluding out-of-syllabus SVR and gradient boosting)
 """
 
 import os
@@ -843,7 +843,9 @@ def run_aircraft_level_analysis(con, summary_dict):
     df_consec.to_csv(os.path.join(TABLES_DIR, "eda_aircraft_consecutive_delays.csv"), index=False)
     
     # 6.2 Audited Gini Calculation on Non-Negative Positive Delay Minutes
-    # POSITIVE_DELAY_MINUTES = SUM(MAX(0, ARR_DELAY))
+    # Population: 6,124 unique commercial aircraft across 6,768,487 target outbound legs (f_next)
+    # in 'data/processed/flight_rotation_pairs.parquet' (not all 2025 completed flights).
+    # Aggregation formula: POSITIVE_DELAY_MINUTES_i = SUM(MAX(0, NEXT_ARR_DELAY_i,j))
     q_tail = f"""
     SELECT 
         TAIL_NUM,
@@ -858,6 +860,7 @@ def run_aircraft_level_analysis(con, summary_dict):
     delays = np.sort(df_tail['positive_delay_minutes'].values.astype(np.float64))
     n = len(delays)
     total_pos_delay = np.sum(delays)
+    total_legs = int(df_tail['rotation_count'].sum())
     
     # Algebraic Gini formula on non-negative array:
     # G = (2 * sum(i * y_i)) / (n * sum(y_i)) - (n + 1) / n
@@ -875,8 +878,11 @@ def run_aircraft_level_analysis(con, summary_dict):
     share_top_50 = (total_pos_delay - cum_delays[idx_50 - 1]) / total_pos_delay * 100.0
     
     df_conc = pd.DataFrame([{
-        "metric": "Aircraft Fleet Positive Delay Distribution",
+        "metric": "Aircraft Fleet Positive Delay Burden Distribution",
         "total_active_aircraft": n,
+        "completed_flight_legs_evaluated": total_legs,
+        "population_scope": "Rotation-pair target legs (NEXT_ARR_DELAY)",
+        "aggregation_formula": "SUM(MAX(0, NEXT_ARR_DELAY))",
         "total_positive_delay_minutes": float(total_pos_delay),
         "mean_rotations_per_tail": round(df_tail['rotation_count'].mean(), 1),
         "median_rotations_per_tail": round(df_tail['rotation_count'].median(), 1),
@@ -891,6 +897,9 @@ def run_aircraft_level_analysis(con, summary_dict):
     
     summary_dict["aircraft_patterns"] = {
         "active_aircraft_count": n,
+        "completed_flight_legs_evaluated": total_legs,
+        "population_scope": "Rotation-pair target legs (NEXT_ARR_DELAY) in flight_rotation_pairs.parquet",
+        "aggregation_formula": "SUM(MAX(0, NEXT_ARR_DELAY))",
         "total_positive_delay_minutes": float(total_pos_delay),
         "gini_coefficient": round(gini, 4),
         "top_10_pct_share": round(share_top_10, 2),
@@ -899,7 +908,7 @@ def run_aircraft_level_analysis(con, summary_dict):
         "consecutive_delay_progression": df_consec.to_dict(orient="records")
     }
     
-    print(f"Aircraft fleet metrics (N = {n:,} aircraft | Total Positive Delay = {total_pos_delay:,.0f} min):")
+    print(f"Aircraft fleet metrics (N = {n:,} aircraft | Total Legs = {total_legs:,} | Total Positive Delay = {total_pos_delay:,.0f} min):")
     print(f"  Gini: {gini:.4f} | Top 10%: {share_top_10:.2f}% | Top 20%: {share_top_20:.2f}% | Top 50%: {share_top_50:.2f}%")
     
     # Plot Figure 6: Aircraft Fleet Patterns
@@ -929,12 +938,12 @@ def run_aircraft_level_analysis(con, summary_dict):
     ax_b.scatter([80], [100.0 - share_top_20], color="#cb181d", s=60, zorder=5)
     ax_b.set_xlim(0, 100)
     ax_b.set_ylim(0, 100)
-    ax_b.set_title("B: Aircraft Fleet Positive Delay Concentration (Lorenz Curve)", fontsize=12, pad=12)
-    ax_b.set_xlabel("Cumulative % of Commercial Aircraft Fleet", fontsize=11)
+    ax_b.set_title("B: Fleet Positive Delay Burden Concentration (Lorenz Curve)", fontsize=12, pad=12)
+    ax_b.set_xlabel("Cumulative % of Commercial Aircraft Fleet (N = 6,124)", fontsize=11)
     ax_b.set_ylabel("Cumulative % of Total Positive Delay Minutes", fontsize=11)
     ax_b.legend(loc="upper left", frameon=True)
-    ax_b.text(0.28, 0.20, f"Gini Coefficient: {gini:.4f}\nTop 10% Aircraft: {share_top_10:.1f}%\nTop 20% Aircraft: {share_top_20:.1f}%\nTop 50% Aircraft: {share_top_50:.1f}%",
-              transform=ax_b.transAxes, fontsize=10, fontweight="bold",
+    ax_b.text(0.28, 0.18, f"Gini Coefficient: {gini:.4f}\n(Moderate Delay Burden Concentration)\nTop 10% Aircraft: {share_top_10:.1f}%\nTop 20% Aircraft: {share_top_20:.1f}%\nTop 50% Aircraft: {share_top_50:.1f}%\nPopulation: 6,768,487 Legs",
+              transform=ax_b.transAxes, fontsize=9.5, fontweight="bold",
               bbox=dict(boxstyle="round,pad=0.5", facecolor="#fff5f0", edgecolor="#fc9272"))
     
     # Subplot C: Consecutive Delayed Flights Today Progression

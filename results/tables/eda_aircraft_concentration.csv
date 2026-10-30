@@ -1,2 +1,2 @@
-metric,total_active_aircraft,total_positive_delay_minutes,mean_rotations_per_tail,median_rotations_per_tail,mean_positive_delay_min_per_tail,median_positive_delay_min_per_tail,gini_coefficient,top_10_pct_delay_share_pct,top_20_pct_delay_share_pct,top_50_pct_delay_share_pct
-Aircraft Fleet Positive Delay Distribution,6124,112174297.0,1105.2,1096.5,18317.2,18376.5,0.289,20.08,34.67,70.0
+metric,total_active_aircraft,completed_flight_legs_evaluated,population_scope,aggregation_formula,total_positive_delay_minutes,mean_rotations_per_tail,median_rotations_per_tail,mean_positive_delay_min_per_tail,median_positive_delay_min_per_tail,gini_coefficient,top_10_pct_delay_share_pct,top_20_pct_delay_share_pct,top_50_pct_delay_share_pct
+Aircraft Fleet Positive Delay Burden Distribution,6124,6768487,Rotation-pair target legs (NEXT_ARR_DELAY),"SUM(MAX(0, NEXT_ARR_DELAY))",112174297.0,1105.2,1096.5,18317.2,18376.5,0.289,20.08,34.67,70.0

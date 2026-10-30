@@ -1,5 +1,5 @@
 {
-  "analysis_timestamp": "2026-10-30T15:37:18Z",
+  "analysis_timestamp": "2026-10-30T15:51:03Z",
   "dataset": "data/processed/flight_rotation_pairs.parquet",
   "sample_size": 6768487,
   "target_analysis": {
@@ -60,6 +60,9 @@
   },
   "aircraft_patterns": {
     "active_aircraft_count": 6124,
+    "completed_flight_legs_evaluated": 6768487,
+    "population_scope": "Rotation-pair target legs (NEXT_ARR_DELAY) in flight_rotation_pairs.parquet",
+    "aggregation_formula": "SUM(MAX(0, NEXT_ARR_DELAY))",
     "total_positive_delay_minutes": 112174297.0,
     "gini_coefficient": 0.289,
     "top_10_pct_share": 20.08,

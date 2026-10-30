@@ -187,46 +187,77 @@ From [`results/tables/eda_turnaround_airport_summary.csv`](file:///Users/arnavra
 
 ## 7. Audited Aircraft Fleet Gini Coefficient & Delay Concentration
 
-### 7.1 Mathematical Definition and Fleet Totals
-To adhere to the mathematical prerequisite of non-negativity for Lorenz curve construction and Gini estimation, the metric was computed strictly on **positive arrival delay minutes**:
-$$\text{POSITIVE\_DELAY\_MINUTES} = \sum_{j=1}^{M_i} \max(0, \text{ARR\_DELAY}_{i,j})$$
-where $M_i$ represents the number of completed flight legs operated by aircraft $i$.
+### 7.1 Mathematical Definition and Exact Population Specification
+To adhere to the mathematical prerequisite of non-negativity for Lorenz curve construction and Gini estimation, the metric was computed strictly on **positive arrival delay minutes**.
+
+- **Exact Population Scope:** The calculation covers all **6,124 unique commercial aircraft** across the **6,768,487 completed outbound flight legs ($f_{\text{next}}$)** represented in the master rotation-pair dataset (`data/processed/flight_rotation_pairs.parquet`). It does **not** cover all completed flights in 2025 (the full 2025 BTS cleaned dataset contains 6,879,483 completed flights across 6,127 aircraft; the rotation-pair dataset excludes 110,996 flights that represent initial un-preceded flights of an aircraft rotation or legs isolated by flight diversions, and 3 tails with zero valid rotations).
+- **Completed Flight Legs Included:** **6,768,487 flight legs**.
+- **Exact Aggregation Formula:**
+  $$\text{POSITIVE\_DELAY\_MINUTES}_i = \sum_{j=1}^{M_i} \max(0, \text{NEXT\_ARR\_DELAY}_{i,j})$$
+  where $M_i$ represents the number of completed outbound rotation legs operated by aircraft $i$ ($\sum_{i=1}^{6124} M_i = 6,768,487$), and $\text{NEXT\_ARR\_DELAY}_{i,j}$ is the actual arrival delay of flight leg $j$.
+- **Gini Formula:**
+  $$G = \frac{2 \sum_{k=1}^{N} k \cdot y_k}{N \sum_{k=1}^{N} y_k} - \frac{N + 1}{N}$$
+  where $N = 6,124$ aircraft, and $y_1 \le y_2 \le \dots \le y_N$ are the sorted non-negative positive delay minute values per aircraft.
 
 From [`results/tables/eda_aircraft_concentration.csv`](file:///Users/arnavraj/Downloads/flight-delay-propagation/results/tables/eda_aircraft_concentration.csv):
-- **Commercial Fleet Size:** **6,124 unique physical aircraft**
+- **Commercial Fleet Size ($N$):** **6,124 unique physical aircraft**
+- **Target Flight Legs Evaluated:** **6,768,487 completed outbound legs**
 - **Total Accumulated Positive Delay:** **112,174,297 minutes** ($1,869,571.6$ aircraft-hours)
 - **Mean Positive Delay per Aircraft:** $18,317.2$ minutes ($305.3$ hours)
 - **Median Positive Delay per Aircraft:** $17,458.0$ minutes ($291.0$ hours)
-- **Fleet Gini Coefficient ($G$):** **0.2890**
+- **Fleet Gini Coefficient ($G$):** **0.2890** ($0.289047$)
 
 ### 7.2 Cumulative Fleet Shares
 - **Top 10% Aircraft Fleet:** Generates **20.08%** of total positive delay minutes ($22,525,607$ min).
 - **Top 20% Aircraft Fleet:** Generates **34.67%** of total positive delay minutes ($38,891,895$ min).
 - **Top 50% Aircraft Fleet:** Generates **70.00%** of total positive delay minutes ($78,522,008$ min).
 
-### 7.3 Methodological Interpretation
-A Gini coefficient of **0.2890** indicates a **relatively low-to-moderate concentration of delay minutes across aircraft airframes**. In comparison, wealth and income Gini coefficients in the United States typically exceed $0.45–0.80$. This confirms that delay minutes are distributed broadly across the fleet in proportion to rotational flight volume and scheduled operating exposure, rather than heavily concentrated in a small cohort of persistently defective airframes.
+### 7.3 Methodological Interpretation & Critical Boundaries
+A Gini coefficient of **0.2890** reflects a **moderate concentration of total positive delay burden** across the commercial aircraft fleet. The top 20% of aircraft account for approximately one-third ($34.67\%$) of all positive arrival-delay minutes, while the bottom 50% account for $30.00\%$ of delay minutes.
+
+> [!WARNING] Methodological Limitation & Analytical Boundary
+> This aggregate Gini metric quantifies inequality in **unnormalized gross delay volume** ($\sum \max(0, \text{delay})$). Because the metric is **not normalized by aircraft flight volume, scheduled block hours, or departures**, airframes operating higher annual rotations ($>1,400$ legs) naturally accumulate substantially more gross delay minutes than airframes operating lower volumes ($<400$ legs).
+>
+> Therefore, this metric **must not be claimed to prove that delays are not concentrated among persistently unreliable aircraft**. Determining whether specific airframes exhibit chronic mechanical or operational unreliability would require normalized rate metrics (such as delay minutes per operating hour, or delay probability conditioned on tail number after controlling for carrier, hub congestion, and route difficulty).
 
 ---
 
 ## 8. Permitted Syllabus Model Recommendations & Phase 5 Modeling Handoff
 
-Based on the empirical findings, the following model families from the **permitted project syllabus** are recommended for comparative evaluation:
+Based on the empirical findings, the following model families from the **permitted project syllabus** are recommended for comparative evaluation in Phase 5 & 6:
 
-### Permitted Model Families
-1. **Linear and Generalized Linear Models:**
-   - **Logistic Regression (L1/L2 regularized):** Interpretable classification benchmark providing odds ratio verification.
-   - **Linear and Multiple Regression / Ridge / Lasso:** Baseline regression models; requires feature transformation to handle target skewness.
-   - **Polynomial Regression:** Evaluates non-linear turnaround buffer margin features within a linear parameter framework.
-2. **Decision Trees and Tree Ensembles:**
-   - **Decision Trees (CART):** Capable of learning the empirical step change observed at $\text{buffer} \le 0$.
-   - **Random Forest (Classifier & Regressor):** Non-linear ensemble capable of capturing complex feature interactions without severe variance.
-3. **Kernel Methods:**
-   - **Support Vector Machines (Linear/RBF SVM & SVR):** Evaluates non-linear separation boundaries on standardized sample subsets.
-4. **Neural Network Architectures:**
-   - **Feedforward Neural Networks (Multi-Layer Perceptron / MLP):** Evaluates dense multi-layer representations for continuous non-linear delay estimation.
+### Permitted Classification Models (`NEXT_ARR_DEL15`)
+1. **Logistic Regression (L1 / L2 Regularized):**
+   - Serves as the primary interpretable linear classification benchmark.
+   - Provides direct validation of empirical odds ratios and well-calibrated baseline probabilities.
+2. **Decision Tree Classifier (CART):**
+   - Non-parametric baseline capable of discovering discrete step functions, such as the sharp transition at $\text{buffer} \le 0$ without feature transformation.
+3. **Random Forest Classifier:**
+   - Non-linear ensemble capable of capturing multi-way feature interactions (e.g., buffer deficit $\times$ evening departure hour $\times$ hub congestion) while mitigating overfitting.
+4. **Support Vector Classifier (Linear & RBF SVC):**
+   - Evaluates maximum-margin linear and non-linear kernel separation boundaries on standardized sample subsets.
+5. **Multi-Layer Perceptron Classifier (MLPClassifier):**
+   - Feedforward neural network architecture capable of learning continuous representation manifolds from normalized continuous and encoded categorical features.
+
+### Permitted Regression Models (`NEXT_ARR_DELAY`)
+1. **Linear and Multiple Regression (OLS):**
+   - Baseline parametric continuous estimator; requires target transformation (e.g., shifted log or power transform) to handle extreme right skewness.
+2. **Regularized Linear Models (Ridge & Lasso Regression):**
+   - Penalized linear models to prevent coefficient explosion from collinear features (e.g., scheduled block time vs. distance).
+3. **Polynomial Regression (Degree 2):**
+   - Evaluates quadratic and non-linear response curves of turnaround buffer capacity within a linear parameter estimation framework.
+4. **Decision Tree Regressor (CART):**
+   - Captures piece-wise constant non-linear relationships and threshold step changes in delay propagation.
+5. **Random Forest Regressor:**
+   - Averaged ensemble of randomized decision trees providing variance reduction and non-linear surface approximation for continuous delay minutes.
+6. **Multi-Layer Perceptron Regressor (MLPRegressor):**
+   - Deep feedforward architecture for continuous regression estimation with non-linear activation functions.
+
+### Explicitly Excluded Out-of-Syllabus Models
+- **Support Vector Regression (SVR):** Strictly excluded from continuous regression estimation as it is not part of the approved course syllabus.
+- **Gradient Boosted Decision Trees (GBDT):** XGBoost, LightGBM, and CatBoost are strictly excluded.
 
 ### Methodological Guardrails for Phase 5 & 6
 - **Model Evaluation:** No single model family is assumed to be superior prior to rigorous comparative empirical evaluation.
-- **Chronological Splitting:** Random train/test splits are prohibited; temporal splits must be enforced to respect causality.
-- **Robust Metrics:** Evaluation must report MAE, MedAE, PR-AUC, and ROC-AUC alongside standard metrics.
+- **Chronological Splitting:** Random train/test splits are strictly prohibited; temporal splits must be enforced to respect operational causality.
+- **Robust Metrics:** Evaluation must report MAE, MedAE, $R^2$, PR-AUC, and ROC-AUC alongside standard metrics.
