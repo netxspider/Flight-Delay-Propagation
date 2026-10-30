@@ -58,7 +58,7 @@ sequenceDiagram
     participant Model as Delay Prediction Model
     participant Outbound as Outbound Leg (Next)
 
-    Aircraft->>Gate: Touchdown & Gate Arrival (PREV_ARR_UTC)
+    Aircraft->>Gate: Actual Gate Arrival / Chocks-On (PREV_ARR_UTC)
     Note over Gate,Model: PREDICTION MOMENT: All Group A, B, C Features Available
     Model->>Outbound: Predict NEXT_ARR_DEL15 & NEXT_ARR_DELAY
     Note over Gate,Outbound: Ground Handling, Boarding, Turnaround Buffer
@@ -111,7 +111,7 @@ The dataset is partitioned chronologically by target flight scheduled date (`NEX
 | **Training** | Jan 1 – Sep 30, 2025 | **5,065,376** | 74.84% | 1,111,200 | **21.94%** | +7.81 min | -6.0 min | 57.59 min | 6,002 |
 | **Validation** | Oct 1 – Nov 30, 2025 | **1,140,909** | 16.86% | 230,521 | **20.20%** | +5.41 min | -7.0 min | 52.15 min | 5,822 |
 | **Test** | Dec 1 – Dec 31, 2025 | **562,202** | 8.31% | 148,865 | **26.48%** | +12.23 min | -4.0 min | 63.91 min | 5,706 |
-| **Full Total** | **Full Year 2025** | **6,768,487** | **100.0%** | **1,490,586** | **22.02%** | **+7.78 min** | **-6.0 min** | **57.26 min** | **6,124** |
+| **Full Total** | **Full Year 2025** | **6,768,487** | **100.0%** | **1,490,586** | **22.02%** | **+7.78 min** | **-6.0 min** | **57.30 min** | **6,124** |
 
 ### Operational Insights on Splits:
 1. **Class Stability:** The target delay rate is stable across training (21.94%) and validation (20.20%). The December test set exhibits the expected holiday seasonal increase (26.48%, mean +12.23 min), providing an authentic operational evaluation of model generalization under peak holiday volume and winter weather disruptions.
@@ -141,9 +141,9 @@ All 7 required quality and leakage validation checks were executed:
 To maintain strict alignment with the approved course syllabus, the model families permitted for comparative evaluation in Phase 6 are explicitly locked:
 
 ### Permitted Classification Models (`NEXT_ARR_DEL15`)
-1. **Logistic Regression (L1 / L2 Regularized):**
-   - Serves as the primary interpretable linear benchmark.
-   - Evaluates odds ratios and calibrated probability baselines.
+1. **Ordinary Logistic Regression (Unregularized Baseline):**
+   - Serves as the primary interpretable linear classification benchmark (using standard maximum likelihood estimation without L1/L2 penalties).
+   - Evaluates baseline log-odds coefficients, odds ratios, and calibrated probability estimates.
 2. **Decision Tree Classifier (CART):**
    - Non-parametric model learning orthogonal step boundaries (e.g. sharp threshold at $\text{buffer} \le 0$).
 3. **Random Forest Classifier:**

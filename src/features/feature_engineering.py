@@ -558,7 +558,7 @@ sequenceDiagram
     participant Model as Delay Prediction Model
     participant Outbound as Outbound Leg (Next)
 
-    Aircraft->>Gate: Touchdown & Gate Arrival (PREV_ARR_UTC)
+    Aircraft->>Gate: Actual Gate Arrival / Chocks-On (PREV_ARR_UTC)
     Note over Gate,Model: PREDICTION MOMENT: All Group A, B, C Features Available
     Model->>Outbound: Predict NEXT_ARR_DEL15 & NEXT_ARR_DELAY
     Note over Gate,Outbound: Ground Handling, Boarding, Turnaround Buffer
@@ -611,7 +611,7 @@ The dataset is partitioned chronologically by target flight scheduled date (`NEX
 | **Training** | Jan 1 – Sep 30, 2025 | **{{TRAIN_ROWS}}** | {{TRAIN_SHARE}}% | {{TRAIN_DELAYED}} | **{{TRAIN_RATE}}%** | {{TRAIN_MEAN}} min | {{TRAIN_MEDIAN}} min | {{TRAIN_STD}} min | {{TRAIN_TAILS}} |
 | **Validation** | Oct 1 – Nov 30, 2025 | **{{VAL_ROWS}}** | {{VAL_SHARE}}% | {{VAL_DELAYED}} | **{{VAL_RATE}}%** | {{VAL_MEAN}} min | {{VAL_MEDIAN}} min | {{VAL_STD}} min | {{VAL_TAILS}} |
 | **Test** | Dec 1 – Dec 31, 2025 | **{{TEST_ROWS}}** | {{TEST_SHARE}}% | {{TEST_DELAYED}} | **{{TEST_RATE}}%** | {{TEST_MEAN}} min | {{TEST_MEDIAN}} min | {{TEST_STD}} min | {{TEST_TAILS}} |
-| **Full Total** | **Full Year 2025** | **{{TOTAL_ROWS}}** | **100.0%** | **{{TOTAL_DELAYED}}** | **{{TOTAL_RATE}}%** | **+7.78 min** | **-6.0 min** | **57.26 min** | **6,124** |
+| **Full Total** | **Full Year 2025** | **{{TOTAL_ROWS}}** | **100.0%** | **{{TOTAL_DELAYED}}** | **{{TOTAL_RATE}}%** | **+7.78 min** | **-6.0 min** | **57.30 min** | **6,124** |
 
 ### Operational Insights on Splits:
 1. **Class Stability:** The target delay rate is stable across training ({{TRAIN_RATE}}%) and validation ({{VAL_RATE}}%). The December test set exhibits the expected holiday seasonal increase ({{TEST_RATE}}%, mean +12.23 min), providing an authentic operational evaluation of model generalization under peak holiday volume and winter weather disruptions.
@@ -641,9 +641,9 @@ All 7 required quality and leakage validation checks were executed:
 To maintain strict alignment with the approved course syllabus, the model families permitted for comparative evaluation in Phase 6 are explicitly locked:
 
 ### Permitted Classification Models (`NEXT_ARR_DEL15`)
-1. **Logistic Regression (L1 / L2 Regularized):**
-   - Serves as the primary interpretable linear benchmark.
-   - Evaluates odds ratios and calibrated probability baselines.
+1. **Ordinary Logistic Regression (Unregularized Baseline):**
+   - Serves as the primary interpretable linear classification benchmark (using standard maximum likelihood estimation without L1/L2 penalties).
+   - Evaluates baseline log-odds coefficients, odds ratios, and calibrated probability estimates.
 2. **Decision Tree Classifier (CART):**
    - Non-parametric model learning orthogonal step boundaries (e.g. sharp threshold at $\text{buffer} \le 0$).
 3. **Random Forest Classifier:**
