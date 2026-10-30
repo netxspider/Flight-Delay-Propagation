@@ -1,3 +1,3 @@
-prior_state,next_ontime_count,next_delayed_count,subsequent_delay_rate_pct
-On-Time (PREV_DEL15 = 0),4528318,735329,13.97
-Delayed (PREV_DEL15 = 1),749583,755257,50.19
+prior_state,denominator_total_inbound,next_ontime_count,next_delayed_numerator,subsequent_delay_rate_pct
+Preceding On-Time (PREV_DEL15 = 0),5263647,4528318,735329,13.97
+Preceding Delayed (PREV_DEL15 = 1),1504840,749583,755257,50.1885

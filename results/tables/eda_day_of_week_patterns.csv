@@ -1,8 +1,8 @@
-dow_num,day_name,pair_count,del15_rate,mean_delay,prop_rate
-1,Monday,1016209,23.49,9.39,50.9
-2,Tuesday,918741,18.12,3.47,43.21
-3,Wednesday,933561,19.06,4.39,47.31
-4,Thursday,1006156,23.04,8.82,53.06
-5,Friday,1009564,22.97,8.74,50.27
-6,Saturday,874839,20.66,6.12,45.86
-7,Sunday,1009417,26.06,12.63,57.76
+dow_num,day_name,total_pairs,total_delayed_num,overall_del15_rate,mean_delay,prop_rate
+1,Monday,1016209,238746.0,23.49,9.39,50.9
+2,Tuesday,918741,166490.0,18.12,3.47,43.21
+3,Wednesday,933561,177902.0,19.06,4.39,47.31
+4,Thursday,1006156,231835.0,23.04,8.82,53.06
+5,Friday,1009564,231868.0,22.97,8.74,50.27
+6,Saturday,874839,180713.0,20.66,6.12,45.86
+7,Sunday,1009417,263032.0,26.06,12.63,57.76

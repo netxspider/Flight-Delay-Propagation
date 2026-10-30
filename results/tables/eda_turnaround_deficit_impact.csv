@@ -1,3 +1,3 @@
-is_deficit,pair_count,pct_of_pairs,next_del15_rate,next_mean_delay,next_median_delay,next_std_delay,next_p90_delay,next_mean_dep_delay,next_median_dep_delay
-1,382937,5.6576,99.5,121.86,89.0,124.39,221.0,125.93,92.0
-0,6385550,94.3424,17.38,0.93,-7.0,41.53,29.0,5.95,-3.0
+is_deficit,pair_count,next_delayed_num,pct_of_pairs,next_del15_rate,next_mean_delay,next_median_delay,next_std_delay,next_p90_delay,next_mean_dep_delay,next_median_dep_delay
+1,382937,381015.0,5.6576,99.5,121.86,89.0,124.39,221.0,125.93,92.0
+0,6385550,1109571.0,94.3424,17.38,0.93,-7.0,41.53,29.0,5.95,-3.0

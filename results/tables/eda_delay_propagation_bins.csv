@@ -1,9 +1,9 @@
-prev_delay_bin,pair_count,pct_of_pairs,next_del15_rate,next_mean_delay,next_median_delay,next_std_delay,next_p90_delay
-1. Early (< 0 min),4112539,60.76,12.43,-2.05,-9.0,42.27,20.0
-2. On-Time (0-14 min),1151108,17.01,19.47,4.82,-4.0,47.36,31.0
-3. Moderate Delay (15-29 min),504631,7.46,34.6,14.21,5.0,54.99,46.0
-4. Significant Delay (30-44 min),276984,4.09,50.84,23.29,15.0,59.96,61.0
-5. Heavy Delay (45-59 min),174340,2.58,59.38,31.95,26.0,66.94,76.0
-6. Severe Delay (60-89 min),208414,3.08,62.17,42.85,39.0,73.99,96.0
-7. Extreme Delay (90-119 min),116398,1.72,62.36,57.26,57.0,84.04,124.0
-8. Catastrophic Delay (>= 120 min),224073,3.31,59.88,92.56,55.0,138.12,229.0
+prev_delay_bin,total_pairs,next_delayed_numerator,next_del15_rate,next_mean_delay,next_median_delay,next_std_delay,next_p90_delay
+1. Early (< 0 min),4112539,511260.0,12.4317,-2.05,-9.0,42.27,20.0
+2. On-Time (0-14 min),1151108,224069.0,19.4655,4.82,-4.0,47.36,31.0
+3. Moderate Delay (15-29 min),504631,174582.0,34.596,14.21,5.0,54.99,46.0
+4. Significant Delay (30-44 min),276984,140824.0,50.8419,23.29,15.0,59.96,61.0
+5. Heavy Delay (45-59 min),174340,103524.0,59.3805,31.95,26.0,66.94,76.0
+6. Severe Delay (60-89 min),208414,129562.0,62.1657,42.85,39.0,73.99,96.0
+7. Extreme Delay (90-119 min),116398,72590.0,62.3636,57.26,57.0,84.04,124.0
+8. Catastrophic Delay (>= 120 min),224073,134175.0,59.88,92.56,55.0,138.12,229.0
