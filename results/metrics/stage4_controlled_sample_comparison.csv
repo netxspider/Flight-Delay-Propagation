@@ -1,0 +1,9 @@
+task,model,controlled_train_sample_size,full_baseline_train_sample_size,controlled_accuracy,controlled_precision,controlled_recall,controlled_f1,controlled_roc_auc,controlled_average_precision_ap,controlled_log_loss,full_baseline_average_precision_ap,full_baseline_roc_auc,train_duration_sec,controlled_mae,controlled_rmse,controlled_r2,full_baseline_mae,full_baseline_rmse,full_baseline_r2
+Classification,Ordinary Logistic Regression (Unregularized),500000,5065376,0.8511713028821756,0.7727244145414695,0.37316339942998683,0.5032821988977428,0.7765223541321491,0.6218467712997341,0.3825086758671733,0.6228,0.7775,4.45,,,,,,
+Classification,Decision Tree Classifier,500000,N/A,0.8674513041793868,0.8230333645659348,0.43820302705610337,0.5719081912267591,0.7886991636392989,0.6609721843084584,0.3728238655542674,N/A,N/A,8.1,,,,,,
+Classification,Random Forest Classifier,500000,N/A,0.8678536149684155,0.8668334774529465,0.4087696999405694,0.5555571932658662,0.7932014070104284,0.660010174828547,0.3747718387773954,N/A,N/A,13.75,,,,,,
+Classification,MLP Classifier (alpha=0.0),250000,N/A,0.8601641322839946,0.9189004166519127,0.3377219429032496,0.4939158239332073,0.7876947873679427,0.645828269010855,0.40650226336087303,N/A,N/A,9.91,,,,,,
+Regression,Multiple Linear Regression (OLS),500000,5065376,,,,,,,,,,4.4,21.1957,44.4274,0.274372,21.1891,44.3956,0.275413
+Regression,Decision Tree Regressor,500000,N/A,,,,,,,,,,7.53,17.7017,39.1046,0.43783,N/A,N/A,N/A
+Regression,Random Forest Regressor,500000,N/A,,,,,,,,,,411.92,17.3997,38.6221,0.451617,N/A,N/A,N/A
+Regression,MLP Regressor (alpha=0.0),250000,N/A,,,,,,,,,,7.98,17.0622,39.3372,0.431122,N/A,N/A,N/A

@@ -1,0 +1,11 @@
+run_id,model_name,feature_group,estimator_class,training_row_count,sampling_method,random_seed,used_sample,alpha,alpha_zero_verified,iterations,fit_time_sec,saved_matches_reported,key_hyperparameters
+Run_1,Decision Tree Classifier,Group_A,DecisionTreeClassifier,500000,reservoir,42,True,N/A,True,N/A,1.01,True,"{""max_depth"": 14, ""min_samples_leaf"": 100, ""random_state"": 42}"
+Run_2,Decision Tree Classifier,Group_C,DecisionTreeClassifier,500000,reservoir,42,True,N/A,True,N/A,8.1,True,"{""max_depth"": 14, ""min_samples_leaf"": 100, ""random_state"": 42}"
+Run_3,Random Forest Classifier,Group_A,RandomForestClassifier,500000,reservoir,42,True,N/A,True,N/A,13.49,True,"{""max_depth"": 14, ""min_samples_leaf"": 50, ""n_estimators"": 100, ""n_jobs"": 2, ""random_state"": 42}"
+Run_4,Random Forest Classifier,Group_C,RandomForestClassifier,500000,reservoir,42,True,N/A,True,N/A,13.75,True,"{""max_depth"": 14, ""min_samples_leaf"": 50, ""n_estimators"": 100, ""n_jobs"": 2, ""random_state"": 42}"
+Run_5,MLP Classifier,Group_C,MLPClassifier,250000,reservoir + pandas,42,True,0.0,True,17,9.91,True,"{""alpha"": 0.0, ""batch_size"": 256, ""hidden_layer_sizes"": [64, 32], ""random_state"": 42}"
+Run_6,Decision Tree Regressor,Group_A,DecisionTreeRegressor,500000,reservoir,42,True,N/A,True,N/A,0.97,True,"{""max_depth"": 14, ""min_samples_leaf"": 100, ""random_state"": 42}"
+Run_7,Decision Tree Regressor,Group_C,DecisionTreeRegressor,500000,reservoir,42,True,N/A,True,N/A,7.53,True,"{""max_depth"": 14, ""min_samples_leaf"": 100, ""random_state"": 42}"
+Run_8,Random Forest Regressor,Group_A,RandomForestRegressor,500000,reservoir,42,True,N/A,True,N/A,31.7,True,"{""max_depth"": 14, ""min_samples_leaf"": 50, ""n_estimators"": 100, ""n_jobs"": 2, ""random_state"": 42}"
+Run_9,Random Forest Regressor,Group_C,RandomForestRegressor,500000,reservoir,42,True,N/A,True,N/A,411.92,True,"{""max_depth"": 14, ""min_samples_leaf"": 50, ""n_estimators"": 100, ""n_jobs"": 2, ""random_state"": 42}"
+Run_10,MLP Regressor,Group_C,MLPRegressor,250000,reservoir + pandas,42,True,0.0,True,15,7.98,True,"{""alpha"": 0.0, ""batch_size"": 256, ""hidden_layer_sizes"": [64, 32], ""random_state"": 42}"

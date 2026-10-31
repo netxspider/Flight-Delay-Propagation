@@ -1,0 +1,21 @@
+delay_band,n_observations,pct_of_population,model,mae_minutes,rmse_minutes,mean_bias_minutes
+Early / On-Time (<= 0m),734735,64.4,Multiple Linear Reg (OLS Group C),16.04,19.63,15.61
+Early / On-Time (<= 0m),734735,64.4,Decision Tree Regressor (Group C),12.02,15.81,11.04
+Early / On-Time (<= 0m),734735,64.4,Random Forest Regressor (Group C),12.19,15.57,11.43
+Early / On-Time (<= 0m),734735,64.4,MLP Regressor (alpha=0.0 Group C),9.36,12.41,4.29
+Minor Delay (1 - 14m),175653,15.4,Multiple Linear Reg (OLS Group C),7.56,10.92,-1.99
+Minor Delay (1 - 14m),175653,15.4,Decision Tree Regressor (Group C),11.2,13.34,-4.68
+Minor Delay (1 - 14m),175653,15.4,Random Forest Regressor (Group C),10.28,12.2,-4.06
+Minor Delay (1 - 14m),175653,15.4,MLP Regressor (alpha=0.0 Group C),14.3,16.46,-10.55
+Moderate Delay (15 - 59m),152718,13.39,Multiple Linear Reg (OLS Group C),27.4,33.88,-12.1
+Moderate Delay (15 - 59m),152718,13.39,Decision Tree Regressor (Group C),23.63,28.02,-14.94
+Moderate Delay (15 - 59m),152718,13.39,Random Forest Regressor (Group C),22.44,26.7,-14.35
+Moderate Delay (15 - 59m),152718,13.39,MLP Regressor (alpha=0.0 Group C),26.87,31.72,-20.9
+Major Delay (60 - 119m),48146,4.22,Multiple Linear Reg (OLS Group C),54.88,61.4,-21.8
+Major Delay (60 - 119m),48146,4.22,Decision Tree Regressor (Group C),46.37,57.66,-34.46
+Major Delay (60 - 119m),48146,4.22,Random Forest Regressor (Group C),45.03,56.29,-33.85
+Major Delay (60 - 119m),48146,4.22,MLP Regressor (alpha=0.0 Group C),49.45,61.5,-38.95
+Severe Delay (>= 120m),29657,2.6,Multiple Linear Reg (OLS Group C),143.01,231.62,-139.72
+Severe Delay (>= 120m),29657,2.6,Decision Tree Regressor (Group C),119.8,205.27,-99.86
+Severe Delay (>= 120m),29657,2.6,Random Forest Regressor (Group C),117.91,204.17,-99.29
+Severe Delay (>= 120m),29657,2.6,MLP Regressor (alpha=0.0 Group C),121.13,206.85,-107.94

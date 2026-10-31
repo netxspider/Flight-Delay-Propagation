@@ -363,9 +363,26 @@ display(df_cls_stage4[['stage', 'run_id', 'model', 'feature_group', 'sample_size
 cells.append(make_cell("markdown", """---
 ## 12. Classification Validation Comparison & Benchmark Findings"""))
 cells.append(make_cell("markdown", """### Key Classification Takeaways:
-1. **Ensemble & Non-Linear Superiority:** Random Forest Group C achieves the highest overall discrimination with an **ROC-AUC of 0.7932** and **PR-AUC of 0.6600**, significantly outperforming unregularized Logistic Regression (ROC-AUC: 0.7775, PR-AUC: 0.6228).
+1. **Ensemble & Non-Linear Superiority:** Random Forest Group C achieves the highest overall discrimination with an **ROC-AUC of 0.7932** and **Average Precision (AP) of 0.6600**, significantly outperforming unregularized Logistic Regression (ROC-AUC: 0.7775, AP: 0.6228).
 2. **Turnaround Thresholds:** Decision Tree on turnaround mechanics alone (Group A) jumps to an F1 of **0.5613** (compared to Logistic Regression's 0.3955) by learning strict orthogonal split boundaries when remaining turnaround buffer turns negative (`IS_TURNAROUND_DEFICIT = 1`).
 3. **MLP High Precision:** Unregularized MLP Classifier (`alpha=0.0`) achieves the highest positive predictive precision (**91.89%**), indicating that deep non-linear feature representations isolate high-confidence delay propagation cascades."""))
+
+# Section 13.1
+cells.append(make_cell("markdown", """---
+### 12.1 Controlled Sample-Size Experiment (Group C, N = 500,000)
+To establish sample-size comparability, Logistic Regression was retrained on the exact same 500,000-row training sample with seed 42:"""))
+cells.append(make_cell("code", """# Display Controlled Sample-Size Comparison
+df_controlled = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage4_controlled_sample_comparison.csv"))
+print("=== Controlled Sample-Size Experiment (Training N = 500,000, Full Val N = 1,140,909) ===")
+display(df_controlled[df_controlled['task'] == 'Classification'][['model', 'controlled_train_sample_size', 'controlled_accuracy', 'controlled_precision', 'controlled_recall', 'controlled_f1', 'controlled_roc_auc', 'controlled_average_precision_ap']])"""))
+
+# Section 13.2
+cells.append(make_cell("markdown", """---
+### 12.2 Permutation Feature Importance Robustness (N = 100,000, 5 Repeats)"""))
+cells.append(make_cell("code", """# Permutation vs Impurity Importance for Random Forest Classifier
+df_perm_cls = pd.read_csv(os.path.join(RESULTS_DIR, "classification/stage4_permutation_importance.csv"))
+print("=== RF Classifier Permutation Importance (Metric: Average Precision Drop) ===")
+display(df_perm_cls.head(10)[['feature', 'mean_importance', 'std_importance', 'mdi_importance']])"""))
 
 # Section 14
 cells.append(make_cell("markdown", """---
@@ -440,6 +457,23 @@ cells.append(make_cell("markdown", """### Key Regression Takeaways:
 1. **Dramatic Non-Linear Variance Capture:** Linear regression (OLS) only accounted for 27.5% of delay variance ($R^2 = 0.2754$, MAE = 21.19 min). By contrast, Random Forest Group C achieves an $R^2$ of **0.4516** and reduces MAE to **17.40 minutes** (an improvement of 3.79 minutes per flight leg across 1.14M flights!).
 2. **MLP Lowest Absolute Error:** MLP Regressor with `alpha=0.0` achieves the lowest Mean Absolute Error across all evaluated models at **17.06 minutes**, outperforming both linear models and individual decision trees.
 3. **Turnaround Throttle Primacy:** Turnaround buffer physics explain the vast majority of continuous delay propagation, while airframe daily operational history provides key secondary modulation."""))
+
+# Section 16.1
+cells.append(make_cell("markdown", """---
+### 15.1 Regression Error Analysis Across Operational Delay Bands
+Performance evaluated across 5 actual target delay bands on the full validation population ($N = 1,140,909$):"""))
+cells.append(make_cell("code", """# Display Delay Band Error Breakdown
+df_delay_bands = pd.read_csv(os.path.join(RESULTS_DIR, "regression/stage4_error_by_delay_band.csv"))
+print("=== Error Breakdown by Target Delay Band (Full Validation Set, N = 1,140,909) ===")
+display(df_delay_bands)"""))
+
+# Section 16.2
+cells.append(make_cell("markdown", """---
+### 15.2 Permutation Feature Importance for Continuous Delay (N = 100,000, 5 Repeats)"""))
+cells.append(make_cell("code", """# Permutation vs Impurity Importance for Random Forest Regressor
+df_perm_reg = pd.read_csv(os.path.join(RESULTS_DIR, "regression/stage4_permutation_importance.csv"))
+print("=== RF Regressor Permutation Importance (Metric: Increase in MAE in minutes) ===")
+display(df_perm_reg.head(10)[['feature', 'mean_importance_mae', 'std_importance_mae', 'mean_importance_r2', 'mdi_importance']])"""))
 
 # Section 17
 cells.append(make_cell("markdown", """---
@@ -529,12 +563,15 @@ print("=== Figure: Actual vs. Predicted Arrival Delay (Random Forest Group C) ==
 display(Image(filename=os.path.join(RESULTS_DIR, "figures/regression_actual_vs_predicted.png")))
 
 print("=== Figure: Residual Error Distribution Across Regressors ===")
-display(Image(filename=os.path.join(RESULTS_DIR, "figures/regression_residual_distribution.png")))"""))
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/regression_residual_distribution.png")))
+
+print("=== Figure: Error Breakdown Across Target Delay Bands ===")
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/regression_error_by_delay_band.png")))"""))
 
 # Section 23
 cells.append(make_cell("markdown", """---
 ## 22. Model Interpretation: Feature Importances & Physical Drivers"""))
-cells.append(make_cell("code", """# Display top feature importances for Tree Models
+cells.append(make_cell("code", """# Display top feature importances for Tree Models & Robustness Comparison
 df_imp_rf_cls = pd.read_csv(os.path.join(RESULTS_DIR, "classification/feature_importances_rf_group_c.csv"))
 df_imp_rf_reg = pd.read_csv(os.path.join(RESULTS_DIR, "regression/feature_importances_rf_group_c.csv"))
 
@@ -542,7 +579,10 @@ print("=== Top 10 Features: Random Forest Classifier (Group C) ===")
 display(df_imp_rf_cls.head(10))
 
 print("\n=== Top 10 Features: Random Forest Regressor (Group C) ===")
-display(df_imp_rf_reg.head(10))"""))
+display(df_imp_rf_reg.head(10))
+
+print("\n=== Figure: Permutation vs. MDI Feature Importance Comparison ===")
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/permutation_importance_comparison.png")))"""))
 
 # Section 24
 cells.append(make_cell("markdown", """---
