@@ -1,0 +1,103 @@
+{
+  "audit_phase": "Phase 6 Stage 6.2: Group Comparison Baseline Audit",
+  "timestamp_utc": "2026-10-31T22:16:00Z",
+  "comparability_status": "Strictly Controlled and Verified",
+  "experiment_context": {
+    "script_source": "src/models/train_baselines.py",
+    "training_dataset": "data/processed/modeling_train.parquet",
+    "training_rows": 5065376,
+    "validation_dataset": "data/processed/modeling_validation.parquet",
+    "validation_rows": 1140909,
+    "random_seed": 42
+  },
+  "ols_regression_baselines": [
+    {
+      "model": "Multiple Linear Regression (OLS)",
+      "feature_group": "Group_A",
+      "feature_description": "Turnaround Physics Only",
+      "num_features": 7,
+      "train_sample_size": 5065376,
+      "val_sample_size": 1140909,
+      "r2_score": 0.261919,
+      "mae_minutes": 20.7044,
+      "mse_minutes2": 2007.67,
+      "rmse_minutes": 44.807,
+      "notes": "True empirical baseline. The figure 0.2312 in stage6_1_final_audit.md was an errant draft entry and is rejected."
+    },
+    {
+      "model": "Multiple Linear Regression (OLS)",
+      "feature_group": "Group_B",
+      "feature_description": "Group A + Flight & Route Context",
+      "num_features": 14,
+      "train_sample_size": 5065376,
+      "val_sample_size": 1140909,
+      "r2_score": 0.264413,
+      "mae_minutes": 21.3719,
+      "mse_minutes2": 2000.89,
+      "rmse_minutes": 44.7313,
+      "delta_r2_vs_prev": 0.002494,
+      "notes": "MSE decreases from 2007.67 to 2000.89; R2 increases by +0.0025."
+    },
+    {
+      "model": "Multiple Linear Regression (OLS)",
+      "feature_group": "Group_C",
+      "feature_description": "Group B + Cumulative Airframe History",
+      "num_features": 18,
+      "train_sample_size": 5065376,
+      "val_sample_size": 1140909,
+      "r2_score": 0.275413,
+      "mae_minutes": 21.1891,
+      "mse_minutes2": 1970.97,
+      "rmse_minutes": 44.3956,
+      "delta_r2_vs_prev": 0.011,
+      "delta_mae_vs_prev": -0.1828,
+      "notes": "MSE decreases to 1970.97; R2 increases by +0.0110; MAE decreases by 0.18m."
+    }
+  ],
+  "logistic_regression_baselines": [
+    {
+      "model": "Ordinary Logistic Regression (Unregularized)",
+      "feature_group": "Group_A",
+      "feature_description": "Turnaround Physics Only",
+      "num_features": 7,
+      "train_sample_size": 5065376,
+      "val_sample_size": 1140909,
+      "roc_auc": 0.735645,
+      "average_precision_ap": 0.579225,
+      "log_loss": 0.395734,
+      "accuracy": 0.846636,
+      "f1_score": 0.395461
+    },
+    {
+      "model": "Ordinary Logistic Regression (Unregularized)",
+      "feature_group": "Group_B",
+      "feature_description": "Group A + Flight & Route Context",
+      "num_features": 14,
+      "train_sample_size": 5065376,
+      "val_sample_size": 1140909,
+      "roc_auc": 0.769758,
+      "average_precision_ap": 0.610247,
+      "log_loss": 0.386183,
+      "accuracy": 0.849068,
+      "f1_score": 0.467064,
+      "delta_roc_auc_vs_prev": 0.034113,
+      "delta_ap_vs_prev": 0.031022
+    },
+    {
+      "model": "Ordinary Logistic Regression (Unregularized)",
+      "feature_group": "Group_C",
+      "feature_description": "Group B + Cumulative Airframe History",
+      "num_features": 18,
+      "train_sample_size": 5065376,
+      "val_sample_size": 1140909,
+      "roc_auc": 0.777498,
+      "average_precision_ap": 0.622751,
+      "log_loss": 0.381697,
+      "accuracy": 0.851266,
+      "f1_score": 0.500253,
+      "delta_roc_auc_vs_prev": 0.00774,
+      "delta_ap_vs_prev": 0.012504
+    }
+  ],
+  "controlled_comparability_conclusion": "All baseline comparisons across Groups A, B, and C for OLS and Logistic Regression are 100% strictly controlled: identical training rows (5,065,376), identical validation rows (1,140,909), identical random seed (42), identical preprocessors, and identical unregularized estimators. For linear models, the isolated addition of airframe history (Group B -> Group C) reliably adds +0.0110 in R2 and +0.0077 in ROC-AUC (+0.0125 AP). For Random Forest, Group B was not evaluated in Stage 4/5, so Group C vs Group A represents the combined gain (+1.08% ROC-AUC, +0.0076 R2)."
+}

@@ -79,8 +79,8 @@ The BTS On-Time Performance dataset contains only scheduled and actual operation
 3. **Crew Schedule Mechanics:** Crew duty limits (FAR Part 117), crew swaps, and crew misconnections sharing the same flight are unrecorded.
 4. **Airport Gate Congestion:** Gate hold times and taxiway congestion are unobserved at prediction time.
 
-### 3.3 Extrapolation Limits of Tree Ensembles
-Random Forest regressors produce piecewise constant predictions bounded by the training target values within terminal leaf nodes. Consequently, the model cannot extrapolate to unprecedented delay durations ($> 300$ minutes) that occur during catastrophic blizzard shutdowns or nationwide ground stops.
+### 3.3 Extrapolation Limits and Conditional Averaging of Tree Ensembles
+Random Forest regressors produce piecewise constant predictions derived from the conditional mean of training samples within terminal leaf nodes (`min_samples_leaf = 50`). While individual tree leaves generate predictions up to $1,141.15$ minutes and test set predictions reach $1,027.9$ minutes, the leaf averaging mechanism shrinks extreme outliers toward local cluster means. For severe delays ($\ge 120$ minutes, where actual test delays average $231.01$ minutes), the model's conditional prediction averages $140.63$ minutes, resulting in a systematic underprediction (mean bias of $-90.38$ minutes) on flights experiencing compound, post-departure operational disruptions.
 
 ---
 

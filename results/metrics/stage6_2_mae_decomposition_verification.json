@@ -1,0 +1,112 @@
+{
+  "audit_phase": "Phase 6 Stage 6.2: MAE Decomposition Verification",
+  "timestamp_utc": "2026-10-31T22:15:30Z",
+  "verification_status": "Verified Reconciled and Validated",
+  "models_and_populations": {
+    "regressor_model": "RandomForestRegressor (Group C)",
+    "regressor_artifact": "models/final/final_selected_regressor.joblib",
+    "validation_population": 1140909,
+    "validation_timeframe": "October 1 - November 30, 2025",
+    "test_population": 562202,
+    "test_timeframe": "December 1 - December 31, 2025",
+    "delay_band_definitions_identical": true
+  },
+  "validation_early_delay_discrepancy_resolution": {
+    "verified_empirical_val_early_mae": 12.1856,
+    "reported_rounded_val_early_mae": 12.19,
+    "source_of_12_19": "results/regression/stage4_error_by_delay_band.csv (line 4: Random Forest Regressor Group C, 734,735 obs, MAE 12.19m)",
+    "source_of_9_79": "Draft narrative typo in Stage 5.1 report, previously resolved in Stage 5.2 consistency check; accidentally carried into Stage 6.1 final audit markdown table.",
+    "status": "9.79 min is rejected as an invalid draft typo; 12.19 min is verified as true empirical value."
+  },
+  "strata_data": [
+    {
+      "delay_band": "Early / On-Time (<= 0m)",
+      "val_n": 734735,
+      "val_weight": 0.643991,
+      "val_mae": 12.19,
+      "test_n": 322255,
+      "test_weight": 0.573201,
+      "test_mae": 13.01,
+      "delta_weight": -0.07079,
+      "delta_mae": 0.82
+    },
+    {
+      "delay_band": "Minor Delay (1 - 14m)",
+      "val_n": 175653,
+      "val_weight": 0.153959,
+      "val_mae": 10.28,
+      "test_n": 91082,
+      "test_weight": 0.162009,
+      "test_mae": 10.58,
+      "delta_weight": 0.00805,
+      "delta_mae": 0.30
+    },
+    {
+      "delay_band": "Moderate Delay (15 - 59m)",
+      "val_n": 152718,
+      "val_weight": 0.133856,
+      "val_mae": 22.44,
+      "test_n": 94233,
+      "test_weight": 0.167614,
+      "test_mae": 22.27,
+      "delta_weight": 0.033758,
+      "delta_mae": -0.17
+    },
+    {
+      "delay_band": "Significant Delay (60 - 119m)",
+      "val_n": 48146,
+      "val_weight": 0.0422,
+      "val_mae": 45.03,
+      "test_n": 31939,
+      "test_weight": 0.056811,
+      "test_mae": 42.70,
+      "delta_weight": 0.014611,
+      "delta_mae": -2.33
+    },
+    {
+      "delay_band": "Severe Delay (>= 120m)",
+      "val_n": 29657,
+      "val_weight": 0.025994,
+      "val_mae": 117.91,
+      "test_n": 22693,
+      "test_weight": 0.040365,
+      "test_mae": 109.98,
+      "delta_weight": 0.014371,
+      "delta_mae": -7.93
+    }
+  ],
+  "reconstructed_totals": {
+    "reconstructed_val_mae": 17.4019,
+    "reconstructed_test_mae": 19.7693,
+    "observed_delta_mae": 2.3674
+  },
+  "decomposition_formulations": {
+    "formulation_a_test_weighted": {
+      "formula": "Delta MAE = sum(w_test * (e_test - e_val)) + sum((w_test - w_val) * e_val)",
+      "within_band_error_effect_minutes": 0.0377,
+      "within_band_share_pct": 1.59,
+      "composition_shift_effect_minutes": 2.3297,
+      "composition_share_pct": 98.41,
+      "reconciled_sum_minutes": 2.3674,
+      "reconciles_exactly": true
+    },
+    "formulation_b_val_weighted": {
+      "formula": "Delta MAE = sum(w_val * (e_test - e_val)) + sum((w_test - w_val) * e_test)",
+      "within_band_error_effect_minutes": 0.247,
+      "within_band_share_pct": 10.44,
+      "composition_shift_effect_minutes": 2.1203,
+      "composition_share_pct": 89.56,
+      "reconciled_sum_minutes": 2.3674,
+      "reconciles_exactly": true
+    },
+    "symmetric_shapley": {
+      "within_band_error_effect_minutes": 0.1424,
+      "within_band_share_pct": 6.01,
+      "composition_shift_effect_minutes": 2.225,
+      "composition_share_pct": 93.99,
+      "reconciled_sum_minutes": 2.3674,
+      "reconciles_exactly": true
+    }
+  },
+  "substantive_conclusion": "The MAE decomposition remains completely valid: population composition shift explains 89.56% to 98.41% (symmetric 93.99%) of the +2.37 min MAE increase, with within-band error remaining remarkably stable (+0.04 to +0.25 min)."
+}

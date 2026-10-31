@@ -1,0 +1,100 @@
+{
+  "audit_phase": "Phase 6 Stage 6.2: Artifact Hash Reconciliation",
+  "timestamp_utc": "2026-10-31T22:15:00Z",
+  "reconciliation_summary": {
+    "status": "Verified Reconciled",
+    "test_dataset_integrity": "Unmodified and Identical Across Stage 6, 6.1, and 6.2",
+    "root_cause_of_hash_discrepancy": "Typographical / reporting error in stage6_1_final_audit.md table where uncompressed in-memory DataFrame size (~61.1 MB) and a corrupted hash suffix were manually inserted, whereas the underlying disk file and stage6_1_integrity_audit.json consistently held the true 12.37 MB file with SHA-256 3f0e5494fdb4d934cda7b77f41eaef6b73de41e1cd3927c752dd3e3e90449d1e."
+  },
+  "artifacts": {
+    "test_dataset": {
+      "path": "data/processed/modeling_test.parquet",
+      "stage6_c44ca21_record": {
+        "source": "results/metrics/stage6_evaluation_integrity_audit.json",
+        "size_bytes": 12973636,
+        "size_human": "12.37 MB",
+        "sha256": "3f0e5494fdb4d934cda7b77f41eaef6b73de41e1cd3927c752dd3e3e90449d1e"
+      },
+      "stage6_1_json_record": {
+        "source": "results/metrics/stage6_1_integrity_audit.json",
+        "size_bytes": 12973636,
+        "size_human": "12.37 MB",
+        "sha256": "3f0e5494fdb4d934cda7b77f41eaef6b73de41e1cd3927c752dd3e3e90449d1e"
+      },
+      "stage6_1_table_narrative_record": {
+        "source": "results/tables/stage6_1_final_audit.md (table)",
+        "size_reported": "61.1 MB (in-memory uncompressed DataFrame estimate)",
+        "sha256_reported": "3f0e5494f1c1f725cf9e1d528b9bc52beab2e9be49b9148d4234057863777559 (corrupted string)",
+        "error_type": "Erroneous draft entry in Markdown table; disk file was never modified."
+      },
+      "stage6_2_current_disk_audit": {
+        "size_bytes": 12973636,
+        "size_human": "12.37 MB",
+        "sha256": "3f0e5494fdb4d934cda7b77f41eaef6b73de41e1cd3927c752dd3e3e90449d1e",
+        "matches_stage6_c44ca21": true,
+        "matches_stage6_1_json": true
+      }
+    },
+    "test_predictions_parquet": {
+      "path": "results/predictions/stage6_test_predictions.parquet",
+      "stage6_c44ca21_git_record": {
+        "git_blob_sha1": "0336aa18c053a3adeab52bb353fb6750b623ce50",
+        "size_bytes": 6867884,
+        "size_human": "6.55 MB",
+        "sha256": "17b53d619416547256a43774ca7996c0a31d1a2f1cf98438894f53ee004a7b07"
+      },
+      "stage6_1_json_record": {
+        "size_bytes": 6867884,
+        "sha256": "17b53d619416547256a43774ca7996c0a31d1a2f1cf98438894f53ee004a7b07"
+      },
+      "stage6_2_current_disk_audit": {
+        "size_bytes": 6867884,
+        "size_human": "6.55 MB",
+        "sha256": "17b53d619416547256a43774ca7996c0a31d1a2f1cf98438894f53ee004a7b07",
+        "matches_stage6_git_commit": true
+      }
+    },
+    "final_classifier": {
+      "path": "models/final/final_selected_classifier.joblib",
+      "git_status": "Untracked due to .gitignore",
+      "stage6_1_json_record": {
+        "size_bytes": 2639881,
+        "sha256": "2c05c745055322754a5774c6fc4a052c90412e68ce4cbb0d425a5e37708ad293"
+      },
+      "stage6_2_current_disk_audit": {
+        "size_bytes": 2639881,
+        "size_human": "2.52 MB",
+        "sha256": "2c05c745055322754a5774c6fc4a052c90412e68ce4cbb0d425a5e37708ad293",
+        "status": "Verified current-file integrity, matches stage6_1_integrity_audit.json"
+      }
+    },
+    "final_regressor": {
+      "path": "models/final/final_selected_regressor.joblib",
+      "git_status": "Untracked due to .gitignore",
+      "stage6_1_json_record": {
+        "size_bytes": 16396897,
+        "sha256": "33033342b5a80d67d9fe843d492a8f55f6734923271981e0f947d4fa4ceab17c"
+      },
+      "stage6_2_current_disk_audit": {
+        "size_bytes": 16396897,
+        "size_human": "15.64 MB",
+        "sha256": "33033342b5a80d67d9fe843d492a8f55f6734923271981e0f947d4fa4ceab17c",
+        "status": "Verified current-file integrity, matches stage6_1_integrity_audit.json"
+      }
+    },
+    "final_preprocessor": {
+      "path": "models/final/final_preprocessor_group_c.joblib",
+      "git_status": "Untracked due to .gitignore",
+      "stage6_1_json_record": {
+        "size_bytes": 8896,
+        "sha256": "a73c4c4d9ab7094d28720a76e6010e57a9e89706b3f5207005af2834e924f7ce"
+      },
+      "stage6_2_current_disk_audit": {
+        "size_bytes": 8896,
+        "size_human": "8.69 KB",
+        "sha256": "a73c4c4d9ab7094d28720a76e6010e57a9e89706b3f5207005af2834e924f7ce",
+        "status": "Verified current-file integrity, matches stage6_1_integrity_audit.json"
+      }
+    }
+  }
+}

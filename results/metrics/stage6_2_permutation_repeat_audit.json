@@ -1,0 +1,72 @@
+{
+  "audit_phase": "Phase 6 Stage 6.2: Permutation Importance Repeat Audit",
+  "timestamp_utc": "2026-10-31T22:16:30Z",
+  "verification_status": "100% Empirically Replicated and Verified",
+  "experimental_setup": {
+    "evaluation_script": "src/models/evaluate_stage6_test.py",
+    "dataset": "data/processed/modeling_test.parquet",
+    "sample_method": "DuckDB reservoir sample (N = 100,000, seed = 42)",
+    "sample_row_count": 100000,
+    "model_regressor": "RandomForestRegressor (Group C, 100 trees, max_depth=14, min_samples_leaf=50)",
+    "regressor_artifact": "models/final/final_selected_regressor.joblib",
+    "scoring_functions": [
+      "sklearn.metrics.r2_score",
+      "sklearn.metrics.mean_absolute_error",
+      "sklearn.metrics.average_precision_score"
+    ],
+    "sample_baseline_metrics": {
+      "sample_base_r2": 0.477008,
+      "sample_base_mae_minutes": 19.896922
+    }
+  },
+  "target_feature_audit": {
+    "feature_name": "ESTIMATED_REMAINING_TURNAROUND_MINUTES",
+    "feature_index": 5,
+    "algebraic_definition": "SCHEDULED_TURNAROUND_BUFFER - PREV_ARR_DELAY",
+    "repeats": [
+      {
+        "repeat": 1,
+        "permuted_r2": -0.436318,
+        "drop_in_r2": 0.913325,
+        "permuted_mae_minutes": 35.6037,
+        "increase_in_mae_minutes": 15.7068
+      },
+      {
+        "repeat": 2,
+        "permuted_r2": -0.443437,
+        "drop_in_r2": 0.920445,
+        "permuted_mae_minutes": 35.6715,
+        "increase_in_mae_minutes": 15.7745
+      },
+      {
+        "repeat": 3,
+        "permuted_r2": -0.441815,
+        "drop_in_r2": 0.918823,
+        "permuted_mae_minutes": 35.7719,
+        "increase_in_mae_minutes": 15.875
+      },
+      {
+        "repeat": 4,
+        "permuted_r2": -0.451261,
+        "drop_in_r2": 0.928268,
+        "permuted_mae_minutes": 35.8172,
+        "increase_in_mae_minutes": 15.9203
+      },
+      {
+        "repeat": 5,
+        "permuted_r2": -0.434797,
+        "drop_in_r2": 0.911805,
+        "permuted_mae_minutes": 35.672,
+        "increase_in_mae_minutes": 15.7751
+      }
+    ],
+    "aggregate_statistics": {
+      "mean_drop_in_r2": 0.91853,
+      "std_drop_in_r2": 0.00585,
+      "mean_increase_in_mae_minutes": 15.8103,
+      "std_increase_in_mae_minutes": 0.0768,
+      "matches_stage6_test_feature_importance_csv": true
+    }
+  },
+  "methodological_caveat": "Univariate permutation importance breaks the exact physical and mathematical identity linking turnaround buffer, prior arrival delay, and remaining turnaround cushion. Shuffling this single column produces synthetic rows with contradictory feature values that severely disrupt tree routing, driving MSE above target variance and forcing R2 negative. This large drop demonstrates heavy architectural dependence on this derived representation under perturbation, rather than an independent causal mechanism."
+}

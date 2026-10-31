@@ -79,3 +79,4 @@ When independently permuted across 100,000 test observations (5 repeats):
 2. **Methodological Safeguard:**
    - Permuting a derived feature independently breaks its algebraic consistency with `SCHEDULED_TURNAROUND_BUFFER` and `PREV_ARR_DELAY`, creating impossible synthetic feature combinations.
    - This test measures the tree ensemble's internal structural reliance on split thresholds along that specific feature dimension. It **must not** be interpreted as a measure of physical causal influence.
+
