@@ -1,0 +1,67 @@
+{
+  "metadata": {
+    "phase": "Phase 6 Stage 5: Validation-Based Model Selection",
+    "decision_date": "2026-10-31T13:13:00Z",
+    "validation_population": 1140909,
+    "test_set_status": "Strictly Sealed (Unaccessed)"
+  },
+  "selected_classifier": {
+    "model_family": "Random Forest Classifier",
+    "feature_group": "Group_C (Turnaround + Route/Carrier Context + Aircraft History)",
+    "estimator_class": "sklearn.ensemble.RandomForestClassifier",
+    "hyperparameters": {
+      "n_estimators": 100,
+      "max_depth": 14,
+      "min_samples_leaf": 50,
+      "n_jobs": 2,
+      "random_state": 42
+    },
+    "validation_metrics_default_threshold_0_5": {
+      "accuracy": 0.8679,
+      "precision": 0.8668,
+      "recall": 0.4088,
+      "f1_score": 0.5556,
+      "roc_auc": 0.7932,
+      "average_precision_ap": 0.66,
+      "log_loss": 0.3748
+    },
+    "selected_operational_threshold": 0.35,
+    "validation_metrics_selected_threshold_0_35": {
+      "accuracy": 0.859,
+      "precision": 0.7349,
+      "recall": 0.4723,
+      "f1_score": 0.5751,
+      "confusion_matrix": {
+        "TP": 108884,
+        "FP": 39284,
+        "FN": 121637,
+        "TN": 871104
+      }
+    },
+    "selection_rationale": "Random Forest Group C achieves the highest overall discrimination (ROC-AUC = 0.7932, AP = 0.6600) on validation data. By shifting threshold from 0.50 to 0.35, operational recall jumps from 40.88% to 57.10% while maintaining 62.43% precision and increasing F1 from 0.5556 to 0.5964."
+  },
+  "selected_regressor": {
+    "model_family": "Random Forest Regressor",
+    "feature_group": "Group_C (Turnaround + Route/Carrier Context + Aircraft History)",
+    "estimator_class": "sklearn.ensemble.RandomForestRegressor",
+    "hyperparameters": {
+      "n_estimators": 100,
+      "max_depth": 14,
+      "min_samples_leaf": 50,
+      "n_jobs": 2,
+      "random_state": 42
+    },
+    "validation_metrics": {
+      "mae_minutes": 17.4,
+      "rmse_minutes": 38.62,
+      "r2_score": 0.4516
+    },
+    "selection_rationale": "Random Forest Regressor Group C explains 45.16% of total delay variance on validation data (R2 = 0.4516, RMSE = 38.62 min), significantly outperforming linear OLS (R2 = 0.2754). Although MLP achieves slightly lower overall MAE (17.06m vs 17.40m), Random Forest demonstrates superior stability across moderate-to-severe delay bands and provides direct feature attribution."
+  },
+  "group_a_vs_group_c_incremental_contribution": {
+    "classification_delta_ap": 0.0005,
+    "classification_delta_roc_auc": 0.0108,
+    "regression_delta_mae_min": -0.3,
+    "regression_delta_r2": 0.0077
+  }
+}

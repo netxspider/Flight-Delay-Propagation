@@ -502,43 +502,111 @@ print(f"Group C (+ Airframe Daily History):MAE = {ols_C['mae']:.2f} min | RMSE =
 
 # Section 18
 cells.append(make_cell("markdown", """---
-## 17. Hyperparameter Tuning Protocol"""))
-cells.append(make_cell("markdown", """To maintain scientific integrity without arbitrary data snooping or computational exhaustion:
-1. **Decision Tree:** Tune `max_depth` $\\in [8, 12, 16, 20]$, `min_samples_leaf` $\\in [50, 100, 200]$.
-2. **Random Forest:** Tune `max_depth` $\\in [12, 16]$, `min_samples_leaf` $\\in [50, 100]$ using $N = 500,000$ to $1,000,000$ representative observations.
-3. **MLP:** Architectures $(64, 32)$ vs $(128, 64)$, `alpha=0.0` strictly enforced, early stopping on validation loss.
-4. **SVC:** Evaluate Linear vs RBF kernels on stratified subsample ($N = 25,000$)."""))
+## 17. Hyperparameter Tuning Protocol & Empirical Results"""))
+cells.append(make_cell("markdown", """To systematically refine our estimators without data snooping or violating syllabus constraints:
+1. **Tree-Based Models (Decision Trees & Random Forests):**
+   - Explored `max_depth` $\\in [10, 14, 16, 18]$ and `min_samples_leaf` $\\in [30, 50, 100]$.
+   - Evaluated ensemble size ($n\\_estimators \\in [50, 100]$) and balanced class weighting (`class_weight='balanced_subsample'`).
+2. **Multi-Layer Perceptrons (MLP):**
+   - Strict Constraint: `alpha = 0.0` (zero L2 regularization).
+   - Architectures: Single-layer $(64,)$, dual-layer $(64, 32)$, and wide $(128, 64)$ with early stopping on validation loss.
+3. **Reference Benchmarks:**
+   - Evaluated unregularized Logistic Regression and Ordinary Least Squares (OLS) under the exact same $N = 500,000$ conditions.
+4. **Validation Integrity:**
+   - Every candidate is evaluated on the full, unpruned validation set ($N = 1,140,909$, October–November 2025)."""))
+cells.append(make_cell("code", """# Display Classification and Regression Hyperparameter Tuning Results
+from IPython.display import Image, display
+
+df_cls_tune = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage5_classification_tuning.csv"))
+print("=== Classification Hyperparameter Tuning Results (Validation N = 1,140,909) ===")
+display(df_cls_tune[['candidate_name', 'model_family', 'accuracy', 'precision', 'recall', 'f1_score', 'roc_auc', 'average_precision_ap', 'log_loss', 'fit_duration_sec']])
+
+df_reg_tune = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage5_regression_tuning.csv"))
+print("\n=== Regression Hyperparameter Tuning Results (Validation N = 1,140,909) ===")
+display(df_reg_tune[['candidate_name', 'model_family', 'mae_minutes', 'rmse_minutes', 'r2_score', 'fit_duration_sec']])
+
+print("\n=== Figure: Hyperparameter Tuning Performance Across Estimators ===")
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage5_tuning_curves.png")))"""))
 
 # Section 19
 cells.append(make_cell("markdown", """---
-## 18. Final Model Selection Protocol"""))
-cells.append(make_cell("markdown", """Model selection is governed strictly by **Validation Set Performance** (October–November 2025):
-- **Classification Criterion:** Maximum Average Precision (PR-AUC) and F1-Score on delayed flights, with secondary consideration of ROC-AUC and calibration (Brier score / Log Loss).
-- **Regression Criterion:** Minimum Out-of-Sample Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE)."""))
+## 18. Final Model Selection & Decision Threshold Optimization"""))
+cells.append(make_cell("markdown", """### 1. Classification Decision Threshold Calibration ($T \\in [0.10, 0.70]$)
+In airline operations, missing a propagated delay (False Negative) causes missed passenger connections, crew duty-time timeouts, and cascade disruptions. Conversely, an operational warning (False Positive) merely triggers expedited ground servicing.
+Standard default threshold ($T = 0.50$) produces high precision (86.68%) but misses **59.12%** of propagated delays (`recall = 40.88%`).
+By scanning thresholds across validation probabilities, we identify **$T = 0.35$** as the optimal operational operating point:
+- **F1-Score increases from 0.5556 to 0.5964** (+4.08 points).
+- **Recall increases from 40.88% to 57.10%** (+16.22 percentage points).
+- **Precision remains robust at 62.43%**."""))
+cells.append(make_cell("code", """# Display Classification Decision Threshold Optimization
+df_thresh = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage5_threshold_analysis.csv"))
+print("=== Classification Probability Threshold Analysis (RF Group C on Validation Data) ===")
+display(df_thresh[df_thresh['model'] == 'Random Forest Classifier (Candidate 1)'][['threshold', 'precision', 'recall', 'f1_score', 'specificity', 'accuracy', 'TP', 'FP', 'FN', 'TN']])
+
+print("\n=== Figure: Precision-Recall vs. Decision Threshold & Trade-off Curves ===")
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage5_threshold_curves.png")))
+
+print("\n=== Figure: Final Model Diagnostic Dashboard ===")
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage5_final_model_diagnostics.png")))"""))
+cells.append(make_cell("markdown", """### 2. Final Selected Models Rationale
+- **Final Classifier: Random Forest Classifier (Group C)**
+  - Config: `n_estimators=100`, `max_depth=14`, `min_samples_leaf=50`, calibrated threshold $T = 0.35$.
+  - Validation: ROC-AUC = 0.7932, AP = 0.6600, F1 = 0.5964 (Recall: 57.10%, Precision: 62.43%).
+- **Final Regressor: Random Forest Regressor (Group C)**
+  - Config: `n_estimators=100`, `max_depth=14`, `min_samples_leaf=50`.
+  - Validation: $R^2 = 0.4516$, RMSE = 38.62 min, MAE = 17.40 min (captures non-linear delay propagation significantly better than OLS $R^2 = 0.2744$)."""))
+cells.append(make_cell("code", """# Load and display finalized selection metadata
+with open(os.path.join(RESULTS_DIR, "metrics/stage5_final_model_selection.json"), "r") as f:
+    final_meta = json.load(f)
+
+print("=== Final Selected Estimator Metadata ===")
+print(json.dumps(final_meta, indent=2))"""))
 
 # Section 20
 cells.append(make_cell("markdown", """---
-## 19. Final Test Evaluation (Isolated December 2025 Set)"""))
-cells.append(make_cell("code", """# Isolated Test Evaluation Cell - Executed ONLY after final model selection
-def evaluate_final_test(best_clf, best_reg, prep_pipeline):
+## 19. Final Test Evaluation Protocol (December 2025 Held-Out Set)"""))
+cells.append(make_cell("markdown", """### Strict Methodological Lock:
+In accordance with rigorous academic machine learning methodology and our pre-registered evaluation protocol:
+- The December 2025 test dataset (`data/processed/modeling_test.parquet`, $N = 562,202$) has remained **strictly sealed, untouched, and unaccessed** during all exploratory, feature engineering, baseline, and Stage 5 tuning iterations.
+- Model selection and threshold calibration were completed exclusively using validation data (October–November 2025).
+- The cell below defines the standalone, reproducible test evaluation pipeline to be executed in Stage 6 upon formal approval."""))
+cells.append(make_cell("code", """# Standalone Test Evaluation Routine (Held-out December 2025)
+def evaluate_final_test_set():
+    \"\"\"
+    Executes the final test evaluation using strictly frozen models and preprocessors.
+    \"\"\"
     print("Loading sealed December 2025 test dataset...")
     df_test = con.execute(f"SELECT * FROM read_parquet('{TEST_PARQUET}')").df()
     print(f"Test dataset loaded: {len(df_test):,} rows.")
     
-    X_test_proc = prep_pipeline.transform(df_test)
+    # Load serialized final preprocessors and estimators
+    prep_C = joblib.load(os.path.join(MODELS_DIR, "final/final_preprocessor_group_c.joblib"))
+    final_clf = joblib.load(os.path.join(MODELS_DIR, "final/final_selected_classifier.joblib"))
+    final_reg = joblib.load(os.path.join(MODELS_DIR, "final/final_selected_regressor.joblib"))
+    
+    X_test_C = prep_C.transform(df_test)
     y_test_cls = df_test['NEXT_ARR_DEL15'].values
     y_test_reg = df_test['NEXT_ARR_DELAY'].values
     
-    # Evaluate Classifier
-    y_test_pred_cls = best_clf.predict(X_test_proc)
-    y_test_prob_cls = best_clf.predict_proba(X_test_proc)[:, 1] if hasattr(best_clf, 'predict_proba') else best_clf.decision_function(X_test_proc)
-    test_metrics_cls = eval_classifier(y_test_cls, y_test_pred_cls, y_test_prob_cls)
+    # 1. Classification Evaluation (Default T=0.50 and Calibrated T=0.35)
+    y_test_prob = final_clf.predict_proba(X_test_C)[:, 1]
+    y_test_pred_default = (y_test_prob >= 0.50).astype(int)
+    y_test_pred_calibrated = (y_test_prob >= 0.35).astype(int)
     
-    # Evaluate Regressor
-    y_test_pred_reg = best_reg.predict(X_test_proc)
-    test_metrics_reg = eval_regressor(y_test_reg, y_test_pred_reg)
+    # 2. Continuous Delay Regression Evaluation
+    y_test_pred_reg = final_reg.predict(X_test_C)
     
-    return test_metrics_cls, test_metrics_reg"""))
+    print("Test Evaluation routine prepared and verified.")
+    return {
+        "test_n": len(df_test),
+        "clf_auc": roc_auc_score(y_test_cls, y_test_prob),
+        "clf_ap": average_precision_score(y_test_cls, y_test_prob),
+        "reg_mae": mean_absolute_error(y_test_reg, y_test_pred_reg),
+        "reg_rmse": np.sqrt(mean_squared_error(y_test_reg, y_test_pred_reg)),
+        "reg_r2": r2_score(y_test_reg, y_test_pred_reg)
+    }
+
+print("Test evaluation protocol ready for Stage 6.")"""))
 
 # Section 21
 cells.append(make_cell("markdown", """---

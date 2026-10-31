@@ -1,0 +1,11 @@
+candidate_name,model_family,training_sample_size,mae_minutes,mse_minutes2,rmse_minutes,r2_score,fit_duration_sec,pred_duration_sec,hyperparameters
+RF_Candidate_1 (Stage 4 Default),RandomForestRegressor,500000,17.3997,1491.67,38.6221,0.451617,411.92,4.52,"{""max_depth"": 14, ""min_samples_leaf"": 50, ""n_estimators"": 100}"
+RF_Candidate_2 (Faster 50 Trees),RandomForestRegressor,500000,17.4131,1492.3167,38.6305,0.451379,173.83,2.1,"{""max_depth"": 14, ""min_samples_leaf"": 50, ""n_estimators"": 50}"
+MLP_Candidate_2 (Single Layer),MLPRegressor,250000,17.0729,1516.0879,38.937,0.44264,19.85,0.53,"{""alpha"": 0.0, ""batch_size"": 256, ""hidden_layer_sizes"": [64]}"
+DT_Candidate_2 (Shallower),DecisionTreeRegressor,500000,17.8407,1525.198,39.0538,0.439291,4.53,0.16,"{""max_depth"": 10, ""min_samples_leaf"": 100}"
+DT_Candidate_1 (Stage 4),DecisionTreeRegressor,500000,17.7017,1529.1727,39.1046,0.43783,9.34,0.23,"{""max_depth"": 14, ""min_samples_leaf"": 100}"
+DT_Candidate_4 (Finer Leaves),DecisionTreeRegressor,500000,17.789,1539.5534,39.2371,0.434013,9.43,0.19,"{""max_depth"": 14, ""min_samples_leaf"": 50}"
+MLP_Candidate_1 (Stage 4),MLPRegressor,250000,17.0622,1547.4188,39.3372,0.431122,10.12,0.75,"{""alpha"": 0.0, ""batch_size"": 256, ""hidden_layer_sizes"": [64, 32]}"
+DT_Candidate_3 (Deeper),DecisionTreeRegressor,500000,17.9074,1551.3501,39.3872,0.429676,13.75,0.19,"{""max_depth"": 18, ""min_samples_leaf"": 50}"
+MLP_Candidate_3 (Wider),MLPRegressor,250000,17.3789,1583.6021,39.7945,0.41782,17.45,1.71,"{""alpha"": 0.0, ""batch_size"": 256, ""hidden_layer_sizes"": [128, 64]}"
+OLS_Linear_Reference,LinearRegression,500000,21.1957,1973.798,44.4274,0.274372,3.49,0.05,{}
