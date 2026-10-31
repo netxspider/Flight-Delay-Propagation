@@ -1,0 +1,34 @@
+{
+  "audit_metadata": {
+    "evaluation_phase": "Phase 6 Stage 6: Final Independent Test Evaluation",
+    "timestamp_utc": "2026-10-31T14:19:58Z",
+    "test_parquet_path": "/Users/arnavraj/Downloads/flight-delay-propagation/data/processed/modeling_test.parquet",
+    "test_sha256": "3f0e5494fdb4d934cda7b77f41eaef6b73de41e1cd3927c752dd3e3e90449d1e",
+    "test_row_count": 562202
+  },
+  "integrity_verifications": {
+    "test_population_equals_562202": true,
+    "zero_missing_predictions": true,
+    "correct_positive_class_index_used": true,
+    "reconciles_actual_positives": true,
+    "reconciles_actual_negatives": true,
+    "reconciles_total_population": true,
+    "zero_retraining_or_fit_calls": true,
+    "no_test_driven_threshold_optimization": true,
+    "frozen_primary_threshold_0_35_maintained": true,
+    "prohibited_models_strictly_absent": true,
+    "zero_feature_leakage": true,
+    "source_parquet_unmodified": true
+  },
+  "summary_metrics_verified": {
+    "classifier_test_roc_auc": 0.7943,
+    "classifier_test_ap": 0.715,
+    "classifier_test_log_loss": 0.4255,
+    "classifier_test_f1_0_35": 0.614,
+    "classifier_test_precision_0_35": 0.7252,
+    "classifier_test_recall_0_35": 0.5324,
+    "regressor_test_mae": 19.7699,
+    "regressor_test_rmse": 45.8629,
+    "regressor_test_r2": 0.485076
+  }
+}

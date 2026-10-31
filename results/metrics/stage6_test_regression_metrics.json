@@ -1,0 +1,40 @@
+{
+  "model_metadata": {
+    "model_name": "Random Forest Regressor (Group C)",
+    "model_artifact": "models/final/final_selected_regressor.joblib",
+    "preprocessor_artifact": "models/final/final_preprocessor_group_c.joblib",
+    "hyperparameters": {
+      "n_estimators": 100,
+      "max_depth": 14,
+      "min_samples_leaf": 50,
+      "random_state": 42,
+      "n_jobs": 2
+    },
+    "test_population": 562202
+  },
+  "test_metrics": {
+    "mae_minutes": 19.7699,
+    "mse_minutes2": 2103.4078,
+    "rmse_minutes": 45.8629,
+    "r2_score": 0.485076
+  },
+  "residuals_analysis": {
+    "definition": "residual = actual - predicted",
+    "mean_residual_minutes": 1.21,
+    "median_residual_minutes": -5.33,
+    "std_residual_minutes": 45.85,
+    "min_residual_minutes": -233.91,
+    "max_residual_minutes": 2839.17,
+    "quantiles": {
+      "p1": -45.75,
+      "p5": -31.42,
+      "p10": -24.99,
+      "p25": -15.4,
+      "p50": -5.33,
+      "p75": 6.93,
+      "p90": 26.23,
+      "p95": 48.48,
+      "p99": 145.69
+    }
+  }
+}

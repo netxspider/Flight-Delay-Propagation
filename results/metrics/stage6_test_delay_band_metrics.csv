@@ -1,0 +1,6 @@
+delay_band,n_observations,pct_of_test_population,mae_minutes,rmse_minutes,mean_prediction_bias_minutes
+Early / On-Time (<= 0m),322255,57.32,13.01,16.69,12.27
+Minor Delay (1 - 14m),91082,16.2,10.58,12.64,-3.46
+Moderate Delay (15 - 59m),94233,16.76,22.27,26.57,-13.64
+Significant Delay (60 - 119m),31939,5.68,42.7,54.03,-30.78
+Severe Delay (>= 120m),22693,4.04,109.98,201.18,-90.38

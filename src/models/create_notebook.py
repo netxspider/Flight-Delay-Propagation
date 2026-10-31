@@ -564,119 +564,133 @@ print(json.dumps(final_meta, indent=2))"""))
 
 # Section 20
 cells.append(make_cell("markdown", """---
-## 19. Final Test Evaluation Protocol (December 2025 Held-Out Set)"""))
-cells.append(make_cell("markdown", """### Strict Methodological Lock:
-In accordance with rigorous academic machine learning methodology and our pre-registered evaluation protocol:
-- The December 2025 test dataset (`data/processed/modeling_test.parquet`, $N = 562,202$) has remained **strictly sealed, untouched, and unaccessed** during all exploratory, feature engineering, baseline, and Stage 5 tuning iterations.
-- Model selection and threshold calibration were completed exclusively using validation data (October–November 2025).
-- The cell below defines the standalone, reproducible test evaluation pipeline to be executed in Stage 6 upon formal approval."""))
-cells.append(make_cell("code", """# Standalone Test Evaluation Routine (Held-out December 2025)
-def evaluate_final_test_set():
-    \"\"\"
-    Executes the final test evaluation using strictly frozen models and preprocessors.
-    \"\"\"
-    print("Loading sealed December 2025 test dataset...")
-    df_test = con.execute(f"SELECT * FROM read_parquet('{TEST_PARQUET}')").df()
-    print(f"Test dataset loaded: {len(df_test):,} rows.")
-    
-    # Load serialized final preprocessors and estimators
-    prep_C = joblib.load(os.path.join(MODELS_DIR, "final/final_preprocessor_group_c.joblib"))
-    final_clf = joblib.load(os.path.join(MODELS_DIR, "final/final_selected_classifier.joblib"))
-    final_reg = joblib.load(os.path.join(MODELS_DIR, "final/final_selected_regressor.joblib"))
-    
-    X_test_C = prep_C.transform(df_test)
-    y_test_cls = df_test['NEXT_ARR_DEL15'].values
-    y_test_reg = df_test['NEXT_ARR_DELAY'].values
-    
-    # 1. Classification Evaluation (Default T=0.50 and Calibrated T=0.35)
-    y_test_prob = final_clf.predict_proba(X_test_C)[:, 1]
-    y_test_pred_default = (y_test_prob >= 0.50).astype(int)
-    y_test_pred_calibrated = (y_test_prob >= 0.35).astype(int)
-    
-    # 2. Continuous Delay Regression Evaluation
-    y_test_pred_reg = final_reg.predict(X_test_C)
-    
-    print("Test Evaluation routine prepared and verified.")
-    return {
-        "test_n": len(df_test),
-        "clf_auc": roc_auc_score(y_test_cls, y_test_prob),
-        "clf_ap": average_precision_score(y_test_cls, y_test_prob),
-        "reg_mae": mean_absolute_error(y_test_reg, y_test_pred_reg),
-        "reg_rmse": np.sqrt(mean_squared_error(y_test_reg, y_test_pred_reg)),
-        "reg_r2": r2_score(y_test_reg, y_test_pred_reg)
-    }
+## 19. Final Independent Test Evaluation (December 2025 Held-Out Set, N = 562,202)
+### Execution of Frozen Model Evaluation:
+The frozen final machine learning models (Group C Random Forest Classifier and Regressor) were evaluated on the independent December 2025 test dataset ($N = 562,202$) without any refitting, adaptation, or threshold re-optimization.
+- Primary Classification Operating Point: **$T = 0.35$**
+- Benchmark References: **$T = 0.39$** (validation grid F1 reference) and **$T = 0.50$** (default)"""))
+cells.append(make_cell("code", """# Display Test Evaluation Distribution and Verification Audit
+with open(os.path.join(RESULTS_DIR, "metrics/stage6_evaluation_integrity_audit.json"), "r") as f:
+    audit_meta = json.load(f)
 
-print("Test evaluation protocol ready for Stage 6.")"""))
+print("=== Stage 6 Test Integrity Audit Verification ===")
+print(json.dumps(audit_meta, indent=2))
+
+with open(os.path.join(RESULTS_DIR, "metrics/stage6_test_distribution_summary.json"), "r") as f:
+    dist_meta = json.load(f)
+
+print("\n=== Test vs Validation Target Distribution Shift ===")
+print(f"Test Population: {dist_meta['test_population']['total_rows']:,} flights (Dec 2025)")
+print(f"Test Delay Prevalence: {dist_meta['test_population']['delay_prevalence_pct']}% (vs Val: {dist_meta['validation_population']['delay_prevalence_pct']}%)")
+print(f"Test Mean Delay: {dist_meta['test_population']['mean_arrival_delay_minutes']}m (vs Val: {dist_meta['validation_population']['mean_arrival_delay_minutes']}m)")
+print(f"Test Std Delay: {dist_meta['test_population']['std_arrival_delay_minutes']}m (vs Val: {dist_meta['validation_population']['std_arrival_delay_minutes']}m)")"""))
+
+cells.append(make_cell("markdown", """### Final Test Classification Performance:
+Evaluated on full December test population ($N = 562,202$, Actual Positives = 148,865, Actual Negatives = 413,337):
+- **ROC-AUC:** **0.7943** (vs. Validation 0.7932, delta: +0.0011)
+- **Average Precision (AP):** **0.7150** (vs. Validation 0.6600, delta: +0.0550)
+- **Primary Threshold ($T = 0.35$):** Precision = 72.52%, Recall = 53.24%, F1 = 0.6140, Specificity = 92.74%, Accuracy = 82.28%
+- **Validation F1 Reference ($T = 0.39$):** Precision = 75.19%, Recall = 51.90%, F1 = 0.6141, Specificity = 93.83%, Accuracy = 82.73%
+- **Default Benchmark ($T = 0.50$):** Precision = 87.52%, Recall = 45.07%, F1 = 0.5950, Specificity = 97.68%, Accuracy = 83.75%"""))
+cells.append(make_cell("code", """# Display Audited Classification Threshold Comparison Table
+df_test_thresh = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage6_test_threshold_comparison.csv"))
+print("=== Final Test Classification Decision Threshold Spectrum (N = 562,202) ===")
+display(df_test_thresh[['threshold', 'TP', 'FP', 'FN', 'TN', 'predicted_positives', 'precision_pct', 'recall_pct', 'f1_score', 'specificity_pct', 'accuracy_pct', 'reconciles_total']])
+
+print("\n=== Figures: Final Test Classification Performance Diagnostics ===")
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_test_confusion_matrix.png")))
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_test_roc_curve.png")))
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_test_precision_recall_curve.png")))
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_test_threshold_comparison.png")))
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_test_calibration_curve.png")))"""))
+
+cells.append(make_cell("markdown", """### Final Test Continuous Delay Regression Performance:
+- **Variance Explained ($R^2$):** **0.4851** (accounts for 48.51% of arrival delay variance relative to mean baseline)
+- **Mean Absolute Error (MAE):** **19.77 minutes** (vs. Validation 17.40 min)
+- **Root Mean Squared Error (RMSE):** **45.86 minutes** (vs. Validation 38.62 min)
+- **Mean Residual:** **+1.21 minutes** (near-zero unconditional global bias)"""))
+cells.append(make_cell("code", """# Display Test Regression Metrics and Residual Diagnostics
+with open(os.path.join(RESULTS_DIR, "metrics/stage6_test_regression_metrics.json"), "r") as f:
+    reg_meta = json.load(f)
+
+print("=== Final Test Regression Metrics ===")
+print(json.dumps(reg_meta['test_metrics'], indent=2))
+print("\n=== Residual Distribution Diagnostics (actual - predicted) ===")
+print(json.dumps(reg_meta['residuals_analysis'], indent=2))
+
+print("\n=== Figures: Test Regression Diagnostics ===")
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_test_actual_vs_predicted.png")))
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_test_residual_distribution.png")))
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_test_residual_vs_predicted.png")))"""))
+
+cells.append(make_cell("markdown", """### Error Analysis Across Operational Delay Severity Bands:
+Stratified across the five standardized operational delay bands:
+1. Early / On-Time ($\le 0$ min): 57.32% of population, MAE = 13.01 min, Bias = +12.27 min
+2. Minor Delay ($1–14$ min): 16.20% of population, MAE = 10.58 min, Bias = -3.46 min
+3. Moderate Delay ($15–59$ min): 16.76% of population, MAE = 22.27 min, Bias = -13.64 min
+4. Significant Delay ($60–119$ min): 5.68% of population, MAE = 42.70 min, Bias = -30.78 min
+5. Severe Delay ($\ge 120$ min): 4.04% of population, MAE = 109.98 min, Bias = -90.38 min"""))
+cells.append(make_cell("code", """# Display Delay Band Error Breakdown
+df_test_bands = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage6_test_delay_band_metrics.csv"))
+print("=== Regression Error Breakdown Across Delay Bands (December Test Set) ===")
+display(df_test_bands)
+
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_test_delay_band_performance.png")))"""))
+
+cells.append(make_cell("markdown", """### Validation vs. Test Generalization Analysis:
+Comparing performance across temporal partitions (October–November vs. December):
+- Classification discrimination transferred with near-zero degradation (ROC-AUC 0.7932 vs 0.7943).
+- Regression $R^2$ improved from 0.4516 to 0.4851.
+- MAE increased from 17.40m to 19.77m due to the 55% surge in severe delays ($\ge 120$m) during winter operations."""))
+cells.append(make_cell("code", """# Display Validation vs Test Comparison Table & Figure
+df_val_test = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage6_validation_test_comparison.csv"))
+print("=== Generalization Comparison: Validation (Oct-Nov) vs. Test (Dec) ===")
+display(df_val_test)
+
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_validation_test_comparison.png")))"""))
+
+cells.append(make_cell("markdown", """### Post-Evaluation Test Permutation Feature Importance (N = 100,000, 5 Repeats):
+Top physical drivers identified on held-out December operations:
+1. `ESTIMATED_REMAINING_TURNAROUND_MINUTES`: Primary bottleneck (+0.0303 AP drop, +15.81 min MAE increase).
+2. `IS_TURNAROUND_DEFICIT`: Binary step-function switch (+0.0219 AP drop).
+3. `SCHEDULED_TURNAROUND_BUFFER`: Scheduled cushion (+0.0129 AP drop, +0.48 min MAE increase).
+4. `PREV_ARR_DELAY`: Inbound flight delay (+0.0105 AP drop, +0.93 min MAE increase).
+5. `PREV_AIRCRAFT_CONSECUTIVE_DEL15`: Cumulative airframe fatigue (+0.0082 AP drop, +0.84 min MAE increase)."""))
+cells.append(make_cell("code", """# Display Test Permutation Feature Importance Table & Figure
+df_test_feat = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage6_test_feature_importance.csv"))
+print("=== Top 10 Permutation Feature Importances (Test Set, N = 100,000, 5 Repeats) ===")
+display(df_test_feat.head(10)[['feature', 'mean_importance_ap', 'std_importance_ap', 'mean_importance_mae', 'std_importance_mae', 'mean_importance_r2']])
+
+display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_test_feature_importance.png")))"""))
 
 # Section 21
 cells.append(make_cell("markdown", """---
-## 20. Confusion Matrix & ROC / PR Curves (IEEE Figures)"""))
-cells.append(make_cell("code", """# Display generated publication-grade classification diagnostics
-from IPython.display import Image, display
-
-print("=== Figure: ROC Curves Across Model Suite ===")
-display(Image(filename=os.path.join(RESULTS_DIR, "figures/classification_roc_curve.png")))
-
-print("=== Figure: Precision-Recall Curves Across Model Suite ===")
-display(Image(filename=os.path.join(RESULTS_DIR, "figures/classification_precision_recall_curve.png")))
-
-print("=== Figure: Validation Set Confusion Matrices ===")
-display(Image(filename=os.path.join(RESULTS_DIR, "figures/classification_confusion_matrix.png")))"""))
+## 20. Consolidated Research Findings & Answers to Core Research Questions
+### Answers to Primary Research Questions:
+1. **Classifier Discrimination:** Out-of-sample test ROC-AUC = **0.7943** and AP = **0.7150**. Operating at $T = 0.35$ captures **53.24%** of delays ($79,250$ flights) with **72.52%** precision and a false alert rate on on-time flights of only **7.26%**.
+2. **Regression Explanatory Power:** Explains **48.51%** ($R^2 = 0.4851$) of the total variance in December arrival delays (MAE = 19.77m, RMSE = 45.86m), with near-zero unconditional bias (+1.21m).
+3. **Out-of-Sample Temporal Generalization:** The model generalizes with remarkable stability from autumn development to winter test (ROC-AUC 0.7932 -> 0.7943; F1 0.5740 -> 0.6140). The aggregate error increase (MAE 17.40m -> 19.77m) is an aggregation artifact of December's 55% surge in severe delays ($\ge 120$m), while within-band error remained constant.
+4. **Physical Drivers:** Turnaround deficit (`ESTIMATED_REMAINING_TURNAROUND_MINUTES` and `IS_TURNAROUND_DEFICIT`) accounts for the dominant non-linear step change. Airframe daily history (`PREV_AIRCRAFT_CONSECUTIVE_DEL15` and `CUMULATIVE_ARR_DELAY_TODAY`) provides a statistically verified $+1.08\%$ ROC-AUC boost, confirming that rotational airframe fatigue is a non-redundant predictive signal.
+5. **Observational Bounds:** Correlation does not equal causality. Buffer deficits represent an observational operational vulnerability rather than a direct mechanical cause."""))
 
 # Section 22
 cells.append(make_cell("markdown", """---
-## 21. Regression Diagnostics: Actual vs. Predicted & Residuals (IEEE Figures)"""))
-cells.append(make_cell("code", """# Display generated publication-grade regression diagnostics
-print("=== Figure: Actual vs. Predicted Arrival Delay (Random Forest Group C) ===")
-display(Image(filename=os.path.join(RESULTS_DIR, "figures/regression_actual_vs_predicted.png")))
-
-print("=== Figure: Residual Error Distribution Across Regressors ===")
-display(Image(filename=os.path.join(RESULTS_DIR, "figures/regression_residual_distribution.png")))
-
-print("=== Figure: Error Breakdown Across Target Delay Bands ===")
-display(Image(filename=os.path.join(RESULTS_DIR, "figures/regression_error_by_delay_band.png")))"""))
+## 21. Threats to Validity & Methodological Limitations
+1. **Unobserved Confounders:** Terminal radar weather (TDWR), convective storms, FAA Ground Delay Programs (GDPs), and connecting flight crew timeouts are partially reflected in arrival delays but lack direct real-time telemetry in BTS data.
+2. **Observational vs Causal:** Finding that a buffer deficit predicts subsequent delays does not guarantee that adding schedule padding will causally eliminate downstream delays in a 1:1 ratio, as airlines adjust operational pacing in response to schedule buffers.
+3. **Severe Delay Degradation:** The model systematically underpredicts severe delays $\ge 120$m (bias = -90.38m) because extreme disruptions are driven by compound administrative interventions (e.g., gate hold programs, crew expirations) rather than turnaround buffer mechanics alone."""))
 
 # Section 23
 cells.append(make_cell("markdown", """---
-## 22. Model Interpretation: Feature Importances & Physical Drivers"""))
-cells.append(make_cell("code", """# Display top feature importances for Tree Models & Robustness Comparison
-df_imp_rf_cls = pd.read_csv(os.path.join(RESULTS_DIR, "classification/feature_importances_rf_group_c.csv"))
-df_imp_rf_reg = pd.read_csv(os.path.join(RESULTS_DIR, "regression/feature_importances_rf_group_c.csv"))
-
-print("=== Top 10 Features: Random Forest Classifier (Group C) ===")
-display(df_imp_rf_cls.head(10))
-
-print("\n=== Top 10 Features: Random Forest Regressor (Group C) ===")
-display(df_imp_rf_reg.head(10))
-
-print("\n=== Figure: Permutation vs. MDI Feature Importance Comparison ===")
-display(Image(filename=os.path.join(RESULTS_DIR, "figures/permutation_importance_comparison.png")))"""))
-
-# Section 24
-cells.append(make_cell("markdown", """---
-## 23. Scientific Interpretation & Research Findings
-### Key Empirical Findings:
-1. **Turnaround Buffer Mechanics:** Inbound delay exceeding the turnaround buffer (`IS_TURNAROUND_DEFICIT = 1`) is the single strongest linear driver of delay propagation.
-2. **Contextual Augmentation:** Adding route and carrier context (Group B) increases PR-AUC from 0.5792 to 0.6102.
-3. **Incremental Value of Aircraft History:** Cumulative same-day airframe history (Group C) further boosts PR-AUC to 0.6228 and pushes classification F1 to 0.5003. Historical aircraft stress is a genuine non-redundant signal for propagation risk.
-4. **Predictive vs. Causal Nuance:** While delays are strongly contagious, propagation is mediated by buffer slack and dispatch intervention rather than pure physical momentum alone."""))
-
-# Section 25
-cells.append(make_cell("markdown", """---
-## 24. Threats to Validity & Limitations
-1. **Unobserved Confounders:** En-route weather fronts, air traffic control ground delay programs (GDPs), and late-arriving connecting crews are partially reflected through arrival delays but lack direct real-time telemetry.
-2. **Observational Bounds:** Models describe empirical delay correlation across consecutive operations, not structural counterfactual mechanics.
-3. **Extreme Outliers:** Long delays (>300 min) introduce high squared-error penalties in continuous regression, favoring robust metric evaluation (MAE/MedAE)."""))
-
-# Section 26
-cells.append(make_cell("markdown", """---
-## 25. Export Models, Metrics, and Figures"""))
+## 22. Export Models, Metrics, Predictions, and Figures"""))
 cells.append(make_cell("code", """# Final serialization confirmation
 print("Exported files verified:")
-print(" - Models:", os.listdir(os.path.join(MODELS_DIR, "classification")))
-print(" - Metrics:", os.listdir(os.path.join(RESULTS_DIR, "metrics")))
-print(" - Baselines:", os.listdir(os.path.join(RESULTS_DIR, "classification")))
-print("Phase 6 Notebook Execution Complete.")"""))
+print(" - Models:", os.listdir(os.path.join(MODELS_DIR, "final")))
+print(" - Metrics:", [f for f in os.listdir(os.path.join(RESULTS_DIR, "metrics")) if f.startswith('stage6')])
+print(" - Predictions:", os.listdir(os.path.join(RESULTS_DIR, "predictions")))
+print(" - Figures:", [f for f in os.listdir(os.path.join(RESULTS_DIR, "figures")) if f.startswith('stage6')])
+print(" - Reports:", [f for f in os.listdir(os.path.join(RESULTS_DIR, "tables")) if f.startswith('stage6')])
+print("\nPhase 6 Final Test Evaluation Notebook Complete.")"""))
 
 notebook_content = {
     "cells": cells,

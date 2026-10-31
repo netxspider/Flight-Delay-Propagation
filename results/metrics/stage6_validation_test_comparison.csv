@@ -1,0 +1,16 @@
+category,metric,validation_val,test_val,delta_absolute,relative_change_pct
+Classification Global,ROC-AUC,0.7932,0.7943,0.0011,0.14
+Classification Global,Average Precision (AP),0.66,0.715,0.055,8.33
+Classification Global,Log Loss,0.3748,0.4255,0.0507,13.52
+Classification (T=0.35),F1-Score,0.574,0.614,0.04,6.97
+Classification (T=0.35),Precision,0.692,0.7252,0.0332,4.8
+Classification (T=0.35),Recall,0.4903,0.5324,0.0421,8.59
+Classification (T=0.35),Accuracy,0.8529,0.8228,-0.0301,-3.53
+Classification (T=0.35),Specificity,0.9447,0.9274,-0.0173,-1.83
+Classification (T=0.50),F1-Score,0.5556,0.595,0.0394,7.09
+Classification (T=0.50),Precision,0.8668,0.8752,0.0084,0.97
+Classification (T=0.50),Recall,0.4088,0.4507,0.0419,10.25
+Regression,MAE (minutes),17.4,19.77,2.37,13.62
+Regression,RMSE (minutes),38.62,45.86,7.24,18.75
+Regression,MSE (minutes^2),1491.67,2103.41,611.74,41.01
+Regression,R^2 Score,0.4516,0.4851,0.0335,7.41

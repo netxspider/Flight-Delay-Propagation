@@ -1,0 +1,67 @@
+{
+  "model_metadata": {
+    "model_name": "Random Forest Classifier (Group C)",
+    "model_artifact": "models/final/final_selected_classifier.joblib",
+    "preprocessor_artifact": "models/final/final_preprocessor_group_c.joblib",
+    "hyperparameters": {
+      "n_estimators": 100,
+      "max_depth": 14,
+      "min_samples_leaf": 50,
+      "random_state": 42,
+      "n_jobs": 2
+    },
+    "test_population": 562202,
+    "test_actual_positives": 148865,
+    "test_actual_negatives": 413337
+  },
+  "global_metrics": {
+    "roc_auc": 0.7943,
+    "average_precision_ap": 0.715,
+    "log_loss": 0.4255
+  },
+  "selected_operational_threshold_0_35": {
+    "threshold": 0.35,
+    "designation": "Primary Operational Operating Point",
+    "confusion_matrix": {
+      "TP": 79250,
+      "FP": 30025,
+      "FN": 69615,
+      "TN": 383312
+    },
+    "precision": 0.7252,
+    "recall": 0.5324,
+    "f1_score": 0.614,
+    "specificity": 0.9274,
+    "accuracy": 0.8228
+  },
+  "validation_f1_grid_reference_0_39": {
+    "threshold": 0.39,
+    "designation": "Validation Fine Grid F1 Reference",
+    "confusion_matrix": {
+      "TP": 77267,
+      "FP": 25501,
+      "FN": 71598,
+      "TN": 387836
+    },
+    "precision": 0.7519,
+    "recall": 0.519,
+    "f1_score": 0.6141,
+    "specificity": 0.9383,
+    "accuracy": 0.8273
+  },
+  "default_benchmark_threshold_0_50": {
+    "threshold": 0.5,
+    "designation": "Default Classification Benchmark",
+    "confusion_matrix": {
+      "TP": 67093,
+      "FP": 9569,
+      "FN": 81772,
+      "TN": 403768
+    },
+    "precision": 0.8752,
+    "recall": 0.4507,
+    "f1_score": 0.595,
+    "specificity": 0.9768,
+    "accuracy": 0.8375
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "metadata": {
+    "evaluation_timestamp_utc": "2026-10-31T14:11:17Z",
+    "test_parquet_path": "/Users/arnavraj/Downloads/flight-delay-propagation/data/processed/modeling_test.parquet",
+    "test_file_size_bytes": 12973636,
+    "test_sha256": "3f0e5494fdb4d934cda7b77f41eaef6b73de41e1cd3927c752dd3e3e90449d1e",
+    "validation_parquet_path": "/Users/arnavraj/Downloads/flight-delay-propagation/data/processed/modeling_validation.parquet"
+  },
+  "test_population": {
+    "total_rows": 562202,
+    "positive_count": 148865,
+    "negative_count": 413337,
+    "delay_prevalence": 0.2648,
+    "delay_prevalence_pct": 26.48,
+    "mean_arrival_delay_minutes": 12.23,
+    "median_arrival_delay_minutes": -4.0,
+    "std_arrival_delay_minutes": 63.91,
+    "min_arrival_delay_minutes": -97.0,
+    "max_arrival_delay_minutes": 2846.0,
+    "quantiles": {
+      "p1": -38.0,
+      "p5": -28.0,
+      "p10": -23.0,
+      "p25": -15.0,
+      "p50": -4.0,
+      "p75": 16.0,
+      "p90": 58.0,
+      "p95": 103.0,
+      "p99": 241.0
+    }
+  },
+  "validation_population": {
+    "total_rows": 1140909,
+    "positive_count": 230521,
+    "negative_count": 910388,
+    "delay_prevalence": 0.2021,
+    "delay_prevalence_pct": 20.21,
+    "mean_arrival_delay_minutes": 5.41,
+    "median_arrival_delay_minutes": -7.0,
+    "std_arrival_delay_minutes": 52.15,
+    "min_arrival_delay_minutes": -76.0,
+    "max_arrival_delay_minutes": 3500.0
+  },
+  "distribution_shift": {
+    "prevalence_delta_percentage_points": 6.27,
+    "mean_delay_delta_minutes": 6.82,
+    "std_delay_delta_minutes": 11.76
+  }
+}
