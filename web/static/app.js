@@ -1,0 +1,680 @@
+// Flight Delay Propagation Research Dashboard Client Logic
+
+const API_BASE = window.location.origin;
+
+// State management
+const state = {
+  activeView: "overview",
+  dataset: {
+    partition: "test",
+    page: 1,
+    pageSize: 15,
+    totalPages: 1,
+    totalRecords: 0,
+    sortBy: "NEXT_ARR_DELAY",
+    order: "desc",
+    carrier: "",
+    origin: "",
+    dest: "",
+    status: "all",
+    deficit: "all",
+    search: ""
+  },
+  threshold: 0.35,
+  modelsData: null,
+  summaryData: null
+};
+
+// Initialize application on DOM loaded
+document.addEventListener("DOMContentLoaded", () => {
+  initNavigation();
+  initPresetButtons();
+  initPredictionForm();
+  initThresholdSlider();
+  initDatasetFilters();
+  
+  // Load initial backend data
+  loadOverviewData();
+  loadDatasetSummary();
+  loadDatasetSample();
+  loadModelsMetrics();
+
+  // Run sample prediction
+  runPrediction();
+});
+
+// Navigation Handling
+function initNavigation() {
+  const navItems = document.querySelectorAll(".nav-item");
+  navItems.forEach(item => {
+    item.addEventListener("click", (e) => {
+      e.preventDefault();
+      const targetView = item.getAttribute("data-view");
+      switchView(targetView);
+    });
+  });
+
+  // Handle URL hash routing
+  if (window.location.hash) {
+    const hashView = window.location.hash.replace("#", "");
+    if (["overview", "dataset", "performance", "prediction", "findings"].includes(hashView)) {
+      switchView(hashView);
+    }
+  }
+}
+
+function switchView(viewName) {
+  state.activeView = viewName;
+  window.location.hash = viewName;
+
+  // Update active nav class
+  document.querySelectorAll(".nav-item").forEach(item => {
+    item.classList.toggle("active", item.getAttribute("data-view") === viewName);
+  });
+
+  // Update visible page section
+  document.querySelectorAll(".dashboard-page").forEach(page => {
+    page.classList.toggle("active", page.id === `${viewName}-view`);
+  });
+
+  // Update top bar title
+  const titles = {
+    overview: "Project Overview & Theoretical Framework",
+    dataset: "Dataset Exploration & BTS Pipeline Analytics",
+    performance: "Model Performance & Empirical Validation",
+    prediction: "Live Aircraft Turnaround & Delay Dispatch Simulator",
+    findings: "Scientific Findings, Implications & IEEE Publication"
+  };
+  document.getElementById("top-bar-page-title").textContent = titles[viewName] || "Research Dashboard";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+// Overview Data Loader
+async function loadOverviewData() {
+  try {
+    const res = await fetch(`${API_BASE}/api/overview`);
+    const data = await res.json();
+    if (data.key_metrics) {
+      document.getElementById("stat-total-rotations").textContent = data.key_metrics.total_rotations.toLocaleString();
+      document.getElementById("stat-test-auc").textContent = data.key_metrics.test_roc_auc.toFixed(4);
+      document.getElementById("stat-test-r2").textContent = (data.key_metrics.test_r2 * 100).toFixed(1) + "%";
+      document.getElementById("stat-deficit-delay-rate").textContent = (data.key_metrics.deficit_delay_rate * 100).toFixed(1) + "%";
+    }
+  } catch (err) {
+    console.error("Error loading overview data:", err);
+  }
+}
+
+// Dataset Summary Loader
+async function loadDatasetSummary() {
+  try {
+    const res = await fetch(`${API_BASE}/api/dataset/summary`);
+    const data = await res.json();
+    state.summaryData = data;
+    renderDatasetSummary(data);
+  } catch (err) {
+    console.error("Error loading dataset summary:", err);
+  }
+}
+
+function renderDatasetSummary(data) {
+  // Render pipeline table
+  const tbody = document.getElementById("pipeline-stages-tbody");
+  if (tbody && data.pipeline_stages) {
+    tbody.innerHTML = data.pipeline_stages.map(stage => `
+      <tr>
+        <td style="font-weight: 500; color: #fff;">${stage.stage}</td>
+        <td style="font-family: monospace; text-align: right;">${stage.count.toLocaleString()}</td>
+        <td style="font-family: monospace; text-align: right; color: var(--accent-blue);">${stage.percentage.toFixed(2)}%</td>
+      </tr>
+    `).join("");
+  }
+
+  // Populate airport dropdowns
+  const originSelect = document.getElementById("filter-origin");
+  const destSelect = document.getElementById("filter-dest");
+  const predOrigin = document.getElementById("pred-origin");
+  const predDest = document.getElementById("pred-dest");
+
+  if (data.top_airports) {
+    const opts = data.top_airports.map(a => `<option value="${a}">${a}</option>`).join("");
+    if (originSelect) originSelect.innerHTML = `<option value="">All Origins</option>` + opts;
+    if (destSelect) destSelect.innerHTML = `<option value="">All Destinations</option>` + opts;
+    if (predOrigin) predOrigin.innerHTML = opts;
+    if (predDest) predDest.innerHTML = opts;
+    if (predOrigin) predOrigin.value = "ORD";
+    if (predDest) predDest.value = "DFW";
+  }
+}
+
+// Dataset Sample Table Loader (DuckDB API)
+async function loadDatasetSample() {
+  const tbody = document.getElementById("dataset-sample-tbody");
+  if (tbody) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 24px; color: var(--text-muted);">
+      <div class="radar-beacon" style="display: inline-block; margin-right: 8px;"></div> Querying Parquet partition via DuckDB engine...
+    </td></tr>`;
+  }
+
+  const p = state.dataset;
+  const params = new URLSearchParams({
+    partition: p.partition,
+    page: p.page,
+    page_size: p.pageSize,
+    sort_by: p.sortBy,
+    order: p.order,
+    carrier: p.carrier,
+    origin: p.origin,
+    dest: p.dest,
+    status: p.status,
+    deficit: p.deficit,
+    search: p.search
+  });
+
+  try {
+    const res = await fetch(`${API_BASE}/api/dataset/sample?${params.toString()}`);
+    const data = await res.json();
+    if (data.error) {
+      if (tbody) tbody.innerHTML = `<tr><td colspan="10" style="color: var(--accent-rose); padding: 16px;">Query error: ${data.error}</td></tr>`;
+      return;
+    }
+
+    state.dataset.totalRecords = data.total;
+    state.dataset.totalPages = data.total_pages;
+
+    renderSampleTable(data);
+  } catch (err) {
+    console.error("DuckDB query failed:", err);
+    if (tbody) tbody.innerHTML = `<tr><td colspan="10" style="color: var(--accent-rose); padding: 16px;">Error querying dataset. Ensure server.py is running.</td></tr>`;
+  }
+}
+
+function renderSampleTable(data) {
+  const tbody = document.getElementById("dataset-sample-tbody");
+  if (!tbody) return;
+
+  if (!data.data || data.data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 24px; color: var(--text-muted);">No matching flights found for the current filter criteria.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.data.map(row => {
+    const isDelayed = row.NEXT_ARR_DEL15 === 1;
+    const isDeficit = row.IS_TURNAROUND_DEFICIT === 1;
+    const cushion = row.ESTIMATED_REMAINING_TURNAROUND_MINUTES;
+
+    return `
+      <tr>
+        <td style="font-family: monospace; font-weight: 600; color: #fff;">${row.TAIL_NUM || "N/A"}</td>
+        <td><span class="brand-badge" style="padding: 2px 6px; font-size: 10px;">${row.NEXT_CARRIER}</span></td>
+        <td><strong>${row.NEXT_ORIGIN}</strong> &rarr; <strong>${row.NEXT_DEST}</strong></td>
+        <td style="font-family: monospace; text-align: right; color: ${row.PREV_ARR_DELAY >= 15 ? 'var(--accent-rose)' : 'var(--text-secondary)'};">
+          ${row.PREV_ARR_DELAY > 0 ? '+' : ''}${row.PREV_ARR_DELAY.toFixed(0)}m
+        </td>
+        <td style="font-family: monospace; text-align: right;">${row.SCHEDULED_TURNAROUND_BUFFER.toFixed(0)}m</td>
+        <td style="font-family: monospace; text-align: right; font-weight: 600; color: ${cushion < 0 ? 'var(--accent-crimson)' : 'var(--accent-emerald)'};">
+          ${cushion > 0 ? '+' : ''}${cushion.toFixed(0)}m
+        </td>
+        <td>
+          ${isDeficit 
+            ? `<span class="status-pill deficit">DEFICIT</span>` 
+            : `<span class="status-pill ontime">BUFFER OK</span>`}
+        </td>
+        <td style="font-family: monospace; text-align: right;">${row.NEXT_CRS_DEP_HOUR}:00</td>
+        <td style="font-family: monospace; text-align: right; font-weight: 700; color: ${isDelayed ? 'var(--accent-rose)' : 'var(--accent-emerald)'};">
+          ${row.NEXT_ARR_DELAY > 0 ? '+' : ''}${row.NEXT_ARR_DELAY.toFixed(0)}m
+        </td>
+        <td>
+          ${isDelayed 
+            ? `<span class="status-pill delayed">DELAYED</span>` 
+            : `<span class="status-pill ontime">ON-TIME</span>`}
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  // Update pagination indicators
+  document.getElementById("pagination-info").textContent = 
+    `Page ${data.page.toLocaleString()} of ${data.total_pages.toLocaleString()} (${data.total.toLocaleString()} matching flights)`;
+  
+  document.getElementById("btn-prev-page").disabled = (data.page <= 1);
+  document.getElementById("btn-next-page").disabled = (data.page >= data.total_pages);
+}
+
+// Dataset Filters
+function initDatasetFilters() {
+  const partitionSelect = document.getElementById("filter-partition");
+  const carrierSelect = document.getElementById("filter-carrier");
+  const originSelect = document.getElementById("filter-origin");
+  const destSelect = document.getElementById("filter-dest");
+  const statusSelect = document.getElementById("filter-status");
+  const deficitSelect = document.getElementById("filter-deficit");
+  const searchInput = document.getElementById("filter-search");
+  const pageSizeSelect = document.getElementById("filter-page-size");
+
+  const triggerUpdate = () => {
+    state.dataset.page = 1;
+    state.dataset.partition = partitionSelect.value;
+    state.dataset.carrier = carrierSelect.value;
+    state.dataset.origin = originSelect.value;
+    state.dataset.dest = destSelect.value;
+    state.dataset.status = statusSelect.value;
+    state.dataset.deficit = deficitSelect.value;
+    state.dataset.search = searchInput.value;
+    state.dataset.pageSize = parseInt(pageSizeSelect.value, 10);
+    loadDatasetSample();
+  };
+
+  [partitionSelect, carrierSelect, originSelect, destSelect, statusSelect, deficitSelect, pageSizeSelect].forEach(el => {
+    if (el) el.addEventListener("change", triggerUpdate);
+  });
+
+  if (searchInput) {
+    let debounceTimer;
+    searchInput.addEventListener("input", () => {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(triggerUpdate, 350);
+    });
+  }
+
+  // Sortable headers
+  document.querySelectorAll("th.sortable").forEach(th => {
+    th.addEventListener("click", () => {
+      const sortField = th.getAttribute("data-sort");
+      if (state.dataset.sortBy === sortField) {
+        state.dataset.order = (state.dataset.order === "desc") ? "asc" : "desc";
+      } else {
+        state.dataset.sortBy = sortField;
+        state.dataset.order = "desc";
+      }
+      loadDatasetSample();
+    });
+  });
+
+  // Pagination buttons
+  const btnPrev = document.getElementById("btn-prev-page");
+  const btnNext = document.getElementById("btn-next-page");
+  if (btnPrev) {
+    btnPrev.addEventListener("click", () => {
+      if (state.dataset.page > 1) {
+        state.dataset.page--;
+        loadDatasetSample();
+      }
+    });
+  }
+  if (btnNext) {
+    btnNext.addEventListener("click", () => {
+      if (state.dataset.page < state.dataset.totalPages) {
+        state.dataset.page++;
+        loadDatasetSample();
+      }
+    });
+  }
+}
+
+// Models & Metrics Loader
+async function loadModelsMetrics() {
+  try {
+    const res = await fetch(`${API_BASE}/api/models`);
+    const data = await res.json();
+    state.modelsData = data;
+    renderModelsSection(data);
+  } catch (err) {
+    console.error("Error loading model metrics:", err);
+  }
+}
+
+function renderModelsSection(data) {
+  // Classification Table
+  const clfTbody = document.getElementById("models-classification-tbody");
+  if (clfTbody && data.classification_validation) {
+    clfTbody.innerHTML = data.classification_validation.map(row => {
+      const isSelected = row.estimator.includes("*");
+      return `
+        <tr style="${isSelected ? 'background: rgba(56, 189, 248, 0.08); font-weight: 600;' : ''}">
+          <td style="color: ${isSelected ? 'var(--accent-blue)' : '#fff'};">${row.estimator}</td>
+          <td><span class="brand-badge" style="padding: 2px 6px;">${row.group}</span></td>
+          <td style="text-align: right; font-family: monospace;">${row.accuracy.toFixed(2)}%</td>
+          <td style="text-align: right; font-family: monospace;">${row.precision.toFixed(2)}%</td>
+          <td style="text-align: right; font-family: monospace;">${row.recall.toFixed(2)}%</td>
+          <td style="text-align: right; font-family: monospace;">${row.f1.toFixed(4)}</td>
+          <td style="text-align: right; font-family: monospace; color: var(--accent-blue);">${row.roc_auc.toFixed(4)}</td>
+          <td style="text-align: right; font-family: monospace; color: var(--accent-emerald);">${row.ap.toFixed(4)}</td>
+          <td style="text-align: right; font-family: monospace; color: var(--text-muted);">${row.fit_time}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  // Regression Table
+  const regTbody = document.getElementById("models-regression-tbody");
+  if (regTbody && data.regression_validation) {
+    regTbody.innerHTML = data.regression_validation.map(row => {
+      const isSelected = row.model.includes("*");
+      return `
+        <tr style="${isSelected ? 'background: rgba(56, 189, 248, 0.08); font-weight: 600;' : ''}">
+          <td style="color: ${isSelected ? 'var(--accent-blue)' : '#fff'};">${row.model}</td>
+          <td><span class="brand-badge" style="padding: 2px 6px;">${row.group}</span></td>
+          <td style="text-align: right; font-family: monospace;">${row.mae.toFixed(2)} min</td>
+          <td style="text-align: right; font-family: monospace;">${row.rmse.toFixed(2)} min</td>
+          <td style="text-align: right; font-family: monospace; color: ${row.r2 > 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)'};">${row.r2.toFixed(4)}</td>
+          <td style="text-align: right; font-family: monospace; color: var(--text-muted);">${row.fit_time}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  // Delay Strata Table
+  const strataTbody = document.getElementById("delay-strata-tbody");
+  if (strataTbody && data.delay_strata_test) {
+    strataTbody.innerHTML = data.delay_strata_test.map(row => `
+      <tr>
+        <td style="font-weight: 600; color: #fff;">${row.stratum}</td>
+        <td style="text-align: right; font-family: monospace;">${row.count.toLocaleString()}</td>
+        <td style="text-align: right; font-family: monospace;">${row.share_pct.toFixed(2)}%</td>
+        <td style="text-align: right; font-family: monospace; color: ${row.mae > 30 ? 'var(--accent-rose)' : 'var(--text-primary)'};">${row.mae.toFixed(2)} m</td>
+        <td style="text-align: right; font-family: monospace;">${row.rmse.toFixed(2)} m</td>
+        <td style="text-align: right; font-family: monospace; color: ${row.bias > 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)'};">${row.bias > 0 ? '+' : ''}${row.bias.toFixed(2)} m</td>
+      </tr>
+    `).join("");
+  }
+
+  // Shift-Share Summary
+  if (data.shift_share_decomposition) {
+    const ssd = data.shift_share_decomposition;
+    document.getElementById("ss-total-delta").textContent = `+${ssd.total_delta_mae.toFixed(2)} min`;
+    document.getElementById("ss-comp-effect").textContent = `+${ssd.formulation_a.composition_shift_effect.toFixed(2)} min (${ssd.formulation_a.composition_shift_pct.toFixed(1)}%)`;
+    document.getElementById("ss-within-effect").textContent = `+${ssd.formulation_a.within_band_effect.toFixed(2)} min (${ssd.formulation_a.within_band_pct.toFixed(1)}%)`;
+  }
+
+  // Permutation Importance Table
+  const permTbody = document.getElementById("permutation-tbody");
+  if (permTbody && data.permutation_importance) {
+    permTbody.innerHTML = data.permutation_importance.map(row => `
+      <tr>
+        <td style="font-family: monospace; font-weight: 700; color: var(--accent-blue); text-align: center;">#${row.rank}</td>
+        <td style="font-family: monospace; font-weight: 600; color: #fff;">${row.feature}</td>
+        <td><span class="brand-badge" style="font-size: 10px;">${row.domain}</span></td>
+        <td style="text-align: right; font-family: monospace; color: var(--accent-emerald);">+${row.ap_drop.toFixed(4)}</td>
+        <td style="text-align: right; font-family: monospace; color: var(--accent-amber);">+${row.mae_increase.toFixed(2)} min</td>
+        <td style="text-align: right; font-family: monospace; color: var(--accent-blue);">${row.r2_drop > 0 ? '+' : ''}${row.r2_drop.toFixed(4)}</td>
+      </tr>
+    `).join("");
+  }
+}
+
+// Interactive Threshold Simulator
+function initThresholdSlider() {
+  const slider = document.getElementById("threshold-slider");
+  const valueDisplay = document.getElementById("threshold-val-display");
+
+  if (!slider) return;
+
+  slider.addEventListener("input", () => {
+    const t = parseFloat(slider.value);
+    state.threshold = t;
+    if (valueDisplay) valueDisplay.textContent = t.toFixed(2);
+    updateThresholdSimulation(t);
+  });
+}
+
+function updateThresholdSimulation(t) {
+  // Approximate empirical response curve from test dataset evaluation
+  // Total N = 562,202, Positives = 148,865 (26.48%), Negatives = 413,337
+  let recall, precision, fpr;
+
+  if (t <= 0.35) {
+    // Between 0.10 and 0.35
+    const frac = (t - 0.10) / 0.25;
+    recall = 0.85 - frac * (0.85 - 0.5324);
+    precision = 0.42 + frac * (0.7252 - 0.42);
+    fpr = 0.28 - frac * (0.28 - 0.0726);
+  } else if (t <= 0.50) {
+    // Between 0.35 and 0.50
+    const frac = (t - 0.35) / 0.15;
+    recall = 0.5324 - frac * (0.5324 - 0.4088);
+    precision = 0.7252 + frac * (0.8668 - 0.7252);
+    fpr = 0.0726 - frac * (0.0726 - 0.0210);
+  } else {
+    // Above 0.50
+    const frac = (t - 0.50) / 0.40;
+    recall = 0.4088 - frac * 0.32;
+    precision = Math.min(0.96, 0.8668 + frac * 0.08);
+    fpr = Math.max(0.005, 0.0210 - frac * 0.018);
+  }
+
+  const f1 = (2 * precision * recall) / (precision + recall);
+  const totalPos = 148865;
+  const totalNeg = 413337;
+  const tp = Math.round(recall * totalPos);
+  const fn = totalPos - tp;
+  const fp = Math.round(fpr * totalNeg);
+  const tn = totalNeg - fp;
+
+  document.getElementById("sim-prec").textContent = (precision * 100).toFixed(1) + "%";
+  document.getElementById("sim-recall").textContent = (recall * 100).toFixed(1) + "%";
+  document.getElementById("sim-f1").textContent = f1.toFixed(4);
+  document.getElementById("sim-fpr").textContent = (fpr * 100).toFixed(1) + "%";
+
+  document.getElementById("cm-tp").textContent = tp.toLocaleString();
+  document.getElementById("cm-fp").textContent = fp.toLocaleString();
+  document.getElementById("cm-fn").textContent = fn.toLocaleString();
+  document.getElementById("cm-tn").textContent = tn.toLocaleString();
+
+  // Highlight badge if optimal
+  const badge = document.getElementById("threshold-badge");
+  if (badge) {
+    if (Math.abs(t - 0.35) < 0.02) {
+      badge.textContent = "Recommended Operational Point (T = 0.35)";
+      badge.style.color = "var(--accent-blue)";
+    } else if (Math.abs(t - 0.39) < 0.02) {
+      badge.textContent = "Mathematical F1 Peak on Grid (T = 0.39)";
+      badge.style.color = "var(--accent-emerald)";
+    } else if (Math.abs(t - 0.50) < 0.02) {
+      badge.textContent = "Default SciKit-Learn Threshold (T = 0.50)";
+      badge.style.color = "var(--text-muted)";
+    } else {
+      badge.textContent = `Custom Operating Point (T = ${t.toFixed(2)})`;
+      badge.style.color = "var(--accent-amber)";
+    }
+  }
+}
+
+// Interactive Live Prediction Playground
+function initPredictionForm() {
+  const form = document.getElementById("prediction-form");
+  if (!form) return;
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    runPrediction();
+  });
+
+  // Attach dynamic range slider number updates
+  const bindSlider = (sliderId, textId, suffix = "") => {
+    const s = document.getElementById(sliderId);
+    const t = document.getElementById(textId);
+    if (s && t) {
+      s.addEventListener("input", () => {
+        t.textContent = `${s.value}${suffix}`;
+        runPrediction();
+      });
+    }
+  };
+
+  bindSlider("pred-prev-delay", "pred-prev-delay-val", "m");
+  bindSlider("pred-buffer", "pred-buffer-val", "m");
+  bindSlider("pred-hour", "pred-hour-val", ":00");
+  bindSlider("pred-distance", "pred-distance-val", " mi");
+  bindSlider("pred-delayed-today", "pred-delayed-today-val", " flights");
+}
+
+function initPresetButtons() {
+  const presets = {
+    deficit: {
+      prev_delay: 75,
+      buffer: 45,
+      carrier: "AA",
+      origin: "ORD",
+      dest: "DFW",
+      hour: 16,
+      distance: 802,
+      delayed_today: 2
+    },
+    cushion_ok: {
+      prev_delay: 20,
+      buffer: 65,
+      carrier: "DL",
+      origin: "ATL",
+      dest: "MCO",
+      hour: 11,
+      distance: 404,
+      delayed_today: 0
+    },
+    fatigued: {
+      prev_delay: 45,
+      buffer: 40,
+      carrier: "WN",
+      origin: "DEN",
+      dest: "PHX",
+      hour: 20,
+      distance: 602,
+      delayed_today: 3
+    },
+    ontime: {
+      prev_delay: 0,
+      buffer: 55,
+      carrier: "UA",
+      origin: "SFO",
+      dest: "SEA",
+      hour: 9,
+      distance: 679,
+      delayed_today: 0
+    }
+  };
+
+  document.querySelectorAll(".preset-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const type = btn.getAttribute("data-preset");
+      const p = presets[type];
+      if (!p) return;
+
+      document.getElementById("pred-prev-delay").value = p.prev_delay;
+      document.getElementById("pred-prev-delay-val").textContent = `${p.prev_delay}m`;
+
+      document.getElementById("pred-buffer").value = p.buffer;
+      document.getElementById("pred-buffer-val").textContent = `${p.buffer}m`;
+
+      document.getElementById("pred-carrier").value = p.carrier;
+      document.getElementById("pred-origin").value = p.origin;
+      document.getElementById("pred-dest").value = p.dest;
+
+      document.getElementById("pred-hour").value = p.hour;
+      document.getElementById("pred-hour-val").textContent = `${p.hour}:00`;
+
+      document.getElementById("pred-distance").value = p.distance;
+      document.getElementById("pred-distance-val").textContent = `${p.distance} mi`;
+
+      document.getElementById("pred-delayed-today").value = p.delayed_today;
+      document.getElementById("pred-delayed-today-val").textContent = `${p.delayed_today} flights`;
+
+      runPrediction();
+    });
+  });
+}
+
+async function runPrediction() {
+  const prevDelay = parseFloat(document.getElementById("pred-prev-delay")?.value || 0);
+  const buffer = parseFloat(document.getElementById("pred-buffer")?.value || 50);
+  const carrier = document.getElementById("pred-carrier")?.value || "AA";
+  const origin = document.getElementById("pred-origin")?.value || "ORD";
+  const dest = document.getElementById("pred-dest")?.value || "DFW";
+  const hour = parseInt(document.getElementById("pred-hour")?.value || 15, 10);
+  const distance = parseFloat(document.getElementById("pred-distance")?.value || 800);
+  const delayedToday = parseInt(document.getElementById("pred-delayed-today")?.value || 0, 10);
+
+  const payload = {
+    prev_arr_delay: prevDelay,
+    prev_dep_delay: Math.max(0, prevDelay - 8),
+    scheduled_turnaround_buffer: buffer,
+    carrier: carrier,
+    origin: origin,
+    dest: dest,
+    crs_dep_hour: hour,
+    day_of_week: 5,
+    month: 12,
+    distance: distance,
+    aircraft_delayed_flights_today: delayedToday,
+    aircraft_consecutive_del15: delayedToday > 0 ? 1 : 0,
+    aircraft_cumulative_delay_today: delayedToday * 30.0 + prevDelay,
+    aircraft_delay_rate_today: delayedToday > 0 ? (delayedToday / 4.0) : 0.0
+  };
+
+  try {
+    const res = await fetch(`${API_BASE}/api/predict`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    const result = await res.json();
+    renderPredictionResult(result);
+  } catch (err) {
+    console.error("Prediction API failed:", err);
+  }
+}
+
+function renderPredictionResult(res) {
+  // Gauge Percentage
+  const pctEl = document.getElementById("gauge-pct-display");
+  const circleEl = document.getElementById("gauge-circle-box");
+  const verdictEl = document.getElementById("pred-verdict-banner");
+  const delayEl = document.getElementById("pred-continuous-delay-val");
+  const cushionEl = document.getElementById("pred-cushion-val");
+  const recommendationEl = document.getElementById("pred-recommendation-text");
+  const driversEl = document.getElementById("pred-drivers-list");
+
+  if (pctEl) pctEl.textContent = `${res.probability_pct}%`;
+  if (circleEl) {
+    circleEl.style.borderColor = res.risk_color;
+    circleEl.style.boxShadow = `0 0 25px ${res.risk_color}33`;
+  }
+
+  if (verdictEl) {
+    verdictEl.textContent = `${res.risk_level} — ${res.operating_verdict}`;
+    verdictEl.style.color = res.risk_color;
+  }
+
+  if (delayEl) {
+    delayEl.textContent = `${res.predicted_delay_minutes > 0 ? '+' : ''}${res.predicted_delay_minutes.toFixed(1)} min`;
+    delayEl.style.color = res.predicted_delay_minutes >= 15 ? "var(--accent-rose)" : "var(--accent-emerald)";
+  }
+
+  if (cushionEl) {
+    const c = res.turnaround_analysis.remaining_cushion;
+    cushionEl.textContent = `${c > 0 ? '+' : ''}${c.toFixed(0)} min (${res.turnaround_analysis.is_deficit ? 'DEFICIT' : 'SUFFICIENT'})`;
+    cushionEl.style.color = c < 0 ? "var(--accent-crimson)" : "var(--accent-emerald)";
+  }
+
+  if (recommendationEl) {
+    recommendationEl.textContent = res.operational_recommendation;
+  }
+
+  if (driversEl && res.key_drivers) {
+    driversEl.innerHTML = res.key_drivers.map(d => `
+      <li style="margin-bottom: 6px; display: flex; align-items: center; gap: 8px;">
+        <span style="color: var(--accent-blue); font-size: 14px;">&#9654;</span> ${d}
+      </li>
+    `).join("");
+  }
+}
+
+// Copy Google Drive Snippet helper
+function copySnippet(elementId) {
+  const el = document.getElementById(elementId);
+  if (el) {
+    navigator.clipboard.writeText(el.innerText).then(() => {
+      alert("Code snippet copied to clipboard!");
+    });
+  }
+}
+window.copySnippet = copySnippet;

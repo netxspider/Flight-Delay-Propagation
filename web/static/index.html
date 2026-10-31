@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Delay Propagation | Machine Learning Research Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Left Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="brand-badge">
+        <div class="radar-beacon"></div>
+        <span>AeroML Lab &bull; CA2</span>
+      </div>
+      <h1>Flight Delay Propagation</h1>
+      <p>BTech CSE Research &bull; IEEE Format</p>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item active" data-view="overview">
+        <span class="nav-icon">&#128205;</span>
+        <span class="nav-text">Project Overview</span>
+      </a>
+      <a class="nav-item" data-view="dataset">
+        <span class="nav-icon">&#128202;</span>
+        <span class="nav-text">Dataset &amp; Pipeline</span>
+        <span class="nav-badge">6.77M</span>
+      </a>
+      <a class="nav-item" data-view="performance">
+        <span class="nav-icon">&#128200;</span>
+        <span class="nav-text">Model Performance</span>
+        <span class="nav-badge">79.4% AUC</span>
+      </a>
+      <a class="nav-item" data-view="prediction">
+        <span class="nav-icon">&#9992;</span>
+        <span class="nav-text">Live Delay Predictor</span>
+      </a>
+      <a class="nav-item" data-view="findings">
+        <span class="nav-icon">&#127942;</span>
+        <span class="nav-text">Findings &amp; Paper</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="footer-stat-card">
+        <div class="footer-stat-row">
+          <span>Total Rotations</span>
+          <span class="footer-stat-val">6,768,487</span>
+        </div>
+        <div class="footer-stat-row">
+          <span>Active Aircraft</span>
+          <span class="footer-stat-val">6,124</span>
+        </div>
+        <div class="footer-stat-row">
+          <span>Test Discrimination</span>
+          <span class="footer-stat-val">0.7943 AUC</span>
+        </div>
+        <div class="footer-stat-row">
+          <span>Delay Explained</span>
+          <span class="footer-stat-val">48.51% R&sup2;</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    
+    <!-- Top App Bar -->
+    <header class="top-bar">
+      <div class="top-bar-title">
+        <h2 id="top-bar-page-title">Project Overview &amp; Theoretical Framework</h2>
+        <span class="badge-pill">U.S. BTS 2025 Rotations</span>
+      </div>
+      <div class="top-bar-actions">
+        <a href="#prediction" class="btn-primary" onclick="switchView('prediction')">
+          <span>&#9992;</span> Launch Predictor
+        </a>
+        <a href="/api/paper" target="_blank" class="btn-secondary">
+          <span>&#128196;</span> Download IEEE Paper (PDF)
+        </a>
+      </div>
+    </header>
+
+    <main class="content-body">
+
+      <!-- ========================================================================= -->
+      <!-- VIEW 1: PROJECT OVERVIEW                                                  -->
+      <!-- ========================================================================= -->
+      <section id="overview-view" class="dashboard-page active">
+        
+        <!-- Key Metrics Cards -->
+        <div class="grid-4">
+          <div class="stat-card">
+            <div class="stat-header">
+              <span>National Rotations</span>
+              <span>&#128336;</span>
+            </div>
+            <div class="stat-value" id="stat-total-rotations">6,768,487</div>
+            <div class="stat-sub">Valid consecutive flight legs in 2025</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span>Test ROC-AUC</span>
+              <span>&#127919;</span>
+            </div>
+            <div class="stat-value" id="stat-test-auc">0.7943</div>
+            <div class="stat-sub positive">+0.0011 vs validation set</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span>Test R&sup2; Score</span>
+              <span>&#128200;</span>
+            </div>
+            <div class="stat-value" id="stat-test-r2">48.51%</div>
+            <div class="stat-sub positive">Arrival delay variance explained</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">
+              <span>Deficit Delay Rate</span>
+              <span>&#9888;</span>
+            </div>
+            <div class="stat-value" id="stat-deficit-delay-rate" style="color: var(--accent-rose);">99.50%</div>
+            <div class="stat-sub danger">+121.9 min mean conditional delay</div>
+          </div>
+        </div>
+
+        <!-- Research Narrative & Core Physical Formulations -->
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">&#128300; Research Problem &amp; Scope</h3>
+                <p class="card-subtitle">Predicting delay propagation across consecutive commercial flight operations</p>
+              </div>
+            </div>
+            <p style="margin-bottom: 14px; font-size: 13.5px; color: var(--text-secondary);">
+              Commercial aviation networks operate under tight aircraft utilization schedules where individual airframes perform consecutive flight legs with limited ground dwell times. When an inbound flight arrives late, the scheduled ground turnaround buffer is consumed, frequently triggering downstream delays in subsequent departures.
+            </p>
+            <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--accent-blue); margin-bottom: 14px;">
+              <strong style="color: var(--accent-blue); font-size: 12.5px;">Primary Research Question:</strong>
+              <p style="font-size: 13px; color: #fff; margin-top: 4px; font-style: italic;">
+                &ldquo;To what extent can delays from previous flight operations predict delays in subsequent flights operated by the same aircraft?&rdquo;
+              </p>
+            </div>
+            <ul style="font-size: 12.5px; color: var(--text-secondary); list-style: none; display: flex; flex-direction: column; gap: 8px;">
+              <li><strong style="color: #fff;">&bull; Strict Methodological Rigor:</strong> Observational associative modeling without synthetic causality or prohibited model regularizers.</li>
+              <li><strong style="color: #fff;">&bull; Clean Temporal Evaluation:</strong> Training (Jan&ndash;Sep), Validation (Oct&ndash;Nov), and held-out Independent Test (Dec).</li>
+              <li><strong style="color: #fff;">&bull; Zero Feature Leakage:</strong> Prediction features restricted strictly to information available prior to departure of the subsequent leg.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">&#9881; Ground Turnaround Mechanics</h3>
+                <p class="card-subtitle">Exact physical formulations of ground buffer absorption</p>
+              </div>
+            </div>
+            
+            <div class="math-card">
+              <div class="math-title">1. Scheduled Turnaround Buffer</div>
+              <div class="math-formula">Buffer = CRS_DEP_TIME(k+1) - CRS_ARR_TIME(k)</div>
+              <p class="math-desc">The scheduled dwell window designed for deplaning, baggage handling, cleaning, and boarding.</p>
+            </div>
+
+            <div class="math-card">
+              <div class="math-title">2. Estimated Remaining Cushion</div>
+              <div class="math-formula">RemTurn = Buffer - PREV_ARR_DELAY</div>
+              <p class="math-desc">The physical remaining ground cushion at gate arrival. If negative, incoming arrival occurred after scheduled departure.</p>
+            </div>
+
+            <div class="math-card" style="border-left-color: var(--accent-rose); margin-bottom: 0;">
+              <div class="math-title" style="color: var(--accent-rose);">3. Turnaround Deficit Indicator</div>
+              <div class="math-formula" style="border-color: rgba(244, 63, 94, 0.3); color: #fb7185;">IS_DEFICIT = 1 if RemTurn &lt; 0 else 0</div>
+              <p class="math-desc">Occurs in 5.66% of flights (382,937 operations). Downstream delay probability reaches 99.50%.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Empirical Delay Propagation Figures -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">&#128202; Empirical Delay Propagation Dynamics (6.77 Million Rotations)</h3>
+              <p class="card-subtitle">Descriptive relationships demonstrating the non-linear propagation threshold</p>
+            </div>
+          </div>
+          <div class="figure-container">
+            <img src="figures/fig_propagation_relationships.png" alt="Empirical Delay Propagation Dynamics">
+            <p class="figure-caption">Figure 1: (a) Mean subsequent arrival delay as a function of inbound arrival delay, exhibiting a steep upward propagation slope once buffer cushion is exhausted. (b) Delay probability stratified by scheduled turnaround buffer.</p>
+          </div>
+        </div>
+
+        <!-- System Architecture Flowchart -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">&#128736; End-to-End System &amp; Modeling Pipeline</h3>
+              <p class="card-subtitle">From raw U.S. DOT records to production dual Random Forest estimators</p>
+            </div>
+          </div>
+          <div class="grid-4" style="margin-top: 10px;">
+            <div style="background: rgba(30,41,59,0.5); padding: 16px; border-radius: var(--radius-sm); border-top: 3px solid var(--accent-cyan);">
+              <strong style="color: var(--accent-cyan); font-size: 13px;">Stage 1: Raw Ingestion</strong>
+              <p style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">6.90M raw BTS records normalized for timezones and Daylight Saving Time (DST).</p>
+            </div>
+            <div style="background: rgba(30,41,59,0.5); padding: 16px; border-radius: var(--radius-sm); border-top: 3px solid var(--accent-blue);">
+              <strong style="color: var(--accent-blue); font-size: 13px;">Stage 2: Rotational Pairing</strong>
+              <p style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">Airframe timeline reconstruction filtered by Tail Number matching and airport spatial continuity.</p>
+            </div>
+            <div style="background: rgba(30,41,59,0.5); padding: 16px; border-radius: var(--radius-sm); border-top: 3px solid var(--accent-indigo);">
+              <strong style="color: var(--accent-indigo); font-size: 13px;">Stage 3: Feature Hierarchy</strong>
+              <p style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">Group A (Turnaround Physics), Group B (+Network Context), Group C (+Airframe Fatigue History).</p>
+            </div>
+            <div style="background: rgba(30,41,59,0.5); padding: 16px; border-radius: var(--radius-sm); border-top: 3px solid var(--accent-emerald);">
+              <strong style="color: var(--accent-emerald); font-size: 13px;">Stage 4: Frozen Ensemble</strong>
+              <p style="font-size: 12px; color: var(--text-secondary); margin-top: 6px;">Dual Random Forest: Classifier tuned to operational threshold T=0.35 + Continuous Regressor.</p>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- VIEW 2: DATASET & EXPLORATION                                             -->
+      <!-- ========================================================================= -->
+      <section id="dataset-view" class="dashboard-page">
+        
+        <!-- Pipeline Filtering Summary -->
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">&#128229; Rotation Reconstruction Pipeline</h3>
+                <p class="card-subtitle">Attrition table from 6.90M physical operations to 6.77M valid consecutive pairs</p>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Reconstruction Stage / Filter Criteria</th>
+                    <th style="text-align: right;">Flight Count</th>
+                    <th style="text-align: right;">Share</th>
+                  </tr>
+                </thead>
+                <tbody id="pipeline-stages-tbody">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">&#128197; Chronological Data Partitions</h3>
+                <p class="card-subtitle">Strict temporal split preventing temporal data contamination</p>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="background: rgba(30,41,59,0.5); padding: 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--accent-blue);">
+                <div style="display: flex; justify-content: space-between;">
+                  <strong style="color: #fff;">Training Set (Jan 1 &ndash; Sep 30, 2025)</strong>
+                  <span class="badge-pill">5,065,376 legs</span>
+                </div>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Delay prevalence: 21.57% (1,092,540 late). Fit all preprocessors and baseline models.</p>
+              </div>
+
+              <div style="background: rgba(30,41,59,0.5); padding: 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--accent-indigo);">
+                <div style="display: flex; justify-content: space-between;">
+                  <strong style="color: #fff;">Validation Set (Oct 1 &ndash; Nov 30, 2025)</strong>
+                  <span class="badge-pill">1,140,909 legs</span>
+                </div>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Delay prevalence: 20.21% (230,521 late). Model selection and decision threshold optimization (T=0.35).</p>
+              </div>
+
+              <div style="background: rgba(30,41,59,0.5); padding: 14px; border-radius: var(--radius-sm); border-left: 3px solid var(--accent-emerald);">
+                <div style="display: flex; justify-content: space-between;">
+                  <strong style="color: #fff;">Independent Test Set (Dec 1 &ndash; Dec 31, 2025)</strong>
+                  <span class="badge-pill">562,202 legs</span>
+                </div>
+                <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">Delay prevalence: 26.48% (148,865 late). Final evaluation of frozen estimators.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Parquet Dataset Explorer -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">&#128065; Interactive Parquet Dataset Explorer (Powered by DuckDB)</h3>
+              <p class="card-subtitle">Query, filter, search, and sort live rotation records from the parquet partitions</p>
+            </div>
+            <div style="display: flex; gap: 8px;">
+              <select id="filter-partition" class="filter-control" style="font-weight: 600;">
+                <option value="test">December Test (562k)</option>
+                <option value="val">Validation Oct-Nov (1.14M)</option>
+                <option value="train">Training Jan-Sep (5.07M)</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Filter Toolbar -->
+          <div class="filter-bar">
+            <div class="filter-group">
+              <span class="filter-label">Search Aircraft / Route</span>
+              <input type="text" id="filter-search" class="filter-control" placeholder="e.g. N101AA, ORD...">
+            </div>
+            <div class="filter-group">
+              <span class="filter-label">Carrier</span>
+              <select id="filter-carrier" class="filter-control">
+                <option value="">All Carriers</option>
+                <option value="AA">AA (American)</option>
+                <option value="DL">DL (Delta)</option>
+                <option value="UA">UA (United)</option>
+                <option value="WN">WN (Southwest)</option>
+                <option value="OO">OO (SkyWest)</option>
+                <option value="YX">YX (Republic)</option>
+                <option value="B6">B6 (JetBlue)</option>
+                <option value="AS">AS (Alaska)</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <span class="filter-label">Origin Airport</span>
+              <select id="filter-origin" class="filter-control">
+                <option value="">All Origins</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <span class="filter-label">Destination Airport</span>
+              <select id="filter-dest" class="filter-control">
+                <option value="">All Destinations</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <span class="filter-label">Delay Status</span>
+              <select id="filter-status" class="filter-control">
+                <option value="all">All Flights</option>
+                <option value="delayed">Delayed (&ge; 15m)</option>
+                <option value="ontime">On-Time (&lt; 15m)</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <span class="filter-label">Turnaround Deficit</span>
+              <select id="filter-deficit" class="filter-control">
+                <option value="all">All Buffers</option>
+                <option value="deficit">Deficit Only (&lt; 0m)</option>
+                <option value="sufficient">Sufficient Buffer</option>
+              </select>
+            </div>
+            <div class="filter-group">
+              <span class="filter-label">Rows per page</span>
+              <select id="filter-page-size" class="filter-control" style="min-width: 80px;">
+                <option value="15">15</option>
+                <option value="25">25</option>
+                <option value="50">50</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Table Content -->
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Tail Num</th>
+                  <th>Carrier</th>
+                  <th>Route</th>
+                  <th class="sortable" data-sort="PREV_ARR_DELAY">Inbound Arr Delay &#8693;</th>
+                  <th class="sortable" data-sort="SCHEDULED_TURNAROUND_BUFFER">Sched Buffer &#8693;</th>
+                  <th class="sortable" data-sort="ESTIMATED_REMAINING_TURNAROUND_MINUTES">Remaining Cushion &#8693;</th>
+                  <th>Buffer State</th>
+                  <th class="sortable" data-sort="NEXT_CRS_DEP_HOUR">Dep Hour &#8693;</th>
+                  <th class="sortable" data-sort="NEXT_ARR_DELAY">Next Arr Delay &#8693;</th>
+                  <th>Target Outcome</th>
+                </tr>
+              </thead>
+              <tbody id="dataset-sample-tbody">
+                <!-- Dynamically loaded via DuckDB -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Bar -->
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; padding: 0 4px;">
+            <span id="pagination-info" style="font-size: 12.5px; color: var(--text-muted);">Loading data...</span>
+            <div style="display: flex; gap: 8px;">
+              <button id="btn-prev-page" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">&larr; Previous</button>
+              <button id="btn-next-page" class="btn-secondary" style="padding: 6px 12px; font-size: 12px;">Next &rarr;</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Google Drive Parquet Hosting & Access Guide -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">&#9729; Google Drive Parquet Dataset Hosting &amp; Cloud Access Guide</h3>
+              <p class="card-subtitle">Detailed instructions for storing, sharing, and remotely querying the 6.77M parquet callsets</p>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div>
+              <h4 style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 10px;">Why Host Parquet on Google Drive?</h4>
+              <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+                The complete 2025 dataset comprises 6.77 million rows totaling ~1.5 GB across 4 primary Parquet files. To allow external researchers or cloud notebooks (Google Colab, Kaggle) to explore the data without local storage, upload the files to Google Drive with public read permissions.
+              </p>
+              <ol style="font-size: 13px; color: var(--text-secondary); padding-left: 20px; display: flex; flex-direction: column; gap: 8px;">
+                <li><strong>Upload to Drive:</strong> Upload <code>modeling_test.parquet</code> (12 MB), <code>modeling_validation.parquet</code> (28 MB), and <code>modeling_train.parquet</code> (137 MB) to a dedicated folder.</li>
+                <li><strong>Enable Sharing:</strong> Right-click file &rarr; <em>Share</em> &rarr; Set General Access to <em>&ldquo;Anyone with the link&rdquo; (Viewer)</em>.</li>
+                <li><strong>Extract File ID:</strong> The share link format is <code>https://drive.google.com/file/d/<b>FILE_ID</b>/view</code>.</li>
+              </ol>
+            </div>
+
+            <div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <h4 style="font-size: 13px; font-weight: 700; color: var(--accent-blue);">Python Download &amp; DuckDB Streaming Snippet</h4>
+                <button onclick="copySnippet('drive-snippet')" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;">Copy Code</button>
+              </div>
+              <pre id="drive-snippet" style="background: rgba(0,0,0,0.6); padding: 12px; border-radius: var(--radius-sm); font-size: 12px; color: #38bdf8; overflow-x: auto; border: 1px solid var(--border-color);">
+# 1. Download directly into any Python environment via gdown:
+pip install gdown duckdb pandas
+
+import gdown
+file_id = "YOUR_GOOGLE_DRIVE_FILE_ID"
+url = f"https://drive.google.com/uc?id={file_id}"
+gdown.download(url, "modeling_test.parquet", quiet=False)
+
+# 2. Instant SQL queries via DuckDB without full memory load:
+import duckdb
+con = duckdb.connect()
+df = con.execute("""
+    SELECT NEXT_CARRIER, NEXT_ORIGIN, NEXT_DEST, 
+           PREV_ARR_DELAY, ESTIMATED_REMAINING_TURNAROUND_MINUTES,
+           NEXT_ARR_DELAY
+    FROM 'modeling_test.parquet'
+    WHERE IS_TURNAROUND_DEFICIT = 1
+    LIMIT 10
+""").df()
+print(df)</pre>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- VIEW 3: MODEL PERFORMANCE                                                 -->
+      <!-- ========================================================================= -->
+      <section id="performance-view" class="dashboard-page">
+        
+        <!-- Validation Benchmarking Tables -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">&#127919; Classification Model Comparison (Validation N = 1,140,909)</h3>
+              <p class="card-subtitle">Strictly controlled evaluation across approved estimator families and feature groups</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Estimator Family</th>
+                  <th>Feature Group</th>
+                  <th style="text-align: right;">Accuracy</th>
+                  <th style="text-align: right;">Precision</th>
+                  <th style="text-align: right;">Recall</th>
+                  <th style="text-align: right;">F1-Score</th>
+                  <th style="text-align: right;">ROC-AUC</th>
+                  <th style="text-align: right;">Average Precision</th>
+                  <th style="text-align: right;">Fit Time</th>
+                </tr>
+              </thead>
+              <tbody id="models-classification-tbody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">&#128200; Continuous Arrival Delay Regression (Validation N = 1,140,909)</h3>
+              <p class="card-subtitle">Comparison of linear models, decision trees, neural networks (alpha=0), and random forests</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Model Family</th>
+                  <th>Group</th>
+                  <th style="text-align: right;">MAE (min)</th>
+                  <th style="text-align: right;">RMSE (min)</th>
+                  <th style="text-align: right;">R&sup2; Score</th>
+                  <th style="text-align: right;">Fit Time</th>
+                </tr>
+              </thead>
+              <tbody id="models-regression-tbody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Interactive Decision Threshold Simulator -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">&#9878; Interactive Decision Threshold Simulator</h3>
+              <p class="card-subtitle">Explore operational trade-offs across decision thresholds on the December test population (N = 562,202)</p>
+            </div>
+            <span id="threshold-badge" class="badge-pill" style="font-size: 12px; padding: 4px 12px;">Recommended Operational Point (T = 0.35)</span>
+          </div>
+
+          <div style="margin: 20px 0;">
+            <div style="display: flex; justify-content: space-between; font-weight: 600; margin-bottom: 6px;">
+              <span>Decision Threshold (T):</span>
+              <span id="threshold-val-display" style="font-family: monospace; font-size: 18px; color: var(--accent-blue);">0.35</span>
+            </div>
+            <input type="range" id="threshold-slider" min="0.10" max="0.90" step="0.01" value="0.35" class="range-slider">
+            <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+              <span>0.10 (High Sensitivity)</span>
+              <span>0.35 (Operational Alert)</span>
+              <span>0.39 (F1 Peak)</span>
+              <span>0.50 (Default)</span>
+              <span>0.90 (Conservative)</span>
+            </div>
+          </div>
+
+          <!-- Simulated Metrics Grid -->
+          <div class="grid-4" style="margin-bottom: 20px;">
+            <div class="stat-card">
+              <div class="stat-header"><span>Operating Precision</span></div>
+              <div class="stat-value" id="sim-prec" style="color: var(--accent-emerald);">72.5%</div>
+              <div class="stat-sub">True delay alerts / Total delay alerts</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-header"><span>Operating Recall</span></div>
+              <div class="stat-value" id="sim-recall" style="color: var(--accent-blue);">53.2%</div>
+              <div class="stat-sub">Captured delays / Total late flights</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-header"><span>F1-Score</span></div>
+              <div class="stat-value" id="sim-f1">0.6140</div>
+              <div class="stat-sub">Harmonic mean balance</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-header"><span>False Alarm Rate</span></div>
+              <div class="stat-value" id="sim-fpr" style="color: var(--accent-amber);">7.3%</div>
+              <div class="stat-sub">False alerts on on-time flights</div>
+            </div>
+          </div>
+
+          <!-- Dynamic Confusion Matrix -->
+          <div style="max-width: 500px; margin: 0 auto; background: rgba(0,0,0,0.3); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+            <h5 style="text-align: center; font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 10px;">Simulated Confusion Matrix (December Test Set)</h5>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+              <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 12px; border-radius: 4px; text-align: center;">
+                <div style="font-size: 11px; color: var(--accent-emerald);">True Positives (TP)</div>
+                <div id="cm-tp" style="font-size: 20px; font-weight: 700; font-family: monospace; color: #fff;">79,250</div>
+              </div>
+              <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); padding: 12px; border-radius: 4px; text-align: center;">
+                <div style="font-size: 11px; color: var(--accent-amber);">False Positives (FP)</div>
+                <div id="cm-fp" style="font-size: 20px; font-weight: 700; font-family: monospace; color: #fff;">30,025</div>
+              </div>
+              <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 12px; border-radius: 4px; text-align: center;">
+                <div style="font-size: 11px; color: var(--accent-rose);">False Negatives (FN)</div>
+                <div id="cm-fn" style="font-size: 20px; font-weight: 700; font-family: monospace; color: #fff;">69,615</div>
+              </div>
+              <div style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); padding: 12px; border-radius: 4px; text-align: center;">
+                <div style="font-size: 11px; color: var(--accent-blue);">True Negatives (TN)</div>
+                <div id="cm-tn" style="font-size: 20px; font-weight: 700; font-family: monospace; color: #fff;">383,312</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Delay Strata & Shift-Share Decomposition -->
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">&#128394; Residuals Across Operational Delay Strata</h3>
+                <p class="card-subtitle">Test set breakdown into 5 standardized operational delay regimes</p>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Delay Stratum</th>
+                    <th style="text-align: right;">Count</th>
+                    <th style="text-align: right;">Share</th>
+                    <th style="text-align: right;">MAE</th>
+                    <th style="text-align: right;">RMSE</th>
+                    <th style="text-align: right;">Bias</th>
+                  </tr>
+                </thead>
+                <tbody id="delay-strata-tbody">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">&#9879; Oaxaca-Blinder Shift-Share Decomposition</h3>
+                <p class="card-subtitle">Decomposing the +2.37m error increase between validation and test</p>
+              </div>
+            </div>
+            <div style="background: rgba(0,0,0,0.3); padding: 16px; border-radius: var(--radius-sm); margin-bottom: 14px;">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span>Total Generalization &Delta;MAE:</span>
+                <strong id="ss-total-delta" style="font-family: monospace; color: #fff;">+2.37 min</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                <span style="color: var(--accent-blue);">Composition Shift Effect (Population):</span>
+                <strong id="ss-comp-effect" style="font-family: monospace; color: var(--accent-blue);">+2.33 min (98.4%)</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span style="color: var(--accent-emerald);">Within-Band Error Effect (Algorithm):</span>
+                <strong id="ss-within-effect" style="font-family: monospace; color: var(--accent-emerald);">+0.04 min (1.6%)</strong>
+              </div>
+            </div>
+            <p style="font-size: 12.5px; color: var(--text-secondary);">
+              <strong>Key Empirical Conclusion:</strong> The model did not suffer algorithmic degradation. In moderate delays (15&ndash;59m), error actually decreased by &minus;0.17m. The higher aggregate test error is mathematically driven by the 55.4% surge in severe winter disruptions (&ge; 120m).
+            </p>
+          </div>
+        </div>
+
+        <!-- High-Resolution Figures Gallery -->
+        <div class="grid-2" style="margin-top: 24px;">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">&#128200; Test ROC &amp; Precision-Recall Curves</h3>
+            </div>
+            <div class="figure-container">
+              <img src="figures/fig_test_roc.png" alt="Test ROC Curve">
+              <p class="figure-caption">Out-of-sample Receiver Operating Characteristic (ROC) curve: AUC = 0.7943.</p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">&#128200; Actual vs. Predicted Arrival Delay</h3>
+            </div>
+            <div class="figure-container">
+              <img src="figures/fig_actual_vs_predicted.png" alt="Actual vs Predicted Delay">
+              <p class="figure-caption">Actual vs predicted delay on 562,202 December operations (R&sup2; = 0.4851, MAE = 19.77m).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Permutation Feature Importance Table -->
+        <div class="card" style="margin-top: 24px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">&#127775; Permutation Feature Importance Rankings (100k Test Legs, 5 Repeats)</h3>
+              <p class="card-subtitle">Impact of shuffling feature values on classification Average Precision and regression MAE</p>
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="text-align: center;">Rank</th>
+                  <th>Feature Name</th>
+                  <th>Feature Domain</th>
+                  <th style="text-align: right;">Drop in Avg Precision</th>
+                  <th style="text-align: right;">Increase in MAE (min)</th>
+                  <th style="text-align: right;">R&sup2; Drop</th>
+                </tr>
+              </thead>
+              <tbody id="permutation-tbody">
+                <!-- Injected via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- VIEW 4: LIVE DELAY PREDICTION SIMULATOR                                   -->
+      <!-- ========================================================================= -->
+      <section id="prediction-view" class="dashboard-page">
+        
+        <!-- Preset Scenario Buttons -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">&#9889; Quick Preset Flight Scenarios</h3>
+              <p class="card-subtitle">Load standardized airline operational situations into the dispatch cockpit</p>
+            </div>
+          </div>
+          <div class="preset-bar">
+            <button class="preset-btn" data-preset="deficit">&#128680; Severe Inbound Delay &amp; Buffer Deficit</button>
+            <button class="preset-btn" data-preset="cushion_ok">&#9989; Marginal Delay with Generous Buffer</button>
+            <button class="preset-btn" data-preset="fatigued">&#128337; Fatigued Airframe Evening Chain</button>
+            <button class="preset-btn" data-preset="ontime">&#9992; On-Time Baseline Rotation</button>
+          </div>
+        </div>
+
+        <!-- Cockpit Layout: Controls Left, Live Readout Right -->
+        <div class="grid-2">
+          
+          <!-- Controls Form -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">&#127915; Dispatch Operational Parameters</h3>
+                <p class="card-subtitle">Configure predecessor flight status, ground turnaround buffer, and aircraft schedule</p>
+              </div>
+            </div>
+            
+            <form id="prediction-form">
+              
+              <!-- Turnaround Physics Section -->
+              <h4 style="font-size: 13px; font-weight: 700; color: var(--accent-blue); margin-bottom: 12px; text-transform: uppercase;">
+                1. Ground Turnaround Physics
+              </h4>
+
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label class="form-label">
+                  <span>Inbound Arrival Delay (Leg k):</span>
+                  <span class="value-preview" id="pred-prev-delay-val">45m</span>
+                </label>
+                <input type="range" id="pred-prev-delay" min="-30" max="240" step="1" value="45" class="range-slider">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 18px;">
+                <label class="form-label">
+                  <span>Scheduled Turnaround Buffer:</span>
+                  <span class="value-preview" id="pred-buffer-val">50m</span>
+                </label>
+                <input type="range" id="pred-buffer" min="20" max="180" step="5" value="50" class="range-slider">
+              </div>
+
+              <!-- Route & Airline Section -->
+              <h4 style="font-size: 13px; font-weight: 700; color: var(--accent-cyan); margin-bottom: 12px; text-transform: uppercase;">
+                2. Route &amp; Flight Schedule
+              </h4>
+
+              <div class="form-grid" style="margin-bottom: 14px;">
+                <div class="form-group">
+                  <label class="form-label">Carrier Code</label>
+                  <select id="pred-carrier" class="form-input">
+                    <option value="AA">American Airlines (AA)</option>
+                    <option value="DL">Delta Air Lines (DL)</option>
+                    <option value="UA">United Airlines (UA)</option>
+                    <option value="WN">Southwest Airlines (WN)</option>
+                    <option value="OO">SkyWest Airlines (OO)</option>
+                    <option value="YX">Republic Airways (YX)</option>
+                    <option value="B6">JetBlue Airways (B6)</option>
+                    <option value="AS">Alaska Airlines (AS)</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Origin Airport</label>
+                  <select id="pred-origin" class="form-input">
+                    <!-- Populated via JS -->
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Destination Airport</label>
+                  <select id="pred-dest" class="form-input">
+                    <!-- Populated via JS -->
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 14px;">
+                <label class="form-label">
+                  <span>Scheduled Departure Hour (UTC/Local):</span>
+                  <span class="value-preview" id="pred-hour-val">15:00</span>
+                </label>
+                <input type="range" id="pred-hour" min="0" max="23" step="1" value="15" class="range-slider">
+              </div>
+
+              <div class="form-group" style="margin-bottom: 18px;">
+                <label class="form-label">
+                  <span>Flight Distance:</span>
+                  <span class="value-preview" id="pred-distance-val">800 mi</span>
+                </label>
+                <input type="range" id="pred-distance" min="100" max="3000" step="50" value="800" class="range-slider">
+              </div>
+
+              <!-- Airframe History Section -->
+              <h4 style="font-size: 13px; font-weight: 700; color: var(--accent-indigo); margin-bottom: 12px; text-transform: uppercase;">
+                3. Airframe Rotational Fatigue (Today)
+              </h4>
+
+              <div class="form-group" style="margin-bottom: 20px;">
+                <label class="form-label">
+                  <span>Delayed Flights Logged by Aircraft Today:</span>
+                  <span class="value-preview" id="pred-delayed-today-val">1 flights</span>
+                </label>
+                <input type="range" id="pred-delayed-today" min="0" max="6" step="1" value="1" class="range-slider">
+              </div>
+
+              <button type="submit" class="btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-size: 14px;">
+                &#9889; Re-Calculate Prediction &amp; Diagnostics
+              </button>
+            </form>
+          </div>
+
+          <!-- Real-Time Diagnostics Cockpit -->
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3 class="card-title">&#128747; Dispatch Diagnostics &amp; Verdict</h3>
+                <p class="card-subtitle">Real-time model inferences evaluated at operational threshold T = 0.35</p>
+              </div>
+            </div>
+
+            <!-- Gauge Meter -->
+            <div class="cockpit-gauge-container">
+              <div class="gauge-circle" id="gauge-circle-box" style="border-color: var(--accent-blue);">
+                <div class="gauge-pct" id="gauge-pct-display">--%</div>
+                <div class="gauge-label">Delay Probability</div>
+              </div>
+
+              <div id="pred-verdict-banner" style="font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--accent-blue);">
+                Evaluating...
+              </div>
+
+              <!-- Continuous Delay & Cushion Readout -->
+              <div class="grid-2" style="width: 100%; margin-top: 16px;">
+                <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                  <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Predicted Arrival Delay</div>
+                  <div id="pred-continuous-delay-val" style="font-size: 26px; font-weight: 800; font-family: monospace; color: #fff; margin-top: 4px;">-- min</div>
+                </div>
+                <div style="background: rgba(0,0,0,0.3); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--border-color);">
+                  <div style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">Remaining Cushion</div>
+                  <div id="pred-cushion-val" style="font-size: 26px; font-weight: 800; font-family: monospace; color: #fff; margin-top: 4px;">-- min</div>
+                </div>
+              </div>
+
+              <!-- Recommendation Card -->
+              <div style="width: 100%; background: rgba(30, 41, 59, 0.6); padding: 16px; border-radius: var(--radius-sm); border-left: 4px solid var(--accent-blue); text-align: left; margin-top: 20px;">
+                <strong style="color: #fff; font-size: 13px;">Operations Control Center (AOCC) Directive:</strong>
+                <p id="pred-recommendation-text" style="font-size: 13px; color: var(--text-secondary); margin-top: 6px;">
+                  Awaiting model evaluation...
+                </p>
+              </div>
+
+              <!-- Contributing Drivers -->
+              <div style="width: 100%; text-align: left; margin-top: 18px;">
+                <strong style="font-size: 12.5px; color: #fff;">Key Predictive Drivers:</strong>
+                <ul id="pred-drivers-list" style="font-size: 12px; color: var(--text-secondary); list-style: none; margin-top: 8px;">
+                  <!-- Injected via JavaScript -->
+                </ul>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- VIEW 5: FINDINGS & CONCLUSION                                             -->
+      <!-- ========================================================================= -->
+      <section id="findings-view" class="dashboard-page">
+        
+        <!-- Key Empirical Findings Cards -->
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title" style="color: var(--accent-rose);">&#9888; 1. Ground Buffer Exhaustion</h3>
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+              Across 6.77 million rotations, 382,937 operations (5.66%) occurred in turnaround deficit (inbound delay exceeded scheduled buffer).
+            </p>
+            <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); padding: 12px; border-radius: var(--radius-sm);">
+              <strong style="color: #f87171; font-size: 13px;">99.50% Downstream Delay Rate</strong>
+              <p style="font-size: 12px; color: #fff; margin-top: 4px;">Mean delay reached +121.86 minutes. Confirms turnaround buffer exhaustion as the primary physical propagation bottleneck.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title" style="color: var(--accent-indigo);">&#128337; 2. Airframe Rotational Fatigue</h3>
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+              Tracking cumulative aircraft delay metrics throughout the day provides statistically non-redundant predictive lift.
+            </p>
+            <div style="background: rgba(99, 102, 241, 0.1); border: 1px solid rgba(99, 102, 241, 0.3); padding: 12px; border-radius: var(--radius-sm);">
+              <strong style="color: #a5b4fc; font-size: 13px;">+0.0419 ROC-AUC Over Group A</strong>
+              <p style="font-size: 12px; color: #fff; margin-top: 4px;">Group C models achieve 0.7775 vs 0.7356 for Group A, proving that airframe history captures latent operational friction.</p>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title" style="color: var(--accent-emerald);">&#128737; 3. Seasonal Generalization</h3>
+            </div>
+            <p style="font-size: 13px; color: var(--text-secondary); margin-bottom: 12px;">
+              Frozen models transferred from Autumn validation to high-disruption December test without decay in discrimination.
+            </p>
+            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); padding: 12px; border-radius: var(--radius-sm);">
+              <strong style="color: #34d399; font-size: 13px;">0.7943 Test ROC-AUC (AP = 0.7150)</strong>
+              <p style="font-size: 12px; color: #fff; margin-top: 4px;">Shift-share decomposition confirms 98.4% of error increase is due to severe weather composition, not model failure.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scientific Limitations & Threats to Validity -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">&#128679; Threats to Validity &amp; Scientific Limitations</h3>
+              <p class="card-subtitle">Transparent boundary conditions qualifying research claims</p>
+            </div>
+          </div>
+          <div class="grid-3">
+            <div style="background: rgba(30,41,59,0.5); padding: 16px; border-radius: var(--radius-sm); border-top: 3px solid var(--accent-amber);">
+              <strong style="color: var(--accent-amber); font-size: 13px;">1. Observational Association vs Causation</strong>
+              <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px;">Finding that buffer deficits predict delays does not prove that adding ground buffer will causally eliminate downstream delays in a 1:1 ratio. Airlines adjust ground operational pacing in response to schedule buffers.</p>
+            </div>
+            <div style="background: rgba(30,41,59,0.5); padding: 16px; border-radius: var(--radius-sm); border-top: 3px solid var(--accent-amber);">
+              <strong style="color: var(--accent-amber); font-size: 13px;">2. Unobserved Confounders</strong>
+              <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px;">BTS data omits real-time meteorological radar, de-icing queues, airport surface holds, and FAA Ground Delay Programs (GDPs). These remain unobserved operational hypotheses.</p>
+            </div>
+            <div style="background: rgba(30,41,59,0.5); padding: 16px; border-radius: var(--radius-sm); border-top: 3px solid var(--accent-amber);">
+              <strong style="color: var(--accent-amber); font-size: 13px;">3. Severe Tail Truncation</strong>
+              <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 6px;">Random Forest predictions are bounded by conditional sample averages in terminal leaves (min_samples_leaf=50). In extreme delays (&ge; 120m), the model conditionally underpredicts extreme multi-hour delays (MAE = 109.98m).</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- IEEE Research Paper Section & Embedded Link -->
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">&#128196; Full IEEE Research Paper (Strict 6 Pages)</h3>
+              <p class="card-subtitle">Official publication compiled using IEEEtran conference template</p>
+            </div>
+            <a href="/api/paper" target="_blank" class="btn-primary">
+              <span>&#128196;</span> Open Full PDF
+            </a>
+          </div>
+
+          <div style="background: rgba(0,0,0,0.4); padding: 20px; border-radius: var(--radius-sm); border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 12px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <strong style="color: #fff; font-size: 14px;">Flight Delays Are Contagious: Predicting Delay Propagation Across Consecutive Aircraft Operations</strong>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Arnav Raj &bull; Department of Computer Science and Engineering, Vellore Institute of Technology, Vellore, India</p>
+              </div>
+              <span class="badge-pill" style="color: var(--accent-emerald); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.1);">Verified 6 Pages</span>
+            </div>
+
+            <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
+              <strong>Abstract:</strong> Commercial flight operations are deeply vulnerable to propagated delays transmitted across consecutive flight segments operated by the same aircraft. This research reconstructs 6.77 million commercial aircraft rotations from the Bureau of Transportation Statistics (BTS) 2025 dataset to quantify the extent to which incoming flight delays predict subsequent delays. We design hierarchical feature spaces isolating ground turnaround mechanics, network topology, and cumulative rotational airframe fatigue. Evaluating frozen dual Random Forest models on held-out December 2025 operations demonstrates robust out-of-sample generalization (ROC-AUC 0.7943, Average Precision 0.7150, R&sup2; 0.4851, MAE 19.77 min). An operational decision threshold of T=0.35 yields 72.52% precision and 53.24% recall with only a 7.26% false alarm rate. A Oaxaca-Blinder shift-share decomposition reveals that 98.4% of macro-level test error growth is driven by population composition shifts during winter disruptions rather than model degradation.
+            </p>
+
+            <div style="display: flex; gap: 12px; margin-top: 8px;">
+              <a href="/api/paper" download="flight_delay_propagation_ieee_paper.pdf" class="btn-secondary">
+                <span>&#11015;</span> Download PDF File
+              </a>
+              <a href="/api/models" target="_blank" class="btn-secondary">
+                <span>&#128269;</span> View Serialized JSON Metrics
+              </a>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
