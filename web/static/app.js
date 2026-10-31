@@ -22,7 +22,15 @@ const state = {
   },
   threshold: 0.35,
   modelsData: null,
-  summaryData: null
+  summaryData: null,
+  figures: {
+    catalog: [],
+    filtered: [],
+    activeCategory: "all",
+    searchQuery: "",
+    currentModalIndex: 0,
+    zoomLevel: 1.0
+  }
 };
 
 // Initialize application on DOM loaded
@@ -32,12 +40,14 @@ document.addEventListener("DOMContentLoaded", () => {
   initPredictionForm();
   initThresholdSlider();
   initDatasetFilters();
+  initFiguresGallery();
   
   // Load initial backend data
   loadOverviewData();
   loadDatasetSummary();
   loadDatasetSample();
   loadModelsMetrics();
+  loadFiguresCatalog();
 
   // Run sample prediction
   runPrediction();
@@ -57,7 +67,7 @@ function initNavigation() {
   // Handle URL hash routing
   if (window.location.hash) {
     const hashView = window.location.hash.replace("#", "");
-    if (["overview", "dataset", "performance", "prediction", "findings"].includes(hashView)) {
+    if (["overview", "dataset", "performance", "figures", "prediction", "findings"].includes(hashView)) {
       switchView(hashView);
     }
   }
@@ -82,7 +92,10 @@ function switchView(viewName) {
     overview: "Project Overview & Theoretical Framework",
     dataset: "Dataset Exploration & BTS Pipeline Analytics",
     performance: "Model Performance & Empirical Validation",
+    figures: "Research Figures & Visualizations Gallery (32+ Publication Artifacts)",
     prediction: "Live Aircraft Turnaround & Delay Dispatch Simulator",
+    findings: "Scientific Findings, Implications & IEEE Publication"
+  };
     findings: "Scientific Findings, Implications & IEEE Publication"
   };
   document.getElementById("top-bar-page-title").textContent = titles[viewName] || "Research Dashboard";
@@ -678,3 +691,269 @@ function copySnippet(elementId) {
   }
 }
 window.copySnippet = copySnippet;
+
+// =============================================================================
+// RESEARCH FIGURES & VISUALIZATIONS GALLERY (32+ FIGURES)
+// =============================================================================
+
+function initFiguresGallery() {
+  // Category Pill Buttons
+  const catPills = document.querySelectorAll("#figure-category-pills .cat-pill");
+  catPills.forEach(pill => {
+    pill.addEventListener("click", () => {
+      catPills.forEach(p => p.classList.remove("active"));
+      pill.classList.add("active");
+      state.figures.activeCategory = pill.getAttribute("data-cat");
+      filterAndRenderFigures();
+    });
+  });
+
+  // Search Input Listener
+  const searchInput = document.getElementById("figures-search-input");
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      state.figures.searchQuery = e.target.value.toLowerCase().trim();
+      filterAndRenderFigures();
+    });
+  }
+
+  // Clear Search Button
+  const clearBtn = document.getElementById("clear-figures-search");
+  if (clearBtn) {
+    clearBtn.addEventListener("click", () => {
+      if (searchInput) searchInput.value = "";
+      state.figures.searchQuery = "";
+      filterAndRenderFigures();
+    });
+  }
+
+  // Keyboard navigation for Lightbox modal
+  document.addEventListener("keydown", (e) => {
+    const modal = document.getElementById("figure-modal");
+    if (modal && modal.style.display !== "none") {
+      if (e.key === "Escape") {
+        closeFigureModal();
+      } else if (e.key === "ArrowLeft") {
+        navigateFigure(-1);
+      } else if (e.key === "ArrowRight") {
+        navigateFigure(1);
+      }
+    }
+  });
+}
+
+async function loadFiguresCatalog() {
+  try {
+    const res = await fetch(`${API_BASE}/api/figures`);
+    const data = await res.json();
+    if (data.figures && data.figures.length > 0) {
+      state.figures.catalog = data.figures;
+      filterAndRenderFigures();
+    }
+  } catch (err) {
+    console.error("Failed to load figures catalog:", err);
+  }
+}
+
+function filterAndRenderFigures() {
+  const { catalog, activeCategory, searchQuery } = state.figures;
+  
+  let filtered = catalog;
+
+  // Filter by category
+  if (activeCategory && activeCategory !== "all") {
+    filtered = filtered.filter(f => f.category_id === activeCategory);
+  }
+
+  // Filter by search query
+  if (searchQuery) {
+    filtered = filtered.filter(f => {
+      const titleMatch = (f.title || "").toLowerCase().includes(searchQuery);
+      const descMatch = (f.description || "").toLowerCase().includes(searchQuery);
+      const stageMatch = (f.stage || "").toLowerCase().includes(searchQuery);
+      const catMatch = (f.category || "").toLowerCase().includes(searchQuery);
+      const fileMatch = (f.filename || "").toLowerCase().includes(searchQuery);
+      return titleMatch || descMatch || stageMatch || catMatch || fileMatch;
+    });
+  }
+
+  state.figures.filtered = filtered;
+
+  // Update gallery counter badge
+  const counterBadge = document.getElementById("gallery-count-badge");
+  if (counterBadge) {
+    counterBadge.textContent = `Showing ${filtered.length} of ${catalog.length} Figures`;
+  }
+
+  renderFiguresGrid(filtered);
+}
+
+function renderFiguresGrid(figures) {
+  const grid = document.getElementById("figures-gallery-grid");
+  if (!grid) return;
+
+  if (figures.length === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 48px; background: var(--bg-card); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
+        <p style="font-size: 16px; color: var(--text-muted); margin-bottom: 8px;">No research figures match the selected filter criteria.</p>
+        <button class="btn-secondary" onclick="resetFigureFilters()">Reset All Filters</button>
+      </div>
+    `;
+    return;
+  }
+
+  grid.innerHTML = figures.map((fig, idx) => {
+    // Stage color accents
+    let stageColor = "var(--accent-blue)";
+    let stageBg = "rgba(56, 189, 248, 0.1)";
+    let stageBorder = "rgba(56, 189, 248, 0.3)";
+
+    if (fig.stage.includes("Stage 6") || fig.stage.includes("Test")) {
+      stageColor = "var(--accent-emerald)";
+      stageBg = "rgba(16, 185, 129, 0.1)";
+      stageBorder = "rgba(16, 185, 129, 0.3)";
+    } else if (fig.stage.includes("Tuning") || fig.stage.includes("Stage 5")) {
+      stageColor = "var(--accent-purple)";
+      stageBg = "rgba(168, 85, 247, 0.1)";
+      stageBorder = "rgba(168, 85, 247, 0.3)";
+    } else if (fig.stage.includes("IEEE") || fig.stage.includes("Paper")) {
+      stageColor = "var(--accent-amber)";
+      stageBg = "rgba(245, 158, 11, 0.1)";
+      stageBorder = "rgba(245, 158, 11, 0.3)";
+    }
+
+    const imgPath = `figures/${fig.filename}`;
+
+    return `
+      <div class="figure-gallery-card">
+        <div class="figure-card-img-wrap" onclick="openFigureModal(${idx})">
+          <img src="${imgPath}" alt="${fig.title}" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+          <div class="figure-card-overlay">
+            <button class="figure-overlay-btn">&#128269; View Full Resolution</button>
+          </div>
+        </div>
+
+        <div class="figure-card-body">
+          <div class="figure-card-meta">
+            <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: ${stageColor}; background: ${stageBg}; border-color: ${stageBorder};">
+              ${fig.stage}
+            </span>
+            <span style="font-size: 11px; color: var(--text-muted);">${fig.source}</span>
+          </div>
+
+          <h4 class="figure-card-title">${fig.title}</h4>
+          
+          <p class="figure-card-desc" title="${fig.description}">
+            ${fig.description}
+          </p>
+
+          <div class="figure-card-takeaway">
+            <strong>Key Insight:</strong> ${fig.takeaway}
+          </div>
+
+          <div class="figure-card-footer">
+            <span style="font-family: monospace; font-size: 10px; color: var(--accent-blue);">${fig.filename}</span>
+            <button class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModal(${idx})">
+              Inspect &rarr;
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+function resetFigureFilters() {
+  state.figures.activeCategory = "all";
+  state.figures.searchQuery = "";
+  const searchInput = document.getElementById("figures-search-input");
+  if (searchInput) searchInput.value = "";
+  
+  const catPills = document.querySelectorAll("#figure-category-pills .cat-pill");
+  catPills.forEach(p => {
+    p.classList.toggle("active", p.getAttribute("data-cat") === "all");
+  });
+
+  filterAndRenderFigures();
+}
+window.resetFigureFilters = resetFigureFilters;
+
+// Lightbox Modal Functions
+function openFigureModal(index) {
+  const figures = state.figures.filtered;
+  if (!figures || index < 0 || index >= figures.length) return;
+
+  state.figures.currentModalIndex = index;
+  state.figures.zoomLevel = 1.0;
+
+  const fig = figures[index];
+  const modal = document.getElementById("figure-modal");
+  if (!modal) return;
+
+  // Set modal elements
+  document.getElementById("modal-category-badge").textContent = fig.category;
+  document.getElementById("modal-stage-badge").textContent = fig.stage;
+  document.getElementById("modal-figure-title").textContent = fig.title;
+  document.getElementById("modal-figure-desc").textContent = fig.description;
+  document.getElementById("modal-figure-takeaway").textContent = fig.takeaway;
+  document.getElementById("modal-filename").textContent = fig.filename;
+  document.getElementById("modal-source").textContent = fig.source;
+  document.getElementById("modal-figure-counter").textContent = `Figure ${index + 1} of ${figures.length}`;
+
+  const imgEl = document.getElementById("modal-figure-img");
+  imgEl.src = `figures/${fig.filename}`;
+  imgEl.style.transform = `scale(1.0)`;
+
+  const downloadBtn = document.getElementById("modal-download-btn");
+  if (downloadBtn) {
+    downloadBtn.href = `figures/${fig.filename}`;
+    downloadBtn.download = fig.filename;
+  }
+
+  modal.style.display = "flex";
+  document.body.style.overflow = "hidden";
+}
+window.openFigureModal = openFigureModal;
+
+function closeFigureModal() {
+  const modal = document.getElementById("figure-modal");
+  if (modal) {
+    modal.style.display = "none";
+    document.body.style.overflow = "auto";
+  }
+}
+window.closeFigureModal = closeFigureModal;
+
+function navigateFigure(direction) {
+  const figures = state.figures.filtered;
+  if (!figures || figures.length === 0) return;
+
+  let newIndex = state.figures.currentModalIndex + direction;
+  if (newIndex < 0) newIndex = figures.length - 1;
+  if (newIndex >= figures.length) newIndex = 0;
+
+  openFigureModal(newIndex);
+}
+window.navigateFigure = navigateFigure;
+
+function zoomFigure(delta) {
+  const imgEl = document.getElementById("modal-figure-img");
+  if (!imgEl) return;
+
+  let newZoom = state.figures.zoomLevel + delta;
+  newZoom = Math.max(0.5, Math.min(3.0, newZoom));
+  state.figures.zoomLevel = newZoom;
+  imgEl.style.transform = `scale(${newZoom})`;
+}
+window.zoomFigure = zoomFigure;
+
+function resetFigureZoom() {
+  state.figures.zoomLevel = 1.0;
+  const imgEl = document.getElementById("modal-figure-img");
+  if (imgEl) {
+    imgEl.style.transform = `scale(1.0)`;
+  }
+}
+window.resetFigureZoom = resetFigureZoom;
+
+

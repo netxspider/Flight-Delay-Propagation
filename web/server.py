@@ -76,6 +76,8 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             self.handle_dataset_sample(query)
         elif path == "/api/models":
             self.handle_models_metrics()
+        elif path == "/api/figures":
+            self.handle_figures()
         elif path == "/api/paper":
             self.handle_paper_download()
         else:
@@ -410,6 +412,484 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         }
         self.send_json(metrics_data)
 
+    def handle_figures(self):
+        catalog = [
+            # --- EDA & NETWORK DYNAMICS (Phase 5) ---
+            {
+                "id": "fig-eda-01",
+                "filename": "fig01_target_distributions.png",
+                "title": "Target Arrival Delay Distributions & Binary Balance",
+                "category": "EDA & Network Dynamics",
+                "category_id": "eda",
+                "stage": "Phase 5 EDA",
+                "source": "results/figures",
+                "description": "Continuous arrival delay density and 15-minute binary delay threshold balance across 6.77 million verified rotation pairs. Shows severe right-skewness with an empirical delay rate of 21.57%.",
+                "takeaway": "Confirms extreme positive skewness in delay minutes, justifying both log-transformed/MAE loss for regression and threshold-calibrated probabilistic classification."
+            },
+            {
+                "id": "fig-eda-02",
+                "filename": "fig02_delay_propagation_relationships.png",
+                "title": "Empirical Delay Propagation Dynamics",
+                "category": "EDA & Network Dynamics",
+                "category_id": "eda",
+                "stage": "Phase 5 EDA",
+                "source": "results/figures",
+                "description": "Mean downstream arrival delay as a function of predecessor flight arrival delay. Visualizes the steep non-linear propagation curve once ground buffer cushions are exhausted.",
+                "takeaway": "Predecessor delays below 15 minutes are largely absorbed by scheduled buffers; delays exceeding 30 minutes propagate with an empirical transfer slope approaching 1.0."
+            },
+            {
+                "id": "fig-eda-03",
+                "filename": "fig03_turnaround_buffer_dynamics.png",
+                "title": "Turnaround Ground Buffer Dynamics & Deficit Cliff",
+                "category": "EDA & Network Dynamics",
+                "category_id": "eda",
+                "stage": "Phase 5 EDA",
+                "source": "results/figures",
+                "description": "Distribution of scheduled turnaround buffers and the acute probability cliff when remaining cushion drops below zero (turnaround deficit).",
+                "takeaway": "Turnaround deficits (5.66% of operations) produce a 99.50% delay propagation probability, confirming ground buffer exhaustion as the primary physical propagation bottleneck."
+            },
+            {
+                "id": "fig-eda-04",
+                "filename": "fig04_temporal_delay_patterns.png",
+                "title": "Diurnal and Day-of-Week Congestion Patterns",
+                "category": "EDA & Network Dynamics",
+                "category_id": "eda",
+                "stage": "Phase 5 EDA",
+                "source": "results/figures",
+                "description": "Mean delay minutes and delay probability stratified across scheduled departure hours (6:00 to 23:00) and days of the week.",
+                "takeaway": "Systemic delays peak sharply in the late afternoon and evening (17:00-21:00) due to network-wide rotational delay accumulation across consecutive daily flights."
+            },
+            {
+                "id": "fig-eda-05",
+                "filename": "fig05_carrier_airport_heterogeneity.png",
+                "title": "Carrier & Major Hub Airport Heterogeneity",
+                "category": "EDA & Network Dynamics",
+                "category_id": "eda",
+                "stage": "Phase 5 EDA",
+                "source": "results/figures",
+                "description": "Cross-carrier delay rates and hub vulnerability rankings across the 14 major operating carriers (WN, AA, DL, UA, etc.) and top 15 U.S. airports (ORD, DEN, DFW, ATL, JFK).",
+                "takeaway": "High-density hubs (e.g. ORD, DEN) exhibit significantly tighter buffers and higher downstream propagation rates than regional spokes."
+            },
+            {
+                "id": "fig-eda-06",
+                "filename": "fig06_aircraft_level_patterns.png",
+                "title": "Airframe Rotational Fatigue & Daily Flight Sequence",
+                "category": "EDA & Network Dynamics",
+                "category_id": "eda",
+                "stage": "Phase 5 EDA",
+                "source": "results/figures",
+                "description": "Propagation probability indexed by daily flight sequence number (legs 1 through 8+) and prior accumulated delays on that specific physical aircraft tail.",
+                "takeaway": "Aircraft on their 4th or higher daily segment exhibit nearly double the delay risk of early morning flights due to compound operational schedule friction."
+            },
+            {
+                "id": "fig-eda-07",
+                "filename": "fig07_feature_correlations.png",
+                "title": "Multivariate Feature Correlation Heatmap",
+                "category": "EDA & Network Dynamics",
+                "category_id": "eda",
+                "stage": "Phase 5 EDA",
+                "source": "results/figures",
+                "description": "Pearson correlation matrix across all 18 engineered features, ground buffers, predecessor arrival delays, schedule variables, and downstream propagation targets.",
+                "takeaway": "Reveals strong correlation between PREV_ARR_DELAY and ESTIMATED_REMAINING_TURNAROUND_MINUTES, while preserving independent predictive signals across temporal features."
+            },
+            {
+                "id": "fig-eda-08",
+                "filename": "airport_geographic_distribution.png",
+                "title": "Geographic Distribution of 352 Network Airports",
+                "category": "EDA & Network Dynamics",
+                "category_id": "eda",
+                "stage": "Phase 5 EDA",
+                "source": "results/figures",
+                "description": "Spatial mapping of the 352 commercial airports in the 2025 BTS dataset across the contiguous United States, Alaska, Hawaii, and Puerto Rico.",
+                "takeaway": "Illustrates the continental coverage of the dataset and the strategic clustering of high-volume transfer hubs across the National Airspace System."
+            },
+            {
+                "id": "fig-eda-09",
+                "filename": "annual_arrival_delay_distribution.png",
+                "title": "Full-Year Arrival Delay Density (BTS 2025)",
+                "category": "EDA & Network Dynamics",
+                "category_id": "eda",
+                "stage": "Phase 5 EDA",
+                "source": "results/figures",
+                "description": "Complete density curve of actual arrival delays with dashed vertical indicators for on-time arrivals (0 min) and the official FAA 15-minute delay threshold.",
+                "takeaway": "Highlights the sharp unimodal density centered near zero with an extended non-Gaussian positive tail reaching into multi-hour delays."
+            },
+
+            # --- MODEL VALIDATION & DIAGNOSTICS (Stage 4) ---
+            {
+                "id": "fig-st4-01",
+                "filename": "classification_roc_curve.png",
+                "title": "Stage 4 Validation Receiver Operating Characteristic (ROC) Curves",
+                "category": "Model Training & Validation (Stage 4)",
+                "category_id": "stage4",
+                "stage": "Stage 4 Modeling",
+                "source": "results/figures",
+                "description": "Validation set ROC curves comparing Majority Baseline, Logistic Regression, Decision Tree, MLP (alpha=0), and Random Forest across Groups A, B, and C.",
+                "takeaway": "Random Forest Group C achieves the top validation discrimination of AUC = 0.7932, outperforming linear baselines (0.7775)."
+            },
+            {
+                "id": "fig-st4-02",
+                "filename": "classification_precision_recall_curve.png",
+                "title": "Stage 4 Validation Precision-Recall Curves",
+                "category": "Model Training & Validation (Stage 4)",
+                "category_id": "stage4",
+                "stage": "Stage 4 Modeling",
+                "source": "results/figures",
+                "description": "Precision-Recall curves highlighting Average Precision (AP) against the 20.21% validation positive baseline across all tested estimators.",
+                "takeaway": "Random Forest Group C delivers AP = 0.6600, demonstrating strong positive class precision retention across diverse operational operating thresholds."
+            },
+            {
+                "id": "fig-st4-03",
+                "filename": "classification_confusion_matrix.png",
+                "title": "Stage 4 Validation Confusion Matrix (T=0.50)",
+                "category": "Model Training & Validation (Stage 4)",
+                "category_id": "stage4",
+                "stage": "Stage 4 Modeling",
+                "source": "results/figures",
+                "description": "Confusion matrix counts and normalized proportions for the selected Random Forest classifier evaluated at default decision threshold T=0.50 on 1.14M validation flights.",
+                "takeaway": "Achieves 86.68% precision with 40.88% recall, proving high precision reliability with an opportunity for threshold optimization."
+            },
+            {
+                "id": "fig-st4-04",
+                "filename": "regression_actual_vs_predicted.png",
+                "title": "Stage 4 Continuous Regression: Actual vs. Predicted Delay",
+                "category": "Model Training & Validation (Stage 4)",
+                "category_id": "stage4",
+                "stage": "Stage 4 Modeling",
+                "source": "results/figures",
+                "description": "Scatter hexbin density of actual vs predicted continuous arrival delay on the validation dataset (N=1,140,909) with unity reference line.",
+                "takeaway": "Demonstrates R2 = 0.4516 and MAE = 17.40 minutes, closely tracking delays up to 100 minutes before exhibiting conservative compression on extreme outliers."
+            },
+            {
+                "id": "fig-st4-05",
+                "filename": "regression_residual_distribution.png",
+                "title": "Stage 4 Regression Residual Density & Calibration",
+                "category": "Model Training & Validation (Stage 4)",
+                "category_id": "stage4",
+                "stage": "Stage 4 Modeling",
+                "source": "results/figures",
+                "description": "Histogram and kernel density of validation residuals (Actual - Predicted) demonstrating mean bias of +0.94 minutes.",
+                "takeaway": "Unconditional calibration error is under 1 minute across 1.14 million validation predictions, confirming unbiased central expectations."
+            },
+            {
+                "id": "fig-st4-06",
+                "filename": "regression_error_by_delay_band.png",
+                "title": "Stage 4 Error Stratification Across 5 Delay Bands",
+                "category": "Model Training & Validation (Stage 4)",
+                "category_id": "stage4",
+                "stage": "Stage 4 Modeling",
+                "source": "results/figures",
+                "description": "Mean Absolute Error broken down into Early/On-Time (<=0m), Minor Delay (1-14m), Moderate Delay (15-44m), Large Delay (45-119m), and Severe Delay (>=120m).",
+                "takeaway": "Early and minor flights achieve low errors (12.19m and 16.54m MAE), while severe delays (>=120m) account for the bulk of global error variance."
+            },
+            {
+                "id": "fig-st4-07",
+                "filename": "permutation_importance_comparison.png",
+                "title": "Stage 4 Permutation Feature Importance Across Estimator Families",
+                "category": "Model Training & Validation (Stage 4)",
+                "category_id": "stage4",
+                "stage": "Stage 4 Modeling",
+                "source": "results/figures",
+                "description": "Empirical drop in validation metric when permuting each of the 18 Group C features across Random Forest, MLP, Decision Tree, and Logistic Regression.",
+                "takeaway": "Consistently identifies ESTIMATED_REMAINING_TURNAROUND_MINUTES and PREV_ARR_DELAY as the top two predictive drivers across all architectures."
+            },
+
+            # --- HYPERPARAMETER TUNING & SELECTION (Stage 5) ---
+            {
+                "id": "fig-st5-01",
+                "filename": "stage5_threshold_curves.png",
+                "title": "Stage 5 Decision Threshold Trade-off Curves",
+                "category": "Hyperparameter Tuning & Selection (Stage 5)",
+                "category_id": "stage5",
+                "stage": "Stage 5 Tuning",
+                "source": "results/figures",
+                "description": "Validation Precision, Recall, and F1 trajectories across thresholds 0.05 to 0.95. Highlights operational trade-off point T=0.35 and grid optimum T=0.39.",
+                "takeaway": "Lowering threshold from 0.50 to 0.35 increases recall from 40.88% to 49.03% with a minimal precision drop to 69.20%, yielding superior operational alerting."
+            },
+            {
+                "id": "fig-st5-02",
+                "filename": "stage5_tuning_curves.png",
+                "title": "Stage 5 Random Forest Hyperparameter Grid Trajectories",
+                "category": "Hyperparameter Tuning & Selection (Stage 5)",
+                "category_id": "stage5",
+                "stage": "Stage 5 Tuning",
+                "source": "results/figures",
+                "description": "Validation AUC, F1, and MAE across tree depth limits (10 to 30) and ensemble sizes (50 to 300 estimators).",
+                "takeaway": "Identified optimal trade-off at n_estimators=200 and max_depth=20, balancing generalization against memory footprint and sub-15ms inference latency."
+            },
+            {
+                "id": "fig-st5-03",
+                "filename": "stage5_final_model_diagnostics.png",
+                "title": "Stage 5 Selected Final Model Comprehensive Diagnostics",
+                "category": "Hyperparameter Tuning & Selection (Stage 5)",
+                "category_id": "stage5",
+                "stage": "Stage 5 Tuning",
+                "source": "results/figures",
+                "description": "Multi-panel summary verifying convergence, reliability calibration, learning curves, and residual normality before freezing weights for test evaluation.",
+                "takeaway": "Formally cleared the frozen Random Forest Group C pipeline for final untouched December test evaluation."
+            },
+
+            # --- FINAL TEST EVALUATION & GENERALIZATION (Stage 6) ---
+            {
+                "id": "fig-st6-01",
+                "filename": "stage6_test_roc_curve.png",
+                "title": "Stage 6 Final Test ROC Curve (AUC = 0.7943)",
+                "category": "Final Test Evaluation (Stage 6)",
+                "category_id": "stage6",
+                "stage": "Stage 6 Test",
+                "source": "results/figures",
+                "description": "Out-of-sample Receiver Operating Characteristic curve evaluated on 562,202 independent December 2025 flights, outperforming validation (0.7932).",
+                "takeaway": "Zero temporal performance degradation, proving that the learned propagation mechanisms generalize across distinct winter seasonal conditions."
+            },
+            {
+                "id": "fig-st6-02",
+                "filename": "stage6_test_precision_recall_curve.png",
+                "title": "Stage 6 Final Test Precision-Recall Curve (AP = 0.7150)",
+                "category": "Final Test Evaluation (Stage 6)",
+                "category_id": "stage6",
+                "stage": "Stage 6 Test",
+                "source": "results/figures",
+                "description": "Out-of-sample Precision-Recall curve on December 2025 test dataset against the 26.48% baseline delay prevalence.",
+                "takeaway": "Average Precision rose from 0.6600 (validation) to 0.7150 (test), reflecting robust true positive capture during heavy holiday disruption periods."
+            },
+            {
+                "id": "fig-st6-03",
+                "filename": "stage6_test_confusion_matrix.png",
+                "title": "Stage 6 Test Confusion Matrix at Operational Threshold (T=0.35)",
+                "category": "Final Test Evaluation (Stage 6)",
+                "category_id": "stage6",
+                "stage": "Stage 6 Test",
+                "source": "results/figures",
+                "description": "Final December test confusion matrix: TP = 79,255, FP = 29,997, FN = 69,610, TN = 383,340 on 562,202 operations.",
+                "takeaway": "Confirms 72.52% precision and 53.24% recall at the operational threshold, maintaining 92.74% specificity on on-time operations."
+            },
+            {
+                "id": "fig-st6-04",
+                "filename": "stage6_test_calibration_curve.png",
+                "title": "Stage 6 Probability Calibration & Reliability Diagram",
+                "category": "Final Test Evaluation (Stage 6)",
+                "category_id": "stage6",
+                "stage": "Stage 6 Test",
+                "source": "results/figures",
+                "description": "Reliability curve comparing predicted probabilities against empirical observed delay frequencies in 10 uniform probability deciles.",
+                "takeaway": "Exhibits tight calibration along the diagonal line with Brier score = 0.1341, confirming that predicted probabilities reflect true empirical risk."
+            },
+            {
+                "id": "fig-st6-05",
+                "filename": "stage6_test_actual_vs_predicted.png",
+                "title": "Stage 6 Test Continuous Delay: Actual vs. Predicted",
+                "category": "Final Test Evaluation (Stage 6)",
+                "category_id": "stage6",
+                "stage": "Stage 6 Test",
+                "source": "results/figures",
+                "description": "Scatter hexbin comparison on December 2025 test set (N=562,202) showing R2 = 0.4851 and MAE = 19.77 minutes.",
+                "takeaway": "The model explains 48.51% of continuous arrival delay variance out-of-sample, outperforming validation R2 (0.4516) by +0.0335."
+            },
+            {
+                "id": "fig-st6-06",
+                "filename": "stage6_test_residual_distribution.png",
+                "title": "Stage 6 Test Residual Distribution & Higher Moments",
+                "category": "Final Test Evaluation (Stage 6)",
+                "category_id": "stage6",
+                "stage": "Stage 6 Test",
+                "source": "results/figures",
+                "description": "Histogram and distribution fit of test residuals showing unconditional bias of +1.21 minutes and median error of -4.32 minutes.",
+                "takeaway": "Confirms absence of significant systemic drift, with near-zero macroscopic bias across the independent evaluation cohort."
+            },
+            {
+                "id": "fig-st6-07",
+                "filename": "stage6_test_residual_vs_predicted.png",
+                "title": "Stage 6 Residuals vs. Predicted Delay (Heteroscedasticity Analysis)",
+                "category": "Final Test Evaluation (Stage 6)",
+                "category_id": "stage6",
+                "stage": "Stage 6 Test",
+                "source": "results/figures",
+                "description": "Residual scatter against predicted arrival delay minutes, examining variance stability across small, medium, and large predicted delays.",
+                "takeaway": "Shows stable variance up to 45 minutes of delay, with expected heteroscedastic dispersion in high-delay regimes caused by unobserved NAS weather shocks."
+            },
+            {
+                "id": "fig-st6-08",
+                "filename": "stage6_test_delay_band_performance.png",
+                "title": "Stage 6 Test Error Stratified Across 5 Delay Bands",
+                "category": "Final Test Evaluation (Stage 6)",
+                "category_id": "stage6",
+                "stage": "Stage 6 Test",
+                "source": "results/figures",
+                "description": "Mean Absolute Error across Early/On-Time (12.44m), Minor (18.17m), Moderate (23.95m), Large (37.75m), and Severe (93.93m) bands.",
+                "takeaway": "Within-band error rates remained nearly identical to validation; overall MAE increased from 17.40m to 19.77m solely due to December's higher severe delay share."
+            },
+            {
+                "id": "fig-st6-09",
+                "filename": "stage6_test_feature_importance.png",
+                "title": "Stage 6 Out-of-Sample Permutation Feature Importance",
+                "category": "Final Test Evaluation (Stage 6)",
+                "category_id": "stage6",
+                "stage": "Stage 6 Test",
+                "source": "results/figures",
+                "description": "Independent test permutation importance rankings for the 18 Group C features on December 2025 flights.",
+                "takeaway": "ESTIMATED_REMAINING_TURNAROUND_MINUTES and PREV_ARR_DELAY account for over 70% of total permutation importance, solidifying ground turnaround physics as paramount."
+            },
+            {
+                "id": "fig-st6-10",
+                "filename": "stage6_test_threshold_comparison.png",
+                "title": "Stage 6 Operating Threshold Performance Comparison",
+                "category": "Final Test Evaluation (Stage 6)",
+                "category_id": "stage6",
+                "stage": "Stage 6 Test",
+                "source": "results/figures",
+                "description": "Side-by-side bar comparison of Precision, Recall, F1, and Accuracy across candidate thresholds T=0.35, T=0.39, and T=0.50 on the test set.",
+                "takeaway": "Demonstrates that T=0.35 captures 53.24% of all delayed flights while preserving 72.52% precision and 92.74% specificity on on-time flights."
+            },
+            {
+                "id": "fig-st6-11",
+                "filename": "stage6_validation_test_comparison.png",
+                "title": "Validation vs. Test Generalization Metrics Comparison",
+                "category": "Final Test Evaluation (Stage 6)",
+                "category_id": "stage6",
+                "stage": "Stage 6 Test",
+                "source": "results/figures",
+                "description": "Comparative radar and bar visualization of ROC-AUC, AP, R2, MAE, RMSE, and Specificity across temporal validation and test cohorts.",
+                "takeaway": "Validates temporal robustness and rules out overfitting across the chronological threshold."
+            },
+
+            # --- MACRO TRENDS & SEASONALITY ---
+            {
+                "id": "fig-macro-01",
+                "filename": "monthly_delay_rate_trend.png",
+                "title": "Longitudinal Monthly Delay Rate Trajectory (Jan-Dec 2025)",
+                "category": "Macro Trends & Seasonality",
+                "category_id": "macro",
+                "stage": "Longitudinal Audit",
+                "source": "results/figures",
+                "description": "Proportion of flights delayed >= 15 minutes across all 12 months of 2025 in the Bureau of Transportation Statistics database.",
+                "takeaway": "Reveals clear seasonal peaks in June/July (convective summer storms) and December (holiday winter volume at 26.48%)."
+            },
+            {
+                "id": "fig-macro-02",
+                "filename": "monthly_flight_volume_cancellations.png",
+                "title": "Monthly Flight Volume & Cancellation Dynamics",
+                "category": "Macro Trends & Seasonality",
+                "category_id": "macro",
+                "stage": "Longitudinal Audit",
+                "source": "results/figures",
+                "description": "Total monthly scheduled flight volume and cancelled operations, establishing the stability of commercial flight density.",
+                "takeaway": "Confirms high volume consistency (~580k flights/month) with low cancellation rates (<2%), validating the integrity of rotational chain reconstruction."
+            },
+
+            # --- IEEE CONFERENCE PUBLICATION FIGURES ---
+            {
+                "id": "fig-ieee-01",
+                "filename": "fig_propagation_relationships.png",
+                "title": "IEEE Fig 1: Empirical Delay Propagation Dynamics",
+                "category": "IEEE Publication Figures",
+                "category_id": "ieee",
+                "stage": "IEEE Paper",
+                "source": "paper/figures",
+                "description": "Dual-panel paper figure showing mean next arrival delay vs inbound delay and next delay probability vs scheduled turnaround buffer.",
+                "takeaway": "Core empirical visualization for Section III of the IEEE paper establishing the rotational propagation problem."
+            },
+            {
+                "id": "fig-ieee-02",
+                "filename": "fig_turnaround_buffer.png",
+                "title": "IEEE Fig 2: Turnaround Buffer Cushion & Deficit Mechanics",
+                "category": "IEEE Publication Figures",
+                "category_id": "ieee",
+                "stage": "IEEE Paper",
+                "source": "paper/figures",
+                "description": "Dual-panel distribution of scheduled turnaround buffers and subsequent delay rate as a function of remaining cushion.",
+                "takeaway": "Illustrates the mathematical turnaround cushion formula and the deficit threshold triggering a 99.5% propagation rate."
+            },
+            {
+                "id": "fig-ieee-03",
+                "filename": "fig_test_roc.png",
+                "title": "IEEE Fig 3(a): Test ROC Curve (AUC = 0.7943)",
+                "category": "IEEE Publication Figures",
+                "category_id": "ieee",
+                "stage": "IEEE Paper",
+                "source": "paper/figures",
+                "description": "High-resolution ROC curve for Section V-A of the conference paper demonstrating out-of-sample discrimination.",
+                "takeaway": "Sub-panel figure showing model discrimination on 562,202 independent test flights."
+            },
+            {
+                "id": "fig-ieee-04",
+                "filename": "fig_test_pr.png",
+                "title": "IEEE Fig 3(b): Test Precision-Recall Curve (AP = 0.7150)",
+                "category": "IEEE Publication Figures",
+                "category_id": "ieee",
+                "stage": "IEEE Paper",
+                "source": "paper/figures",
+                "description": "High-resolution Precision-Recall curve with random classifier baseline comparison for the IEEE paper.",
+                "takeaway": "Demonstrates Average Precision substantially exceeding the 26.5% no-skill prevalence baseline."
+            },
+            {
+                "id": "fig-ieee-05",
+                "filename": "fig_test_confusion_matrix.png",
+                "title": "IEEE Fig 4: Operational Confusion Matrix at T=0.35",
+                "category": "IEEE Publication Figures",
+                "category_id": "ieee",
+                "stage": "IEEE Paper",
+                "source": "paper/figures",
+                "description": "Publication heat-matrix showing true positives, false positives, false negatives, and true negatives on December test data.",
+                "takeaway": "Visualizes the 72.52% precision and 92.74% specificity achieved at the selected operating threshold."
+            },
+            {
+                "id": "fig-ieee-06",
+                "filename": "fig_actual_vs_predicted.png",
+                "title": "IEEE Fig 5(a): Continuous Delay Regression Hexbin",
+                "category": "IEEE Publication Figures",
+                "category_id": "ieee",
+                "stage": "IEEE Paper",
+                "source": "paper/figures",
+                "description": "Regression calibration hexbin comparing actual and predicted continuous arrival delays in minutes (R2 = 0.4851).",
+                "takeaway": "Featured in Section V-B of the paper showing tight adherence along the 45-degree reference line."
+            },
+            {
+                "id": "fig-ieee-07",
+                "filename": "fig_delay_band_performance.png",
+                "title": "IEEE Fig 5(b): MAE Across Delay Strata",
+                "category": "IEEE Publication Figures",
+                "category_id": "ieee",
+                "stage": "IEEE Paper",
+                "source": "paper/figures",
+                "description": "Mean Absolute Error bar chart across the 5 delay strata in December test evaluation.",
+                "takeaway": "Visualizes the error distribution showing that prediction error is highly concentrated in severe disruption flights."
+            },
+            {
+                "id": "fig-ieee-08",
+                "filename": "fig_feature_importance.png",
+                "title": "IEEE Fig 6: Top Permutation Feature Importances",
+                "category": "IEEE Publication Figures",
+                "category_id": "ieee",
+                "stage": "IEEE Paper",
+                "source": "paper/figures",
+                "description": "Bar plot of the most influential features ranked by permutation importance drop in the independent test evaluation.",
+                "takeaway": "Demonstrates the dominance of remaining turnaround cushion, inbound arrival delay, and deficit indicator."
+            }
+        ]
+
+        # Count categories
+        cat_counts = {}
+        for f in catalog:
+            cid = f["category_id"]
+            cat_counts[cid] = cat_counts.get(cid, 0) + 1
+
+        figures_payload = {
+            "total": len(catalog),
+            "results_figures_count": sum(1 for f in catalog if f["source"] == "results/figures"),
+            "paper_figures_count": sum(1 for f in catalog if f["source"] == "paper/figures"),
+            "categories": [
+                {"id": "all", "name": "All Research Figures", "count": len(catalog)},
+                {"id": "eda", "name": "EDA & Network Dynamics", "count": cat_counts.get("eda", 0)},
+                {"id": "stage4", "name": "Model Training & Validation (Stage 4)", "count": cat_counts.get("stage4", 0)},
+                {"id": "stage5", "name": "Hyperparameter Tuning & Selection (Stage 5)", "count": cat_counts.get("stage5", 0)},
+                {"id": "stage6", "name": "Final Test Evaluation (Stage 6)", "count": cat_counts.get("stage6", 0)},
+                {"id": "macro", "name": "Macro Trends & Seasonality", "count": cat_counts.get("macro", 0)},
+                {"id": "ieee", "name": "IEEE Conference Paper Figures", "count": cat_counts.get("ieee", 0)}
+            ],
+            "figures": catalog
+        }
+        self.send_json(figures_payload)
+
     def handle_predict(self):
         global PREPROCESSOR, CLASSIFIER, REGRESSOR
         try:
@@ -561,3 +1041,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

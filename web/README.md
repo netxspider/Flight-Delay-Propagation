@@ -39,7 +39,7 @@ http://localhost:8000
 
 ## 🧭 Dashboard Architecture & Layout
 
-The dashboard features a **fixed left-side navigation bar** with 5 primary views, built with high-end dark aviation operations styling (zinc/slate theme, frosted glass cards, and status badges):
+The dashboard features a **fixed left-side navigation bar** with 6 primary views, built with high-end dark aviation operations styling (zinc/slate theme, frosted glass cards, and status badges):
 
 ```
 ┌─────────────────┬──────────────────────────────────────────────────────────────────┐
@@ -48,6 +48,7 @@ The dashboard features a **fixed left-side navigation bar** with 5 primary views
 │ 🛫 Overview     │  • Problem statement, physical turnaround equations, pipeline   │
 │ 📊 Dataset      │  • DuckDB Parquet explorer, filters, sorting, missing values     │
 │ 📈 Performance  │  • Model comparisons, threshold simulator, confusion matrix     │
+│ 🖼️ Figures (32+)│  • Full repository of 32 audit figures + 8 IEEE paper figures    │
 │ 🎯 Prediction   │  • Real-time model cockpit, turnaround physics, factor drivers   │
 │ 📝 Findings     │  • Empirical conclusions, buffer thresholds, IEEE paper download │
 └─────────────────┴──────────────────────────────────────────────────────────────────┘
@@ -80,15 +81,26 @@ The dashboard features a **fixed left-side navigation bar** with 5 primary views
   - $T = 0.39$ (Grid F1-Maximizing Threshold: 75.76% Precision, 48.91% Recall, 0.5942 F1)
   - $T = 0.50$ (Standard Default: 86.68% Precision, 40.88% Recall, 0.5556 F1)
 - **Error Stratification & Shift-Share Analysis:** 5 delay strata MAE decomposition table and Oaxaca-Blinder decomposition.
-- **Publication Figures Gallery:** High-resolution view and zoom modal for all 12 research figures.
 
-### 4. Live Prediction Playground (`#prediction`)
+### 4. Comprehensive Research Figures Gallery (`#figures`)
+- **Complete Visual Repository:** Displays all **32 empirical figures from `results/figures/`** plus the **8 official IEEE conference paper figures from `paper/figures/`** (40 high-resolution charts in total).
+- **Multi-Category Navigation:**
+  - *EDA & Network Dynamics (9 figures):* Target distributions, propagation curves, buffer dynamics, diurnal/weekly patterns, carrier heterogeneity, rotational fatigue, feature correlation heatmaps, geographic airport maps, and annual delay densities.
+  - *Model Validation & Diagnostics (7 figures):* Stage 4 validation ROC, PR curves, confusion matrices, actual vs. predicted delay hexbins, residual densities, error by delay bands, and multi-model permutation importance comparisons.
+  - *Hyperparameter Tuning & Selection (3 figures):* Stage 5 threshold curves ($T \in [0.05, 0.95]$), Random Forest tree/depth tuning curves, and final pre-freeze diagnostic panels.
+  - *Final Test Evaluation & Generalization (11 figures):* Stage 6 December test ROC (0.7943), test PR curve (0.7150), operational confusion matrix (T=0.35), probability calibration curve, continuous hexbin ($R^2=0.4851$), residual distributions, heteroscedasticity checks, 5-band delay strata MAE, out-of-sample permutation importance, threshold comparisons, and validation vs. test generalization radars.
+  - *Macro Trends & Seasonality (2 figures):* 12-month BTS delay rate trajectory and monthly flight volume/cancellation trends.
+  - *IEEE Conference Publication Figures (8 figures):* High-resolution charts integrated into the camera-ready 6-page paper.
+- **Interactive Fullscreen Lightbox & Zoom:** Click any figure card to open a full-resolution modal with pan/zoom (+, -, 1:1), keyboard navigation (left/right arrows), direct PNG download, and full scientific metadata with key empirical takeaways.
+- **Real-Time Live Search:** Instantly filter figures by keyword, title, stage, or metric.
+
+### 5. Live Prediction Playground (`#prediction`)
 - **Trained Model Backend:** Directly calls the frozen `final_selected_classifier.joblib`, `final_selected_regressor.joblib`, and `final_preprocessor_group_c.joblib` loaded into server memory.
 - **Scenario Presets:** One-click presets for Severe Turnaround Deficit, Tight Turnaround Buffer, Normal On-Time Dwell, Evening Hub Congestion, and Weather Outflow Spillover.
 - **Real-Time Physics Engine:** Dynamically calculates remaining turnaround cushion and deficit minutes.
 - **Inference Gauge & Attribution:** Displays predicted delay probability, discrete operational verdict ($\ge 15$ min delay vs. on-time), continuous delay estimate, risk banner, and natural language factor driver tags.
 
-### 5. Findings & IEEE Paper Preview (`#findings`)
+### 6. Findings & IEEE Paper Preview (`#findings`)
 - **Core Empirical Conclusions:** 4 key takeaways regarding delay propagation dynamics, the nonlinear deficit cliff, temporal generalization, and rotational fatigue accumulation.
 - **Limitations & Disclaimers:** Explicit non-causal language and threats to validity.
 - **IEEE Paper Integration:** Built-in PDF viewer and download button serving the strictly 6-page compiled conference paper (`/api/paper`).
@@ -175,3 +187,4 @@ init_services()
 print('Server backend and models initialized successfully!')
 "
 ```
+

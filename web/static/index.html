@@ -34,6 +34,11 @@
         <span class="nav-text">Model Performance</span>
         <span class="nav-badge">79.4% AUC</span>
       </a>
+      <a class="nav-item" data-view="figures">
+        <span class="nav-icon">&#128444;&#65039;</span>
+        <span class="nav-text">Research Figures</span>
+        <span class="nav-badge">32+</span>
+      </a>
       <a class="nav-item" data-view="prediction">
         <span class="nav-icon">&#9992;</span>
         <span class="nav-text">Live Delay Predictor</span>
@@ -691,7 +696,60 @@ print(df)</pre>
       </section>
 
       <!-- ========================================================================= -->
-      <!-- VIEW 4: LIVE DELAY PREDICTION SIMULATOR                                   -->
+      <!-- VIEW 4: COMPREHENSIVE RESEARCH FIGURES GALLERY (32+ FIGURES)              -->
+      <!-- ========================================================================= -->
+      <section id="figures-view" class="dashboard-page">
+        
+        <!-- Header Banner Card -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header" style="flex-wrap: wrap; gap: 16px;">
+            <div>
+              <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 4px;">
+                <h3 class="card-title" style="font-size: 20px;">&#128444;&#65039; Research Figures &amp; Visualizations Gallery</h3>
+                <span class="badge-pill" style="color: var(--accent-blue); border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.1);">32 Audit Figures + 8 IEEE Paper Figures</span>
+              </div>
+              <p class="card-subtitle">
+                Inspect high-resolution visual evidence across all 6 research stages: Exploratory Data Analysis, Turnaround Ground Mechanics, Model Validation, Hyperparameter Tuning, December 2025 Test Generalization, and IEEE Publication Artifacts.
+              </p>
+            </div>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <span id="gallery-count-badge" class="badge-pill" style="font-size: 13px; padding: 6px 14px; color: var(--accent-emerald); border-color: rgba(16,185,129,0.3); background: rgba(16,185,129,0.1);">
+                Showing 40 Figures
+              </span>
+            </div>
+          </div>
+
+          <!-- Controls: Category Filter Buttons & Real-Time Search -->
+          <div style="margin-top: 18px; display: flex; flex-direction: column; gap: 14px;">
+            <div id="figure-category-pills" class="category-filters">
+              <button class="cat-pill active" data-cat="all">All Figures (40)</button>
+              <button class="cat-pill" data-cat="eda">EDA &amp; Network Dynamics (9)</button>
+              <button class="cat-pill" data-cat="stage4">Model Validation (Stage 4) (7)</button>
+              <button class="cat-pill" data-cat="stage5">Tuning &amp; Selection (Stage 5) (3)</button>
+              <button class="cat-pill" data-cat="stage6">Final Test Evaluation (Stage 6) (11)</button>
+              <button class="cat-pill" data-cat="macro">Macro Trends &amp; Seasonality (2)</button>
+              <button class="cat-pill" data-cat="ieee">IEEE Conference Paper (8)</button>
+            </div>
+
+            <div style="display: flex; gap: 12px; align-items: center;">
+              <div style="flex: 1; position: relative;">
+                <input type="text" id="figures-search-input" class="filter-input" placeholder="Search figures by title, stage, or keyword (e.g., 'calibration', 'ROC', 'buffer', 'strata', 'residual', 'importance')..." style="width: 100%; padding-left: 36px;">
+                <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px;">&#128269;</span>
+              </div>
+              <button id="clear-figures-search" class="btn-secondary" style="padding: 8px 14px; font-size: 12px;">Clear Filter</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dynamic Figures Grid -->
+        <div id="figures-gallery-grid" class="figures-gallery-grid">
+          <!-- Dynamically populated via app.js -->
+        </div>
+
+      </section>
+
+      <!-- ========================================================================= -->
+      <!-- VIEW 5: LIVE DELAY PREDICTION SIMULATOR                                   -->
       <!-- ========================================================================= -->
       <section id="prediction-view" class="dashboard-page">
         
@@ -981,6 +1039,52 @@ print(df)</pre>
     </main>
   </div>
 
+  <!-- Fullscreen Lightbox Figure Modal -->
+  <div id="figure-modal" class="lightbox-modal" style="display: none;">
+    <div class="lightbox-backdrop" onclick="closeFigureModal()"></div>
+    <div class="lightbox-container">
+      <div class="lightbox-header">
+        <div class="lightbox-title-wrap">
+          <span id="modal-category-badge" class="badge-pill">Category</span>
+          <span id="modal-stage-badge" class="badge-pill" style="color: var(--accent-purple); border-color: rgba(168,85,247,0.3); background: rgba(168,85,247,0.1);">Stage</span>
+          <h3 id="modal-figure-title" style="color: #fff; font-size: 15px; margin: 0; font-weight: 600;">Figure Title</h3>
+        </div>
+        <div class="lightbox-actions">
+          <button class="lightbox-btn" onclick="zoomFigure(0.15)" title="Zoom In">&#128269; +</button>
+          <button class="lightbox-btn" onclick="zoomFigure(-0.15)" title="Zoom Out">&#128269; -</button>
+          <button class="lightbox-btn" onclick="resetFigureZoom()" title="Reset Zoom">1:1</button>
+          <a id="modal-download-btn" href="#" download class="lightbox-btn" title="Download PNG">&#11015; Download</a>
+          <button class="lightbox-btn close" onclick="closeFigureModal()" title="Close (Esc)">&times;</button>
+        </div>
+      </div>
+
+      <div class="lightbox-body">
+        <button class="lightbox-nav prev" onclick="navigateFigure(-1)" title="Previous Figure (Left Arrow)">&#10094;</button>
+        <div class="lightbox-image-viewport" id="modal-viewport">
+          <img id="modal-figure-img" src="" alt="Figure Full Preview">
+        </div>
+        <button class="lightbox-nav next" onclick="navigateFigure(1)" title="Next Figure (Right Arrow)">&#10095;</button>
+      </div>
+
+      <div class="lightbox-footer">
+        <div class="lightbox-meta-row">
+          <div style="flex: 2;">
+            <p id="modal-figure-desc" style="font-size: 13px; color: var(--text-secondary); line-height: 1.5; margin: 0;"></p>
+          </div>
+          <div style="flex: 1; border-left: 1px solid var(--border-color); padding-left: 16px;">
+            <strong style="font-size: 11px; text-transform: uppercase; color: var(--accent-emerald); letter-spacing: 0.05em;">Key Empirical Finding</strong>
+            <p id="modal-figure-takeaway" style="font-size: 12px; color: #fff; margin-top: 4px; line-height: 1.4; margin-bottom: 0;"></p>
+          </div>
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px; padding-top: 8px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 11px; color: var(--text-muted);">
+          <span>File: <code id="modal-filename" style="color: var(--accent-blue);">filename.png</code> &bull; Source: <span id="modal-source">results/figures</span></span>
+          <span id="modal-figure-counter">Figure 1 of 40</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>
+
