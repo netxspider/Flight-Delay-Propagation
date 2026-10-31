@@ -21,6 +21,11 @@ data/processed/
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
+# Trained model binaries (Joblib)
+models/**/*.joblib
+models/*.joblib
+*.joblib
+
 # Matplotlib cache
 .matplotlib/
 

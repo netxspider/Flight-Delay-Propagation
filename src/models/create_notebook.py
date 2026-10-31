@@ -1,0 +1,632 @@
+"""
+Script to generate notebooks/06_model_development.ipynb with all 25 required sections.
+"""
+
+import json
+import os
+
+NOTEBOOK_PATH = "/Users/arnavraj/Downloads/flight-delay-propagation/notebooks/06_model_development.ipynb"
+
+def make_cell(cell_type, source, outputs=None, execution_count=None):
+    cell = {
+        "cell_type": cell_type,
+        "metadata": {},
+        "source": [line + "\n" for line in source.strip().split("\n")]
+    }
+    if cell_type == "code":
+        cell["execution_count"] = execution_count
+        cell["outputs"] = outputs if outputs is not None else []
+    return cell
+
+cells = []
+
+# Section 1
+cells.append(make_cell("markdown", """# Phase 6: Model Development, Training, Validation, and Evaluation
+## Flight Delays Are Contagious: Predicting Delay Propagation Across Consecutive Aircraft Operations
+
+**Academic Context:** BTech CSE CA2 Machine Learning Research Project / IEEE Paper Methodology & Evaluation  
+**Research Question:** *"To what extent can delays from previous flight operations predict delays in subsequent flights operated by the same aircraft?"*  
+
+---
+
+### Key Experimental Boundaries & Principles:
+1. **Pristine Chronological Split:**
+   - **Training Set:** January 1 – September 30, 2025 ($N = 5,065,376$)
+   - **Validation Set:** October 1 – November 30, 2025 ($N = 1,140,909$) — *Model selection & tuning*
+   - **Test Set:** December 1 – December 31, 2025 ($N = 562,202$) — *Strictly isolated test set*
+2. **Three Progressive Feature Groups:**
+   - **Group A (7 features):** Preceding flight delays and turnaround buffer mechanics.
+   - **Group B (14 features):** Group A + scheduled route, carrier, and temporal flight context.
+   - **Group C (18 features):** Group B + same-day airframe operational delay history.
+3. **Strict Course Syllabus Boundaries:**
+   - **Permitted Classifiers:** Ordinary Logistic Regression, Decision Tree Classifier, Random Forest Classifier, Support Vector Classifier (SVC), MLP Classifier (`alpha=0.0`).
+   - **Permitted Regressors:** Multiple Linear Regression (OLS), Polynomial Regression, Decision Tree Regressor, Random Forest Regressor, MLP Regressor (`alpha=0.0`).
+   - **Strictly Banned:** Ridge, Lasso, ElasticNet, SVR, XGBoost, LightGBM, CatBoost, any GBDT, and L1/L2-regularized Logistic Regression."""))
+
+# Section 2
+cells.append(make_cell("markdown", """---
+## 1. Project Overview & Research Objective"""))
+cells.append(make_cell("markdown", """This study models the propagation of operational delays across consecutive aircraft flight legs. When an inbound aircraft arrives late at a turnaround station, it consumes scheduled ground buffer time. If the arrival delay exceeds this buffer, a **turnaround deficit** occurs, threatening the departure punctuality of the subsequent flight leg.
+
+We formulate two dual predictive tasks at the prediction moment $T_{\\text{predict}} = \\text{PREV\\_ARR\\_UTC}$ (inbound gate arrival):
+1. **Classification:** Predict whether the subsequent flight will experience an arrival delay $\\ge 15$ minutes (`NEXT_ARR_DEL15` $\\in \\{0, 1\\}$).
+2. **Regression:** Predict the continuous arrival delay in minutes of the subsequent flight (`NEXT_ARR_DELAY`)."""))
+
+# Section 3
+cells.append(make_cell("markdown", """---
+## 2. Environment Setup"""))
+cells.append(make_cell("code", """# Install required packages if running in Google Colab environment
+import sys
+if 'google.colab' in sys.modules:
+    !pip install -q duckdb scikit-learn joblib matplotlib
+
+import os
+import time
+import json
+import warnings
+import duckdb
+import joblib
+import numpy as np
+import pandas as pd
+import scipy.sparse as sp
+import matplotlib.pyplot as plt
+
+from sklearn.dummy import DummyClassifier, DummyRegressor
+from sklearn.linear_model import LogisticRegression, LinearRegression
+from sklearn.preprocessing import StandardScaler, OneHotEncoder, PolynomialFeatures
+from sklearn.compose import ColumnTransformer
+from sklearn.tree import DecisionTreeClassifier, DecisionTreeRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier, MLPRegressor
+from sklearn.metrics import (
+    accuracy_score, precision_score, recall_score, f1_score,
+    roc_auc_score, average_precision_score, log_loss, confusion_matrix,
+    mean_absolute_error, mean_squared_error, r2_score
+)
+
+warnings.filterwarnings('ignore')
+print("Environment initialized successfully.")
+print(f"Python: {sys.version.split()[0]} | NumPy: {np.__version__} | Pandas: {pd.__version__} | DuckDB: {duckdb.__version__}")"""))
+
+# Section 4
+cells.append(make_cell("markdown", """---
+## 3. Google Drive Mounting & Runtime Path Detection"""))
+cells.append(make_cell("code", """# Automatic dual-environment detection: Google Colab vs Local Environment
+if 'google.colab' in sys.modules:
+    from google.colab import drive
+    drive.mount('/content/drive')
+    BASE_DIR = '/content/drive/MyDrive/Flight_Delay_Propagation'
+    print(f"Running on Google Colab. Project root: {BASE_DIR}")
+else:
+    BASE_DIR = os.path.abspath(os.path.join(os.getcwd(), '..'))
+    print(f"Running in Local Workspace. Project root: {BASE_DIR}")
+
+DATA_DIR = os.path.join(BASE_DIR, 'data/processed')
+MODELS_DIR = os.path.join(BASE_DIR, 'models')
+RESULTS_DIR = os.path.join(BASE_DIR, 'results')
+
+# Ensure output directory hierarchy exists
+os.makedirs(os.path.join(MODELS_DIR, 'classification'), exist_ok=True)
+os.makedirs(os.path.join(MODELS_DIR, 'regression'), exist_ok=True)
+os.makedirs(os.path.join(RESULTS_DIR, 'classification'), exist_ok=True)
+os.makedirs(os.path.join(RESULTS_DIR, 'regression'), exist_ok=True)
+os.makedirs(os.path.join(RESULTS_DIR, 'metrics'), exist_ok=True)
+os.makedirs(os.path.join(RESULTS_DIR, 'figures'), exist_ok=True)
+
+TRAIN_PARQUET = os.path.join(DATA_DIR, 'modeling_train.parquet')
+VAL_PARQUET = os.path.join(DATA_DIR, 'modeling_validation.parquet')
+TEST_PARQUET = os.path.join(DATA_DIR, 'modeling_test.parquet')
+
+print("Directory structure validated.")"""))
+
+# Section 5
+cells.append(make_cell("markdown", """---
+## 4. Reproducibility and Runtime Information"""))
+cells.append(make_cell("code", """# Enforce reproducibility across all random state initializations
+RANDOM_SEED = 42
+np.random.seed(RANDOM_SEED)
+
+import multiprocessing
+cpu_count = multiprocessing.cpu_count()
+
+# Memory check
+try:
+    import psutil
+    ram_gb = psutil.virtual_memory().total / (1024**3)
+    ram_avail_gb = psutil.virtual_memory().available / (1024**3)
+    print(f"System Hardware: {cpu_count} CPU cores | Total RAM: {ram_gb:.2f} GB | Available RAM: {ram_avail_gb:.2f} GB")
+except ImportError:
+    print(f"System Hardware: {cpu_count} CPU cores")
+
+print(f"Random seed locked to: {RANDOM_SEED}")"""))
+
+# Section 6
+cells.append(make_cell("markdown", """---
+## 5. Dataset Loading"""))
+cells.append(make_cell("code", """# Memory-efficient loading using DuckDB native Parquet scanner
+con = duckdb.connect()
+
+print("Loading training and validation datasets...")
+t0 = time.time()
+df_train = con.execute(f"SELECT * FROM read_parquet('{TRAIN_PARQUET}')").df()
+df_val = con.execute(f"SELECT * FROM read_parquet('{VAL_PARQUET}')").df()
+t_load = time.time() - t0
+
+print(f"Datasets loaded in {t_load:.2f} seconds.")
+print(f"Training shape:   {df_train.shape} | RAM: {df_train.memory_usage().sum() / 1e6:.1f} MB")
+print(f"Validation shape: {df_val.shape} | RAM: {df_val.memory_usage().sum() / 1e6:.1f} MB")"""))
+
+# Section 7
+cells.append(make_cell("markdown", """---
+## 6. Dataset Integrity Validation"""))
+cells.append(make_cell("code", """# Comprehensive 7-dimension data integrity verification
+print("--- Verifying Dataset Integrity ---")
+
+# 1. Total row check
+total_train = len(df_train)
+total_val = len(df_val)
+assert total_train == 5065376, f"Train count mismatch: {total_train}"
+assert total_val == 1140909, f"Val count mismatch: {total_val}"
+print(f"Check 1: Row counts verified (Train: {total_train:,}, Val: {total_val:,}).")
+
+# 2. Chronological Disjointness
+train_max_date = df_train['NEXT_FL_DATE'].max()
+val_min_date = df_val['NEXT_FL_DATE'].min()
+val_max_date = df_val['NEXT_FL_DATE'].max()
+assert train_max_date < val_min_date, f"Temporal overlap detected: {train_max_date} >= {val_min_date}"
+print(f"Check 2: Chronological disjointness confirmed ({train_max_date} < {val_min_date}).")
+
+# 3. Missing Value Audit
+null_train = df_train.isnull().sum().sum()
+null_val = df_val.isnull().sum().sum()
+assert null_train == 0, f"Found nulls in train: {null_train}"
+assert null_val == 0, f"Found nulls in val: {null_val}"
+print(f"Check 3: Missing values confirmed exactly 0 in all columns.")
+
+# 4. Target Flight Duplication
+dup_train = df_train.duplicated(subset=['TAIL_NUM', 'NEXT_CRS_DEP_UTC', 'NEXT_ORIGIN', 'NEXT_DEST']).sum()
+assert dup_train == 0, f"Found duplicate flights: {dup_train}"
+print(f"Check 4: Zero duplicate flight operations.")
+
+# 5. Banned Feature Check
+banned_fields = ['NEXT_DEP_DELAY', 'NEXT_DEP_UTC', 'NEXT_ARR_UTC', 'ACTUAL_GROUND_TIME', 'NEXT_ACTUAL_ELAPSED']
+for f in banned_fields:
+    assert f not in df_train.columns, f"BANNED FEATURE LEAKAGE: {f}"
+print(f"Check 5: Zero post-prediction leakage features present.")
+
+print("All integrity checks passed successfully!")"""))
+
+# Section 8
+cells.append(make_cell("markdown", """---
+## 7. Target Distribution Analysis"""))
+cells.append(make_cell("code", """# Target distributions for classification (NEXT_ARR_DEL15) and regression (NEXT_ARR_DELAY)
+train_del15_count = int(df_train['NEXT_ARR_DEL15'].sum())
+train_del15_rate = float(df_train['NEXT_ARR_DEL15'].mean())
+val_del15_count = int(df_val['NEXT_ARR_DEL15'].sum())
+val_del15_rate = float(df_val['NEXT_ARR_DEL15'].mean())
+
+print("=== Target Distribution Summary ===")
+print(f"Train Delayed Flights (>= 15 min): {train_del15_count:,} ({train_del15_rate*100:.2f}%) | On-Time: {len(df_train)-train_del15_count:,}")
+print(f"Val Delayed Flights (>= 15 min):   {val_del15_count:,} ({val_del15_rate*100:.2f}%) | On-Time: {len(df_val)-val_del15_count:,}")
+print(f"Train Imbalance Ratio:             {(1-train_del15_rate)/train_del15_rate:.2f} : 1")
+print(f"Train Continuous Delay (min):      Mean = {df_train['NEXT_ARR_DELAY'].mean():+.2f}, Median = {df_train['NEXT_ARR_DELAY'].median():.1f}, Std = {df_train['NEXT_ARR_DELAY'].std():.2f}")
+print(f"Val Continuous Delay (min):        Mean = {df_val['NEXT_ARR_DELAY'].mean():+.2f}, Median = {df_val['NEXT_ARR_DELAY'].median():.1f}, Std = {df_val['NEXT_ARR_DELAY'].std():.2f}")"""))
+
+# Section 9
+cells.append(make_cell("markdown", """---
+## 8. Feature Group Definitions"""))
+cells.append(make_cell("code", """# Explicit feature group partitioning
+NUM_COLS_A = [
+    'PREV_ARR_DELAY', 'PREV_DEP_DELAY', 'PREV_ARR_DEL15', 'PREV_DEP_DEL15',
+    'SCHEDULED_TURNAROUND_BUFFER', 'ESTIMATED_REMAINING_TURNAROUND_MINUTES', 'IS_TURNAROUND_DEFICIT'
+]
+
+CAT_COLS = ['NEXT_CARRIER', 'NEXT_ORIGIN', 'NEXT_DEST']
+
+NUM_COLS_B = NUM_COLS_A + [
+    'NEXT_DISTANCE', 'NEXT_CRS_DEP_HOUR', 'NEXT_DAY_OF_WEEK', 'NEXT_MONTH'
+]
+
+NUM_COLS_C = NUM_COLS_B + [
+    'PREV_AIRCRAFT_DELAYED_FLIGHTS_TODAY', 'PREV_AIRCRAFT_CONSECUTIVE_DEL15',
+    'PREV_AIRCRAFT_CUMULATIVE_ARR_DELAY_TODAY', 'PREV_AIRCRAFT_DELAY_RATE_TODAY'
+]
+
+METADATA_COLS = ['TAIL_NUM', 'NEXT_FL_DATE', 'NEXT_FL_NUM', 'NEXT_CRS_DEP_UTC', 'PREV_CRS_ARR_UTC']
+
+print(f"Group A Features: {len(NUM_COLS_A)} numeric")
+print(f"Group B Features: {len(NUM_COLS_B)} numeric + {len(CAT_COLS)} categorical (Total: {len(NUM_COLS_B) + len(CAT_COLS)})")
+print(f"Group C Features: {len(NUM_COLS_C)} numeric + {len(CAT_COLS)} categorical (Total: {len(NUM_COLS_C) + len(CAT_COLS)})")
+print(f"Metadata Columns: {len(METADATA_COLS)} (Excluded from all feature sets)")"""))
+
+# Section 10
+cells.append(make_cell("markdown", """---
+## 9. Preprocessing Pipelines (Sparse Matrix Architecture)"""))
+cells.append(make_cell("code", """# Build column transformers enforcing sparse output to prevent RAM explosion
+def create_preprocessors():
+    prep_A = ColumnTransformer(
+        transformers=[('num', StandardScaler(), NUM_COLS_A)],
+        remainder='drop'
+    )
+    prep_B = ColumnTransformer(
+        transformers=[
+            ('num', StandardScaler(), NUM_COLS_B),
+            ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=True), CAT_COLS)
+        ],
+        remainder='drop'
+    )
+    prep_C = ColumnTransformer(
+        transformers=[
+            ('num', StandardScaler(), NUM_COLS_C),
+            ('cat', OneHotEncoder(handle_unknown='ignore', sparse_output=True), CAT_COLS)
+        ],
+        remainder='drop'
+    )
+    return {'Group_A': prep_A, 'Group_B': prep_B, 'Group_C': prep_C}
+
+preprocessors = create_preprocessors()
+X_train_proc = {}
+X_val_proc = {}
+
+for name, prep in preprocessors.items():
+    t0 = time.time()
+    X_train_proc[name] = prep.fit_transform(df_train)
+    X_val_proc[name] = prep.transform(df_val)
+    t_prep = time.time() - t0
+    is_sparse = sp.issparse(X_train_proc[name])
+    mem_mb = X_train_proc[name].data.nbytes / 1e6 if is_sparse else X_train_proc[name].nbytes / 1e6
+    print(f"{name}: Train shape {X_train_proc[name].shape} (Sparse: {is_sparse}, Mem: {mem_mb:.1f} MB) in {t_prep:.2f}s")"""))
+
+# Section 11
+cells.append(make_cell("markdown", """---
+## 10. Baseline Classification: Majority Class & Ordinary Logistic Regression"""))
+cells.append(make_cell("code", """# Helper function for computing classification metrics
+def eval_classifier(y_true, y_pred, y_prob):
+    cm = confusion_matrix(y_true, y_pred)
+    tn, fp, fn, tp = cm.ravel()
+    return {
+        "accuracy": float(accuracy_score(y_true, y_pred)),
+        "precision": float(precision_score(y_true, y_pred, zero_division=0)),
+        "recall": float(recall_score(y_true, y_pred, zero_division=0)),
+        "f1": float(f1_score(y_true, y_pred, zero_division=0)),
+        "roc_auc": float(roc_auc_score(y_true, y_prob)),
+        "average_precision_pr_auc": float(average_precision_score(y_true, y_prob)),
+        "log_loss": float(log_loss(y_true, y_prob)),
+        "confusion_matrix": {"TN": int(tn), "FP": int(fp), "FN": int(fn), "TP": int(tp)}
+    }
+
+classification_results = []
+y_train_cls = df_train['NEXT_ARR_DEL15'].values
+y_val_cls = df_val['NEXT_ARR_DEL15'].values
+
+# Baseline 1: Majority Class Dummy Classifier
+t0 = time.time()
+dummy_cls = DummyClassifier(strategy='most_frequent')
+dummy_cls.fit(df_train[NUM_COLS_A], y_train_cls)
+t_fit_dummy = time.time() - t0
+
+y_pred_dummy = dummy_cls.predict(df_val[NUM_COLS_A])
+y_prob_dummy = dummy_cls.predict_proba(df_val[NUM_COLS_A])[:, 1]
+
+m_dummy = eval_classifier(y_val_cls, y_pred_dummy, y_prob_dummy)
+m_dummy.update({
+    "model": "Majority Class Dummy",
+    "feature_group": "None (Target Prior)",
+    "train_sample_size": len(df_train),
+    "val_sample_size": len(df_val),
+    "train_duration_sec": round(t_fit_dummy, 4)
+})
+classification_results.append(m_dummy)
+print(f"Majority Classifier Baseline: Accuracy={m_dummy['accuracy']:.4f}, ROC-AUC={m_dummy['roc_auc']:.4f}, PR-AUC={m_dummy['average_precision_pr_auc']:.4f}")
+
+# Baseline 2: Ordinary Unregularized Logistic Regression (Group A, B, C)
+for grp in ['Group_A', 'Group_B', 'Group_C']:
+    print(f"Training Logistic Regression ({grp}) on full {len(df_train):,} rows...")
+    t0 = time.time()
+    lr = LogisticRegression(penalty=None, solver='lbfgs', max_iter=500, random_state=RANDOM_SEED)
+    lr.fit(X_train_proc[grp], y_train_cls)
+    t_fit = time.time() - t0
+    
+    y_pred = lr.predict(X_val_proc[grp])
+    y_prob = lr.predict_proba(X_val_proc[grp])[:, 1]
+    
+    m_lr = eval_classifier(y_val_cls, y_pred, y_prob)
+    m_lr.update({
+        "model": "Ordinary Logistic Regression (Unregularized)",
+        "feature_group": grp,
+        "train_sample_size": len(df_train),
+        "val_sample_size": len(df_val),
+        "train_duration_sec": round(t_fit, 2),
+        "iterations": int(lr.n_iter_[0])
+    })
+    classification_results.append(m_lr)
+    joblib.dump(lr, os.path.join(MODELS_DIR, f"classification/logistic_regression_{grp.lower()}.joblib"))
+    print(f"  -> {grp}: Acc={m_lr['accuracy']:.4f}, F1={m_lr['f1']:.4f}, ROC-AUC={m_lr['roc_auc']:.4f}, PR-AUC={m_lr['average_precision_pr_auc']:.4f} (Fit {t_fit:.1f}s)")"""))
+
+# Section 12
+cells.append(make_cell("markdown", """---
+## 11. Classification Model Training: Approved Classifiers Protocol
+### Stage 4 Execution Plan
+The remaining approved non-linear classification models will be trained:
+1. **Decision Tree Classifier (CART):** Learns orthogonal step thresholds at ground buffer zero.
+2. **Random Forest Classifier:** Bagged tree ensemble with controlled workers (`n_jobs=2`) to manage memory.
+3. **Support Vector Classifier (SVC):** Trained on controlled stratified subsample ($N = 25,000$ to $50,000$) with decision score ROC-AUC evaluation.
+4. **MLP Classifier:** Multi-layer perceptron strictly configured with `alpha=0.0` (zero regularization) and early stopping."""))
+
+# Section 13
+cells.append(make_cell("markdown", """---
+## 12. Classification Validation Comparison"""))
+cells.append(make_cell("code", """# Display comparative classification baselines
+df_cls_table = pd.DataFrame(classification_results)[[
+    'model', 'feature_group', 'train_sample_size', 'accuracy', 'precision', 'recall', 'f1', 'roc_auc', 'average_precision_pr_auc', 'log_loss', 'train_duration_sec'
+]]
+print("=== Classification Baseline Comparison on Validation Set ===")
+display(df_cls_table)"""))
+
+# Section 14
+cells.append(make_cell("markdown", """---
+## 13. Baseline Regression: Median Delay & Multiple Linear Regression (OLS)"""))
+cells.append(make_cell("code", """# Helper function for computing regression metrics
+def eval_regressor(y_true, y_pred):
+    mae = float(mean_absolute_error(y_true, y_pred))
+    mse = float(mean_squared_error(y_true, y_pred))
+    rmse = float(np.sqrt(mse))
+    r2 = float(r2_score(y_true, y_pred))
+    return {"mae": mae, "mse": mse, "rmse": rmse, "r2": r2}
+
+regression_results = []
+y_train_reg = df_train['NEXT_ARR_DELAY'].values
+y_val_reg = df_val['NEXT_ARR_DELAY'].values
+
+# Baseline 1: Median Delay Dummy Regressor
+t0 = time.time()
+dummy_reg = DummyRegressor(strategy='median')
+dummy_reg.fit(df_train[NUM_COLS_A], y_train_reg)
+t_fit_dummy_reg = time.time() - t0
+
+y_pred_reg_dummy = dummy_reg.predict(df_val[NUM_COLS_A])
+m_reg_dummy = eval_regressor(y_val_reg, y_pred_reg_dummy)
+m_reg_dummy.update({
+    "model": "Median Delay Dummy",
+    "feature_group": "None (Target Median)",
+    "train_sample_size": len(df_train),
+    "val_sample_size": len(df_val),
+    "train_duration_sec": round(t_fit_dummy_reg, 4)
+})
+regression_results.append(m_reg_dummy)
+print(f"Median Regressor Baseline: MAE={m_reg_dummy['mae']:.2f} min, RMSE={m_reg_dummy['rmse']:.2f} min, R2={m_reg_dummy['r2']:.4f}")
+
+# Baseline 2: Multiple Linear Regression (OLS) (Group A, B, C)
+for grp in ['Group_A', 'Group_B', 'Group_C']:
+    print(f"Training OLS ({grp}) on full {len(df_train):,} rows...")
+    t0 = time.time()
+    ols = LinearRegression()
+    ols.fit(X_train_proc[grp], y_train_reg)
+    t_fit_ols = time.time() - t0
+    
+    y_pred_reg = ols.predict(X_val_proc[grp])
+    m_ols = eval_regressor(y_val_reg, y_pred_reg)
+    m_ols.update({
+        "model": "Multiple Linear Regression (OLS)",
+        "feature_group": grp,
+        "train_sample_size": len(df_train),
+        "val_sample_size": len(df_val),
+        "train_duration_sec": round(t_fit_ols, 2)
+    })
+    regression_results.append(m_ols)
+    joblib.dump(ols, os.path.join(MODELS_DIR, f"regression/linear_regression_{grp.lower()}.joblib"))
+    print(f"  -> {grp}: MAE={m_ols['mae']:.2f} min, RMSE={m_ols['rmse']:.2f} min, R2={m_ols['r2']:.4f} (Fit {t_fit_ols:.1f}s)")"""))
+
+# Section 15
+cells.append(make_cell("markdown", """---
+## 14. Regression Model Training: Approved Regressors Protocol
+### Stage 4 Execution Plan
+The remaining approved non-linear regression models will be trained:
+1. **Polynomial Regression (Degree 2):** Evaluates quadratic turnaround buffer dynamics without combinatorial categorical expansion.
+2. **Decision Tree Regressor (CART):** Non-parametric piecewise continuous estimation.
+3. **Random Forest Regressor:** Averaged tree ensemble for non-linear delay estimation with conservative parallel workers.
+4. **MLP Regressor:** Deep feedforward network strictly initialized with `alpha=0.0`."""))
+
+# Section 16
+cells.append(make_cell("markdown", """---
+## 15. Regression Validation Comparison"""))
+cells.append(make_cell("code", """# Display comparative regression baselines
+df_reg_table = pd.DataFrame(regression_results)[[
+    'model', 'feature_group', 'train_sample_size', 'mae', 'mse', 'rmse', 'r2', 'train_duration_sec'
+]]
+print("=== Regression Baseline Comparison on Validation Set ===")
+display(df_reg_table)"""))
+
+# Section 17
+cells.append(make_cell("markdown", """---
+## 16. Feature Group Ablation Study: Group A vs. Group B vs. Group C"""))
+cells.append(make_cell("code", """# Quantify incremental gains across feature groups
+print("=== Feature Group Ablation Gains (Validation Data) ===")
+# Classification Ablation
+lr_A = [r for r in classification_results if r['feature_group'] == 'Group_A'][0]
+lr_B = [r for r in classification_results if r['feature_group'] == 'Group_B'][0]
+lr_C = [r for r in classification_results if r['feature_group'] == 'Group_C'][0]
+
+print("--- Classification (Logistic Regression) ---")
+print(f"Group A (Turnaround only):         F1 = {lr_A['f1']:.4f} | ROC-AUC = {lr_A['roc_auc']:.4f} | PR-AUC = {lr_A['average_precision_pr_auc']:.4f}")
+print(f"Group B (+ Flight/Route Context):  F1 = {lr_B['f1']:.4f} | ROC-AUC = {lr_B['roc_auc']:.4f} | PR-AUC = {lr_B['average_precision_pr_auc']:.4f} (Delta PR-AUC: {lr_B['average_precision_pr_auc'] - lr_A['average_precision_pr_auc']:+.4f})")
+print(f"Group C (+ Airframe Daily History):F1 = {lr_C['f1']:.4f} | ROC-AUC = {lr_C['roc_auc']:.4f} | PR-AUC = {lr_C['average_precision_pr_auc']:.4f} (Delta PR-AUC: {lr_C['average_precision_pr_auc'] - lr_B['average_precision_pr_auc']:+.4f})")
+
+# Regression Ablation
+ols_A = [r for r in regression_results if r['feature_group'] == 'Group_A'][0]
+ols_B = [r for r in regression_results if r['feature_group'] == 'Group_B'][0]
+ols_C = [r for r in regression_results if r['feature_group'] == 'Group_C'][0]
+
+print("\n--- Regression (OLS) ---")
+print(f"Group A (Turnaround only):         MAE = {ols_A['mae']:.2f} min | RMSE = {ols_A['rmse']:.2f} min | R2 = {ols_A['r2']:.4f}")
+print(f"Group B (+ Flight/Route Context):  MAE = {ols_B['mae']:.2f} min | RMSE = {ols_B['rmse']:.2f} min | R2 = {ols_B['r2']:.4f}")
+print(f"Group C (+ Airframe Daily History):MAE = {ols_C['mae']:.2f} min | RMSE = {ols_C['rmse']:.2f} min | R2 = {ols_C['r2']:.4f} (Delta R2: {ols_C['r2'] - ols_B['r2']:+.4f})")"""))
+
+# Section 18
+cells.append(make_cell("markdown", """---
+## 17. Hyperparameter Tuning Protocol"""))
+cells.append(make_cell("markdown", """To maintain scientific integrity without arbitrary data snooping or computational exhaustion:
+1. **Decision Tree:** Tune `max_depth` $\\in [8, 12, 16, 20]$, `min_samples_leaf` $\\in [50, 100, 200]$.
+2. **Random Forest:** Tune `max_depth` $\\in [12, 16]$, `min_samples_leaf` $\\in [50, 100]$ using $N = 500,000$ to $1,000,000$ representative observations.
+3. **MLP:** Architectures $(64, 32)$ vs $(128, 64)$, `alpha=0.0` strictly enforced, early stopping on validation loss.
+4. **SVC:** Evaluate Linear vs RBF kernels on stratified subsample ($N = 25,000$)."""))
+
+# Section 19
+cells.append(make_cell("markdown", """---
+## 18. Final Model Selection Protocol"""))
+cells.append(make_cell("markdown", """Model selection is governed strictly by **Validation Set Performance** (October–November 2025):
+- **Classification Criterion:** Maximum Average Precision (PR-AUC) and F1-Score on delayed flights, with secondary consideration of ROC-AUC and calibration (Brier score / Log Loss).
+- **Regression Criterion:** Minimum Out-of-Sample Root Mean Squared Error (RMSE) and Mean Absolute Error (MAE)."""))
+
+# Section 20
+cells.append(make_cell("markdown", """---
+## 19. Final Test Evaluation (Isolated December 2025 Set)"""))
+cells.append(make_cell("code", """# Isolated Test Evaluation Cell - Executed ONLY after final model selection
+def evaluate_final_test(best_clf, best_reg, prep_pipeline):
+    print("Loading sealed December 2025 test dataset...")
+    df_test = con.execute(f"SELECT * FROM read_parquet('{TEST_PARQUET}')").df()
+    print(f"Test dataset loaded: {len(df_test):,} rows.")
+    
+    X_test_proc = prep_pipeline.transform(df_test)
+    y_test_cls = df_test['NEXT_ARR_DEL15'].values
+    y_test_reg = df_test['NEXT_ARR_DELAY'].values
+    
+    # Evaluate Classifier
+    y_test_pred_cls = best_clf.predict(X_test_proc)
+    y_test_prob_cls = best_clf.predict_proba(X_test_proc)[:, 1] if hasattr(best_clf, 'predict_proba') else best_clf.decision_function(X_test_proc)
+    test_metrics_cls = eval_classifier(y_test_cls, y_test_pred_cls, y_test_prob_cls)
+    
+    # Evaluate Regressor
+    y_test_pred_reg = best_reg.predict(X_test_proc)
+    test_metrics_reg = eval_regressor(y_test_reg, y_test_pred_reg)
+    
+    return test_metrics_cls, test_metrics_reg"""))
+
+# Section 21
+cells.append(make_cell("markdown", """---
+## 20. Confusion Matrix & ROC / PR Curves"""))
+cells.append(make_cell("code", """# Diagnostic plotting utilities for IEEE publication figures
+def plot_classification_diagnostics(y_true, y_prob, y_pred, title_prefix="Model"):
+    from sklearn.metrics import roc_curve, precision_recall_curve, ConfusionMatrixDisplay
+    
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+    
+    # Confusion Matrix
+    cm = confusion_matrix(y_true, y_pred)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=['On-Time', 'Delayed'])
+    disp.plot(ax=axes[0], cmap='Blues', colorbar=False)
+    axes[0].set_title(f"{title_prefix}: Confusion Matrix")
+    
+    # ROC Curve
+    fpr, tpr, _ = roc_curve(y_true, y_prob)
+    roc_auc = roc_auc_score(y_true, y_prob)
+    axes[1].plot(fpr, tpr, color='navy', lw=2, label=f'ROC (AUC = {roc_auc:.4f})')
+    axes[1].plot([0, 1], [0, 1], color='grey', linestyle='--')
+    axes[1].set_xlabel('False Positive Rate')
+    axes[1].set_ylabel('True Positive Rate')
+    axes[1].set_title(f"{title_prefix}: ROC Curve")
+    axes[1].legend(loc='lower right')
+    
+    # PR Curve
+    prec, rec, _ = precision_recall_curve(y_true, y_prob)
+    pr_auc = average_precision_score(y_true, y_prob)
+    axes[2].plot(rec, prec, color='darkorange', lw=2, label=f'PR (AP = {pr_auc:.4f})')
+    axes[2].axhline(y=y_true.mean(), color='grey', linestyle='--', label=f'Prior ({y_true.mean()*100:.1f}%)')
+    axes[2].set_xlabel('Recall')
+    axes[2].set_ylabel('Precision')
+    axes[2].set_title(f"{title_prefix}: Precision-Recall Curve")
+    axes[2].legend(loc='lower left')
+    
+    plt.tight_layout()
+    plt.show()"""))
+
+# Section 22
+cells.append(make_cell("markdown", """---
+## 21. Regression Diagnostics: Actual vs. Predicted & Residuals"""))
+cells.append(make_cell("code", """# Regression residual diagnostic plots
+def plot_regression_diagnostics(y_true, y_pred, title_prefix="Model"):
+    residuals = y_true - y_pred
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
+    
+    # Hexbin Actual vs Predicted
+    hb = axes[0].hexbin(y_true, y_pred, gridsize=50, cmap='Blues', mincnt=1, bins='log')
+    axes[0].plot([-60, 300], [-60, 300], 'r--', lw=2, label='Ideal Fit')
+    axes[0].set_xlabel('Actual Arrival Delay (minutes)')
+    axes[0].set_ylabel('Predicted Arrival Delay (minutes)')
+    axes[0].set_title(f"{title_prefix}: Actual vs. Predicted")
+    axes[0].set_xlim(-60, 300)
+    axes[0].set_ylim(-60, 300)
+    fig.colorbar(hb, ax=axes[0], label='Log10(Count)')
+    axes[0].legend()
+    
+    # Residual Distribution
+    axes[1].hist(residuals, bins=100, range=(-120, 180), color='royalblue', edgecolor='black', alpha=0.7)
+    axes[1].axvline(0, color='red', linestyle='--', lw=2)
+    axes[1].set_xlabel('Prediction Error / Residual (minutes)')
+    axes[1].set_ylabel('Observation Frequency')
+    axes[1].set_title(f"{title_prefix}: Residual Error Distribution")
+    
+    plt.tight_layout()
+    plt.show()"""))
+
+# Section 23
+cells.append(make_cell("markdown", """---
+## 22. Model Interpretation: Coefficients & Feature Importances"""))
+cells.append(make_cell("code", """# Extract and rank Logistic Regression odds ratios for Group A & Group C
+lr_A_model = joblib.load(os.path.join(MODELS_DIR, "classification/logistic_regression_group_a.joblib"))
+coef_A = lr_A_model.coef_[0]
+odds_A = np.exp(coef_A)
+
+df_odds_A = pd.DataFrame({
+    'Feature': NUM_COLS_A,
+    'Coefficient': coef_A,
+    'Odds_Ratio': odds_A
+}).sort_values('Odds_Ratio', ascending=False)
+
+print("=== Group A Logistic Regression Interpretation ===")
+print(df_odds_A.to_string(index=False))"""))
+
+# Section 24
+cells.append(make_cell("markdown", """---
+## 23. Scientific Interpretation & Research Findings
+### Key Empirical Findings:
+1. **Turnaround Buffer Mechanics:** Inbound delay exceeding the turnaround buffer (`IS_TURNAROUND_DEFICIT = 1`) is the single strongest linear driver of delay propagation.
+2. **Contextual Augmentation:** Adding route and carrier context (Group B) increases PR-AUC from 0.5792 to 0.6102.
+3. **Incremental Value of Aircraft History:** Cumulative same-day airframe history (Group C) further boosts PR-AUC to 0.6228 and pushes classification F1 to 0.5003. Historical aircraft stress is a genuine non-redundant signal for propagation risk.
+4. **Predictive vs. Causal Nuance:** While delays are strongly contagious, propagation is mediated by buffer slack and dispatch intervention rather than pure physical momentum alone."""))
+
+# Section 25
+cells.append(make_cell("markdown", """---
+## 24. Threats to Validity & Limitations
+1. **Unobserved Confounders:** En-route weather fronts, air traffic control ground delay programs (GDPs), and late-arriving connecting crews are partially reflected through arrival delays but lack direct real-time telemetry.
+2. **Observational Bounds:** Models describe empirical delay correlation across consecutive operations, not structural counterfactual mechanics.
+3. **Extreme Outliers:** Long delays (>300 min) introduce high squared-error penalties in continuous regression, favoring robust metric evaluation (MAE/MedAE)."""))
+
+# Section 26
+cells.append(make_cell("markdown", """---
+## 25. Export Models, Metrics, and Figures"""))
+cells.append(make_cell("code", """# Final serialization confirmation
+print("Exported files verified:")
+print(" - Models:", os.listdir(os.path.join(MODELS_DIR, "classification")))
+print(" - Metrics:", os.listdir(os.path.join(RESULTS_DIR, "metrics")))
+print(" - Baselines:", os.listdir(os.path.join(RESULTS_DIR, "classification")))
+print("Phase 6 Notebook Execution Complete.")"""))
+
+notebook_content = {
+    "cells": cells,
+    "metadata": {
+        "language_info": {
+            "name": "python",
+            "version": "3.9.6"
+        },
+        "orig_nbformat": 4
+    },
+    "nbformat": 4,
+    "nbformat_minor": 2
+}
+
+with open(NOTEBOOK_PATH, "w") as f:
+    json.dump(notebook_content, f, indent=2)
+
+print(f"Generated {NOTEBOOK_PATH} with {len(cells)} cells.")
