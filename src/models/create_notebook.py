@@ -532,11 +532,12 @@ display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage5_tuning_curves.p
 cells.append(make_cell("markdown", """---
 ## 18. Final Model Selection & Decision Threshold Optimization"""))
 cells.append(make_cell("markdown", """### 1. Classification Decision Threshold Calibration & Audit Reconciliation
-In airline operations, missing a propagated delay (False Negative) causes missed passenger connections, crew duty-time timeouts, and cascade disruptions. Conversely, an operational warning (False Positive) merely triggers expedited ground servicing.
-Standard default threshold ($T = 0.50$) produces high precision (86.68%) but misses **59.12%** of propagated delays (`recall = 40.88%`, F1 = 0.5556).
+In flight operations dispatching, operating at the standard default threshold ($T = 0.50$) produces high precision (86.68%) but misses **59.12%** of propagated delays (`recall = 40.88%`, F1 = 0.5556).
 A systematic threshold audit on the full validation population ($N = 1,140,909$, 230,521 positive delay events) reveals:
-- **Selected Operational Threshold ($T = 0.35$):** Precision = 69.20%, Recall = 49.03%, **F1 = 0.5740**. (Lifts delay recall by +8.15 percentage points while preserving near-70% precision).
-- **Mathematical F1 Optimum ($T = 0.39$ fine / $0.40$ coarse):** Precision = 72.53%, Recall = 47.65%, **F1 = 0.5751**."""))
+- **Best F1 Threshold on the Evaluated 0.01 Grid ($T = 0.39$ fine / $0.40$ coarse):** Precision = 72.53%, Recall = 47.65%, **F1 = 0.5751** (Highest F1 score achieved across the evaluated 0.01 threshold grid).
+- **Selected Operational Operating Point ($T = 0.35$):** Precision = 69.20%, Recall = 49.03%, **F1 = 0.5740**.
+  - *Potential Operational Trade-Off:* Illustrates an operational trade-off that captures 49.03% of delayed legs (+8.15 percentage points higher coverage than default $T = 0.50$, capturing an additional 18,805 true positive delay propagations) in exchange for additional false alerts (50,305 FP vs 14,476 FP at default).
+  - *Methodological Caveat:* This is presented as an illustrative trade-off rather than a proven cost-optimal threshold, as actual operational costs (e.g., gate holds vs. missed passenger connections) are unobserved in BTS public data."""))
 cells.append(make_cell("code", """# Display Audited Classification Decision Threshold Analysis
 df_thresh_audit = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage5_threshold_integrity_audit.csv"))
 print("=== Reconciled Classification Probability Threshold Analysis (RF Group C) ===")

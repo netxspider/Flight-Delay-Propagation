@@ -17,8 +17,8 @@ Following systematic candidate comparisons across tree-based ensembles, unregula
    - **Key Discrimination Performance:** **ROC-AUC = 0.7932**, **Average Precision (AP) = 0.6600**, **Log Loss = 0.3748**.
    - **Decision Threshold Policy:**
      - **Default Threshold ($T = 0.50$):** Precision = 86.68%, Recall = 40.88%, F1 = 0.5556 (High precision, but misses 59.12% of delays).
-     - **Mathematical F1-Optimum ($T = 0.39$):** Precision = 72.53%, Recall = 47.65%, **F1 = 0.5751**.
-     - **Selected Operational Threshold ($T = 0.35$):** Precision = 69.20%, Recall = 49.03%, **F1 = 0.5740** (Captures nearly 50% of delays while preserving ~70% precision).
+     - **Best F1 Threshold on the Evaluated 0.01 Grid ($T = 0.39$):** Precision = 72.53%, Recall = 47.65%, **F1 = 0.5751** (Highest F1 score across evaluated 0.01 threshold grid).
+     - **Selected Operational Operating Point ($T = 0.35$):** Precision = 69.20%, Recall = 49.03%, **F1 = 0.5740** (Presents a potential operational trade-off, capturing 49.03% of delays compared to 40.88% at default $T = 0.50$, while maintaining 69.20% precision).
 
 2. **Winning Regression Model:**
    - **Estimator:** **Random Forest Regressor (Group C)**
@@ -78,9 +78,9 @@ All counts below are calculated directly from the serialized validation predicti
 | 0.20 | 126,865 | 91,704 | 103,656 | 818,684 | 218,569 | 58.04% | 55.03% | 0.5650 | 89.93% | 82.88% | Balanced sensitivity |
 | 0.25 | 117,801 | 62,740 | 112,720 | 847,648 | 180,541 | 65.25% | 51.10% | 0.5732 | 93.11% | 84.62% | Moderate precision focus |
 | 0.30 | 115,158 | 56,520 | 115,363 | 853,868 | 171,678 | 67.08% | 49.96% | 0.5726 | 93.79% | 84.93% | Conservative warning |
-| **0.35 (Selected Operating)** | **113,035** | **50,305** | **117,486** | **860,083** | **163,340** | **69.20%** | **49.03%** | **0.5740** | **94.47%** | **85.29%** | **Selected practical dispatch rule** |
-| **0.39 (Fine F1 Maximum)** | **109,835** | **41,599** | **120,686** | **868,789** | **151,434** | **72.53%** | **47.65%** | **0.5751** | **95.43%** | **85.78%** | **Global mathematical F1 optimum** |
-| 0.40 (Coarse F1 Maximum) | 108,884 | 39,284 | 121,637 | 871,104 | 148,168 | 73.49% | 47.23% | 0.5751 | 95.68% | 85.90% | Discrete grid F1 optimum |
+| **0.35 (Selected Operating Point)** | **113,035** | **50,305** | **117,486** | **860,083** | **163,340** | **69.20%** | **49.03%** | **0.5740** | **94.47%** | **85.29%** | **Potential operational trade-off (higher recall)** |
+| **0.39 (Best F1 on 0.01 Grid)** | **109,835** | **41,599** | **120,686** | **868,789** | **151,434** | **72.53%** | **47.65%** | **0.5751** | **95.43%** | **85.78%** | **Best F1 threshold on evaluated 0.01 grid** |
+| 0.40 (Coarse Grid Optimum) | 108,884 | 39,284 | 121,637 | 871,104 | 148,168 | 73.49% | 47.23% | 0.5751 | 95.68% | 85.90% | Best F1 threshold on coarse 0.05 grid |
 | 0.45 | 102,865 | 27,400 | 127,656 | 882,988 | 130,265 | 78.97% | 44.62% | 0.5702 | 96.99% | 86.41% | High precision focus |
 | **0.50 (Default)** | **94,230** | **14,476** | **136,291** | **895,912** | **108,706** | **86.68%** | **40.88%** | **0.5556** | **98.41%** | **86.79%** | **Default rule / misses 59% delays** |
 

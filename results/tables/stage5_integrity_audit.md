@@ -16,7 +16,7 @@ This audit investigated and resolved metric, threshold, and textual inconsistenc
 ### 1.1 Root Cause of Classification Threshold Inconsistencies
 1. **Markdown Report Table Mismatch:** The table in Section 4 of `stage5_model_selection.md` contained hardcoded template values from early draft planning (e.g., claiming $T = 0.35$ yielded Precision = 62.43%, Recall = 57.10%, F1 = 0.5964, FP = 74,621, FN = 98,901). These figures were typed as prose strings rather than pulled dynamically from the actual evaluation dataframe.
 2. **JSON Key Labeling Inconsistency:** In `stage5_final_model_selection.json`, the dictionary key `"validation_metrics_selected_threshold_0_35"` was populated with `best_f1_row`, which corresponded to threshold **$T = 0.40$** (Precision = 73.49%, Recall = 47.23%, F1 = 0.5751, TP = 108,884, FP = 39,284, FN = 121,637, TN = 871,104).
-3. **F1-Optimality Mischaracterization:** The report described $T = 0.35$ as the "F1-optimal" threshold, whereas the actual calculated data in `stage5_threshold_analysis.csv` demonstrated that $T = 0.40$ had higher F1 (0.5751 vs 0.5740), and on a fine grid (step 0.01), the true global maximum occurs at **$T = 0.39$** ($F_1 = 0.57512$). Furthermore, the report's own table listed $T = 0.25$ with F1 = 0.5974, contradicting the claim that 0.35 was optimal.
+3. **F1-Optimality Mischaracterization & Operational Clarification:** The report described $T = 0.35$ as the "F1-optimal" threshold, whereas the actual calculated data in `stage5_threshold_analysis.csv` demonstrated that $T = 0.40$ had higher F1 (0.5751 vs 0.5740), and on the evaluated 0.01 grid, the best F1 score occurs at **$T = 0.39$** ($F_1 = 0.57512$). Furthermore, $T = 0.35$ is properly designated as a **selected operational operating point** (illustrating a potential operational trade-off that captures 49.03% of delays compared to 40.88% at default $T = 0.50$, without claiming a proven cost-optimal dollar threshold).
 
 ### 1.2 Resolution & Forensic Verification
 - All metrics have been recomputed from the serialized validation predictions and actual binary labels.
@@ -40,9 +40,9 @@ Evaluated across candidate thresholds for the winning **Random Forest Classifier
 | 0.20 | 126,865 | 91,704 | 103,656 | 818,684 | 218,569 | 58.04% | 55.03% | 0.5650 | 89.93% | 82.88% | Reconciled (100%) |
 | 0.25 | 117,801 | 62,740 | 112,720 | 847,648 | 180,541 | 65.25% | 51.10% | 0.5732 | 93.11% | 84.62% | Reconciled (100%) |
 | 0.30 | 115,158 | 56,520 | 115,363 | 853,868 | 171,678 | 67.08% | 49.96% | 0.5726 | 93.79% | 84.93% | Reconciled (100%) |
-| **0.35 (Selected Operating)** | **113,035** | **50,305** | **117,486** | **860,083** | **163,340** | **69.20%** | **49.03%** | **0.5740** | **94.47%** | **85.29%** | **Reconciled (100%)** |
-| **0.39 (Fine F1 Maximum)** | **109,835** | **41,599** | **120,686** | **868,789** | **151,434** | **72.53%** | **47.65%** | **0.5751** | **95.43%** | **85.78%** | **Reconciled (100%)** |
-| 0.40 (Coarse F1 Maximum) | 108,884 | 39,284 | 121,637 | 871,104 | 148,168 | 73.49% | 47.23% | 0.5751 | 95.68% | 85.90% | Reconciled (100%) |
+| **0.35 (Selected Operating Point)** | **113,035** | **50,305** | **117,486** | **860,083** | **163,340** | **69.20%** | **49.03%** | **0.5740** | **94.47%** | **85.29%** | **Reconciled (100%)** |
+| **0.39 (Best F1 on 0.01 Grid)** | **109,835** | **41,599** | **120,686** | **868,789** | **151,434** | **72.53%** | **47.65%** | **0.5751** | **95.43%** | **85.78%** | **Reconciled (100%)** |
+| 0.40 (Coarse Grid Optimum) | 108,884 | 39,284 | 121,637 | 871,104 | 148,168 | 73.49% | 47.23% | 0.5751 | 95.68% | 85.90% | Reconciled (100%) |
 | 0.45 | 102,865 | 27,400 | 127,656 | 882,988 | 130,265 | 78.97% | 44.62% | 0.5702 | 96.99% | 86.41% | Reconciled (100%) |
 | **0.50 (Default)** | **94,230** | **14,476** | **136,291** | **895,912** | **108,706** | **86.68%** | **40.88%** | **0.5556** | **98.41%** | **86.79%** | **Reconciled (100%)** |
 | 0.55 | 86,852 | 8,677 | 143,669 | 901,711 | 95,529 | 90.92% | 37.68% | 0.5328 | 99.05% | 86.65% | Reconciled (100%) |
@@ -62,13 +62,14 @@ Evaluated across candidate thresholds for the winning **Random Forest Classifier
 ## 3. Threshold Policy & Selection Criteria
 
 ### 3.1 Characterization of Decision Thresholds
-1. **Mathematical F1-Maximizing Threshold ($T = 0.39$ or $0.40$):**
-   - On a fine search ($0.01$ step), $T = 0.39$ yields $F_1 = 0.57512$, with Precision = 72.53% and Recall = 47.65%.
-   - On the standard coarse grid, $T = 0.40$ yields $F_1 = 0.57506$, with Precision = 73.49% and Recall = 47.23%.
-2. **Selected Operational Threshold ($T = 0.35$):**
-   - Yields Precision = 69.20%, Recall = 49.03%, and $F_1 = 0.5740$.
-   - **Operational Justification:** In airline delay propagation dispatching, false alarms carry a lower marginal operational cost than missed delays (which cascade into downstream misconnections). Retaining $T = 0.35$ provides an operationally balanced dispatch warning rule that captures **49.03%** of delayed legs (+8.15 percentage points higher coverage than default $T = 0.50$) while maintaining nearly 70% precision ($69.20\%$).
-   - **Correction:** $T = 0.35$ is strictly designated as a **selected operational operating threshold**, NOT the mathematical F1 optimum.
+1. **Best F1 Threshold on the Evaluated 0.01 Grid ($T = 0.39$):**
+   - On the evaluated 0.01 grid, $T = 0.39$ achieves the highest F1 score: $F_1 = 0.57512$, with Precision = 72.53%, Recall = 47.65%, Specificity = 95.43%, and Accuracy = 85.78% (TP = 109,835, FP = 41,599, FN = 120,686, TN = 868,789).
+   - On the standard coarse grid (0.05 step), $T = 0.40$ achieves $F_1 = 0.57506$, with Precision = 73.49% and Recall = 47.23%.
+2. **Selected Operational Operating Point ($T = 0.35$):**
+   - Yields Precision = 69.20%, Recall = 49.03%, and $F_1 = 0.5740$ (TP = 113,035, FP = 50,305, FN = 117,486, TN = 860,083).
+   - **Potential Operational Trade-Off:** Operating at $T = 0.35$ illustrates a potential operational trade-off: capturing **49.03%** of delayed flights (+8.15 percentage points higher recall than default $T = 0.50$, identifying an additional 18,805 true positive delay propagations) in exchange for accepting additional false alerts ($50,305$ false positives vs $14,476$ at $T = 0.50$).
+   - **Methodological Guardrail:** This is presented as an illustrative operational trade-off rather than a proven cost-optimal threshold, because true operational dispatch costs (e.g. crew duty limits, passenger rebooking expenses, gate hold costs) are unobserved in BTS public data and cannot be quantified.
+   - **Distinction:** $T = 0.35$ is strictly designated as a **selected operational operating point**, distinctly separated from the best F1 threshold on the evaluated grid ($T = 0.39$).
 3. **Default Threshold ($T = 0.50$):**
    - Yields Precision = 86.68%, Recall = 40.88%, and $F_1 = 0.5556$.
    - While highly precise (only 14,476 false positives), it misses 136,291 delayed flights (59.12% false negative rate).
@@ -135,12 +136,19 @@ In `train_stage5_tuning.py`, the hyperparameter tuning procedure was **NOT** an 
    - $R^2 = 0.4516$ denotes that the Random Forest regressor accounts for **45.16% of the variance in subsequent flight arrival delays relative to a naive mean-prediction baseline** ($1 - \text{SS}_{\text{res}} / \text{SS}_{\text{tot}}$). It does NOT mean that 45.16% of flights or delays are predicted accurately.
 4. **No Causal Claims:**
    - Predictive importance (e.g., turnaround deficit importance) reflects statistical association and operational constraints, NOT structural counterfactual causality. Interventions such as padding turnaround schedules may induce operational responses not captured by observational models.
-5. **Delay Band Nuance:**
-   - Random Forest is **not** strictly best across every single delay band:
-     - On-time / early flights ($\le 0$ min): MLP achieved lower MAE ($9.36$ min vs RF $9.79$ min).
-     - Moderate delays ($15–60$ min): Decision Trees and Random Forests performed similarly (MAE $\approx 17.7$ min).
-     - Severe delays ($\ge 120$ min): Random Forest dominated (MAE $117.91$ min vs OLS $143.01$ min and MLP $122.99$ min).
-     - Random Forest was selected because it achieves the lowest aggregate RMSE ($38.62$ min) and highest variance explained ($R^2 = 0.4516$).
+5. **Delay Band Error Reconciliation & Discrepancy Investigation:**
+   - **Discrepancy Audit:** Investigated the apparent discrepancy between Stage 4.1 reported RF MAE on early/on-time flights ($\le 0$ min) of **12.19 minutes** and the Stage 5.1 draft narrative mention of **9.79 minutes**.
+   - **Root Cause & Forensic Verification:**
+     - The underlying data file [`results/regression/stage4_error_by_delay_band.csv`](file:///Users/arnavraj/Downloads/flight-delay-propagation/results/regression/stage4_error_by_delay_band.csv) and figure [`results/figures/regression_error_by_delay_band.png`](file:///Users/arnavraj/Downloads/flight-delay-propagation/results/figures/regression_error_by_delay_band.png) have always recorded MAE = **12.19 minutes** (RMSE = 15.57 min, Bias = +11.43 min, $N = 734,735$).
+     - Re-running prediction verification across the serialized models `models/final/final_selected_regressor.joblib` and `models/regression/random_forest_group_c.joblib` on the exact 734,735 early/on-time validation rows confirmed identical predictions (`np.allclose = True`) with exact MAE = **12.1856 minutes** (12.19 min).
+     - The value `9.79 min` was purely a narrative typographic error in the Stage 5.1 draft prose text and did not arise from any alternative dataset, model, or code execution.
+   - **Comparative Performance Across Delay Bands (Full Val $N = 1,140,909$):**
+     - Early / On-Time ($\le 0$ min, 64.4% of population): MLP achieves lowest MAE (**9.36 min**, bias +4.29 min), whereas Decision Tree achieves **12.02 min** (bias +11.04 min), Random Forest achieves **12.19 min** (bias +11.43 min), and OLS achieves **16.04 min** (bias +15.61 min).
+     - Minor Delays ($1–14$ min, 15.4% of population): OLS achieves lowest MAE (**7.56 min**), RF achieves **10.28 min**, DT achieves **11.20 min**, MLP achieves **14.30 min**.
+     - Moderate Delays ($15–59$ min, 13.4% of population): Random Forest achieves lowest MAE (**22.44 min**), DT achieves **23.63 min**, MLP achieves **26.87 min**, OLS achieves **27.40 min**.
+     - Major Delays ($60–119$ min, 4.2% of population): Random Forest achieves lowest MAE (**45.03 min**), DT achieves **46.37 min**, MLP achieves **49.45 min**, OLS achieves **54.88 min**.
+     - Severe Delays ($\ge 120$ min, 2.6% of population): Random Forest achieves lowest MAE (**117.91 min**), DT achieves **119.80 min**, MLP achieves **121.13 min**, OLS achieves **143.01 min**.
+   - **Selection Decision:** Random Forest was selected as the final regressor because it achieves the lowest overall RMSE ($38.62$ min), the highest overall variance explained ($R^2 = 0.4516$), and superior accuracy across moderate, major, and severe delay regimes where operational consequences are greatest.
 6. **Validation Optimism Warning:**
    - Because candidate models and decision thresholds were selected based on validation set performance, the validation metrics reported here may carry a minor optimistic bias. The final, unbiased generalization benchmark will be established exclusively on the held-out December 2025 test dataset in Stage 6.
 
@@ -153,3 +161,4 @@ In `train_stage5_tuning.py`, the hyperparameter tuning procedure was **NOT** an 
 - [x] **No Prohibited Estimators:** Exclusively syllabus-compliant models were evaluated (Logistic Regression, Decision Trees, Random Forests, MLP, OLS).
 - [x] **Exact Population Reconciliation:** All confusion matrix totals equal $1,140,909$, with positive sums equal to $230,521$ and negative sums equal to $910,388$.
 - [x] **Versioned Preservation:** Original Stage 5 report preserved at [`results/tables/stage5_model_selection_v1_backup.md`](file:///Users/arnavraj/Downloads/flight-delay-propagation/results/tables/stage5_model_selection_v1_backup.md).
+
