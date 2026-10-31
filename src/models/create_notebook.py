@@ -531,17 +531,16 @@ display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage5_tuning_curves.p
 # Section 19
 cells.append(make_cell("markdown", """---
 ## 18. Final Model Selection & Decision Threshold Optimization"""))
-cells.append(make_cell("markdown", """### 1. Classification Decision Threshold Calibration ($T \\in [0.10, 0.70]$)
+cells.append(make_cell("markdown", """### 1. Classification Decision Threshold Calibration & Audit Reconciliation
 In airline operations, missing a propagated delay (False Negative) causes missed passenger connections, crew duty-time timeouts, and cascade disruptions. Conversely, an operational warning (False Positive) merely triggers expedited ground servicing.
-Standard default threshold ($T = 0.50$) produces high precision (86.68%) but misses **59.12%** of propagated delays (`recall = 40.88%`).
-By scanning thresholds across validation probabilities, we identify **$T = 0.35$** as the optimal operational operating point:
-- **F1-Score increases from 0.5556 to 0.5964** (+4.08 points).
-- **Recall increases from 40.88% to 57.10%** (+16.22 percentage points).
-- **Precision remains robust at 62.43%**."""))
-cells.append(make_cell("code", """# Display Classification Decision Threshold Optimization
-df_thresh = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage5_threshold_analysis.csv"))
-print("=== Classification Probability Threshold Analysis (RF Group C on Validation Data) ===")
-display(df_thresh[df_thresh['model'] == 'Random Forest Classifier (Candidate 1)'][['threshold', 'precision', 'recall', 'f1_score', 'specificity', 'accuracy', 'TP', 'FP', 'FN', 'TN']])
+Standard default threshold ($T = 0.50$) produces high precision (86.68%) but misses **59.12%** of propagated delays (`recall = 40.88%`, F1 = 0.5556).
+A systematic threshold audit on the full validation population ($N = 1,140,909$, 230,521 positive delay events) reveals:
+- **Selected Operational Threshold ($T = 0.35$):** Precision = 69.20%, Recall = 49.03%, **F1 = 0.5740**. (Lifts delay recall by +8.15 percentage points while preserving near-70% precision).
+- **Mathematical F1 Optimum ($T = 0.39$ fine / $0.40$ coarse):** Precision = 72.53%, Recall = 47.65%, **F1 = 0.5751**."""))
+cells.append(make_cell("code", """# Display Audited Classification Decision Threshold Analysis
+df_thresh_audit = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage5_threshold_integrity_audit.csv"))
+print("=== Reconciled Classification Probability Threshold Analysis (RF Group C) ===")
+display(df_thresh_audit[df_thresh_audit['model'] == 'Random Forest Classifier (Group C)'][['threshold', 'precision', 'recall', 'f1_score', 'specificity', 'accuracy', 'positive_prediction_count', 'confusion_matrix_total', 'reconciles_positives', 'reconciles_negatives', 'reconciles_total']])
 
 print("\n=== Figure: Precision-Recall vs. Decision Threshold & Trade-off Curves ===")
 display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage5_threshold_curves.png")))
@@ -550,11 +549,11 @@ print("\n=== Figure: Final Model Diagnostic Dashboard ===")
 display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage5_final_model_diagnostics.png")))"""))
 cells.append(make_cell("markdown", """### 2. Final Selected Models Rationale
 - **Final Classifier: Random Forest Classifier (Group C)**
-  - Config: `n_estimators=100`, `max_depth=14`, `min_samples_leaf=50`, calibrated threshold $T = 0.35$.
-  - Validation: ROC-AUC = 0.7932, AP = 0.6600, F1 = 0.5964 (Recall: 57.10%, Precision: 62.43%).
+  - Config: `n_estimators=100`, `max_depth=14`, `min_samples_leaf=50`, operational threshold $T = 0.35$.
+  - Validation: ROC-AUC = 0.7932, AP = 0.6600, F1 = 0.5740 at $T = 0.35$ (Recall: 49.03%, Precision: 69.20%).
 - **Final Regressor: Random Forest Regressor (Group C)**
   - Config: `n_estimators=100`, `max_depth=14`, `min_samples_leaf=50`.
-  - Validation: $R^2 = 0.4516$, RMSE = 38.62 min, MAE = 17.40 min (captures non-linear delay propagation significantly better than OLS $R^2 = 0.2744$)."""))
+  - Validation: $R^2 = 0.4516$ (explains 45.16% of arrival delay variance relative to mean baseline), RMSE = 38.62 min, MAE = 17.40 min (dominates severe delay regimes $\ge 120$ min)."""))
 cells.append(make_cell("code", """# Load and display finalized selection metadata
 with open(os.path.join(RESULTS_DIR, "metrics/stage5_final_model_selection.json"), "r") as f:
     final_meta = json.load(f)

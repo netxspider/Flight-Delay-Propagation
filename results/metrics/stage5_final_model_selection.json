@@ -1,8 +1,10 @@
 {
   "metadata": {
-    "phase": "Phase 6 Stage 5: Validation-Based Model Selection",
-    "decision_date": "2026-10-31T13:13:00Z",
+    "phase": "Phase 6 Stage 5: Validation-Based Model Selection (Reconciled in Stage 5.1)",
+    "decision_date": "2026-10-31T13:36:56Z",
     "validation_population": 1140909,
+    "positive_observations": 230521,
+    "negative_observations": 910388,
     "test_set_status": "Strictly Sealed (Unaccessed)"
   },
   "selected_classifier": {
@@ -16,29 +18,55 @@
       "n_jobs": 2,
       "random_state": 42
     },
-    "validation_metrics_default_threshold_0_5": {
+    "validation_discrimination": {
+      "roc_auc": 0.793201,
+      "average_precision_ap": 0.66001,
+      "log_loss": 0.374772
+    },
+    "default_threshold_0_50": {
+      "threshold": 0.5,
       "accuracy": 0.8679,
       "precision": 0.8668,
       "recall": 0.4088,
       "f1_score": 0.5556,
-      "roc_auc": 0.7932,
-      "average_precision_ap": 0.66,
-      "log_loss": 0.3748
+      "specificity": 0.9841,
+      "confusion_matrix": {
+        "TP": 94230,
+        "FP": 14476,
+        "FN": 136291,
+        "TN": 895912
+      }
+    },
+    "mathematical_f1_optimum_threshold_0_39": {
+      "threshold": 0.39,
+      "accuracy": 0.8578,
+      "precision": 0.7253,
+      "recall": 0.4765,
+      "f1_score": 0.5751,
+      "specificity": 0.9543,
+      "confusion_matrix": {
+        "TP": 109835,
+        "FP": 41599,
+        "FN": 120686,
+        "TN": 868789
+      }
     },
     "selected_operational_threshold": 0.35,
     "validation_metrics_selected_threshold_0_35": {
-      "accuracy": 0.859,
-      "precision": 0.7349,
-      "recall": 0.4723,
-      "f1_score": 0.5751,
+      "threshold": 0.35,
+      "accuracy": 0.8529,
+      "precision": 0.692,
+      "recall": 0.4903,
+      "f1_score": 0.574,
+      "specificity": 0.9447,
       "confusion_matrix": {
-        "TP": 108884,
-        "FP": 39284,
-        "FN": 121637,
-        "TN": 871104
+        "TP": 113035,
+        "FP": 50305,
+        "FN": 117486,
+        "TN": 860083
       }
     },
-    "selection_rationale": "Random Forest Group C achieves the highest overall discrimination (ROC-AUC = 0.7932, AP = 0.6600) on validation data. By shifting threshold from 0.50 to 0.35, operational recall jumps from 40.88% to 57.10% while maintaining 62.43% precision and increasing F1 from 0.5556 to 0.5964."
+    "selection_rationale": "Random Forest Group C achieves the highest overall discrimination (ROC-AUC = 0.7932, AP = 0.6600) on validation data. Threshold T = 0.35 is designated as a selected operational threshold: it increases delay recall from 40.88% (at T=0.50) to 49.03% (+8.15 percentage points) while maintaining 69.20% precision and lifting F1 from 0.5556 to 0.5740 (near the global fine F1 maximum of 0.5751 at T=0.39)."
   },
   "selected_regressor": {
     "model_family": "Random Forest Regressor",
@@ -52,16 +80,16 @@
       "random_state": 42
     },
     "validation_metrics": {
-      "mae_minutes": 17.4,
-      "rmse_minutes": 38.62,
-      "r2_score": 0.4516
+      "mae_minutes": 17.3997,
+      "rmse_minutes": 38.6221,
+      "r2_score": 0.451617
     },
-    "selection_rationale": "Random Forest Regressor Group C explains 45.16% of total delay variance on validation data (R2 = 0.4516, RMSE = 38.62 min), significantly outperforming linear OLS (R2 = 0.2754). Although MLP achieves slightly lower overall MAE (17.06m vs 17.40m), Random Forest demonstrates superior stability across moderate-to-severe delay bands and provides direct feature attribution."
+    "selection_rationale": "Random Forest Regressor Group C explains 45.16% of total delay variance relative to a naive mean-prediction baseline on validation data (R2 = 0.4516, RMSE = 38.62 min), significantly outperforming linear OLS (R2 = 0.2744). While MLP achieves slightly lower overall MAE (17.06m vs 17.40m), Random Forest demonstrates superior performance in severe delay bands (>=120 min: MAE 117.91m vs MLP 122.99m and OLS 143.01m) and lowest aggregate RMSE."
   },
   "group_a_vs_group_c_incremental_contribution": {
     "classification_delta_ap": 0.0005,
     "classification_delta_roc_auc": 0.0108,
     "regression_delta_mae_min": -0.3,
-    "regression_delta_r2": 0.0077
+    "regression_delta_r2": 0.0076
   }
 }

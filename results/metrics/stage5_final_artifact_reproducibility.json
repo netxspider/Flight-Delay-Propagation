@@ -1,0 +1,91 @@
+{
+  "metadata": {
+    "audit_phase": "Phase 6 Stage 5.1: Final Model Selection Integrity Audit",
+    "audit_timestamp_utc": "2026-10-31T13:36:56Z",
+    "validation_population": 1140909,
+    "positive_observations": 230521,
+    "negative_observations": 910388,
+    "test_set_status": "Strictly Sealed (Unaccessed)"
+  },
+  "classifier_reproducibility": {
+    "saved_model_path": "models/final/final_selected_classifier.joblib",
+    "saved_preprocessor_path": "models/final/final_preprocessor_group_c.joblib",
+    "model_class": "RandomForestClassifier",
+    "classes": [
+      0,
+      1
+    ],
+    "positive_class_index": 1,
+    "feature_count_transformed": 725,
+    "validation_metrics": {
+      "roc_auc": 0.793201,
+      "average_precision_ap": 0.66001,
+      "log_loss": 0.374772
+    },
+    "threshold_metrics": {
+      "default_threshold_0_50": {
+        "accuracy": 0.8679,
+        "precision": 0.8668,
+        "recall": 0.4088,
+        "f1_score": 0.5556,
+        "specificity": 0.9841,
+        "confusion_matrix": {
+          "TP": 94230,
+          "FP": 14476,
+          "FN": 136291,
+          "TN": 895912
+        }
+      },
+      "f1_maximizing_threshold_0_39": {
+        "accuracy": 0.8578,
+        "precision": 0.7253,
+        "recall": 0.4765,
+        "f1_score": 0.5751,
+        "specificity": 0.9543,
+        "confusion_matrix": {
+          "TP": 109835,
+          "FP": 41599,
+          "FN": 120686,
+          "TN": 868789
+        }
+      },
+      "selected_operational_threshold_0_35": {
+        "accuracy": 0.8529,
+        "precision": 0.692,
+        "recall": 0.4903,
+        "f1_score": 0.574,
+        "specificity": 0.9447,
+        "confusion_matrix": {
+          "TP": 113035,
+          "FP": 50305,
+          "FN": 117486,
+          "TN": 860083
+        }
+      }
+    }
+  },
+  "regressor_reproducibility": {
+    "saved_model_path": "models/final/final_selected_regressor.joblib",
+    "saved_preprocessor_path": "models/final/final_preprocessor_group_c.joblib",
+    "model_class": "RandomForestRegressor",
+    "hyperparameters": {
+      "max_depth": 14,
+      "min_samples_leaf": 50,
+      "n_estimators": 100,
+      "n_jobs": 2,
+      "random_state": 42
+    },
+    "validation_metrics": {
+      "mae_minutes": 17.3997,
+      "mse_minutes2": 1491.67,
+      "rmse_minutes": 38.6221,
+      "r2_score": 0.451617
+    }
+  },
+  "reconciliation_verifications": {
+    "all_confusion_matrices_reconcile_exactly": true,
+    "positive_sum_exact": 230521,
+    "negative_sum_exact": 910388,
+    "total_sum_exact": 1140909
+  }
+}
