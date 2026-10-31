@@ -639,9 +639,10 @@ display(Image(filename=os.path.join(RESULTS_DIR, "figures/stage6_test_delay_band
 
 cells.append(make_cell("markdown", """### Validation vs. Test Generalization Analysis:
 Comparing performance across temporal partitions (October–November vs. December):
-- Classification discrimination transferred with near-zero degradation (ROC-AUC 0.7932 vs 0.7943).
+- Classification discrimination transferred with stable performance (ROC-AUC 0.7932 vs 0.7943; AP 0.6600 vs 0.7150).
 - Regression $R^2$ improved from 0.4516 to 0.4851.
-- MAE increased from 17.40m to 19.77m due to the 55% surge in severe delays ($\ge 120$m) during winter operations."""))
+- MAE increased from 17.40m to 19.77m (+2.37m). A formal Oaxaca-Blinder / shift-share decomposition demonstrates that **94.0% to 98.4% (+2.23 to +2.33 minutes)** of this increase is mathematically accounted for by population composition shift (a 55.4% surge in severe delays $\ge 120$m carrying higher baseline errors), while within-band error remained virtually flat (+0.04 to +0.25 min net effect).
+- Winter weather and holiday travel volumes serve as plausible contextual hypotheses for this distribution shift rather than directly measured causal drivers, as BTS data lacks real-time weather and ATC telemetry."""))
 cells.append(make_cell("code", """# Display Validation vs Test Comparison Table & Figure
 df_val_test = pd.read_csv(os.path.join(RESULTS_DIR, "metrics/stage6_validation_test_comparison.csv"))
 print("=== Generalization Comparison: Validation (Oct-Nov) vs. Test (Dec) ===")
@@ -669,16 +670,17 @@ cells.append(make_cell("markdown", """---
 ### Answers to Primary Research Questions:
 1. **Classifier Discrimination:** Out-of-sample test ROC-AUC = **0.7943** and AP = **0.7150**. Operating at $T = 0.35$ captures **53.24%** of delays ($79,250$ flights) with **72.52%** precision and a false alert rate on on-time flights of only **7.26%**.
 2. **Regression Explanatory Power:** Explains **48.51%** ($R^2 = 0.4851$) of the total variance in December arrival delays (MAE = 19.77m, RMSE = 45.86m), with near-zero unconditional bias (+1.21m).
-3. **Out-of-Sample Temporal Generalization:** The model generalizes with remarkable stability from autumn development to winter test (ROC-AUC 0.7932 -> 0.7943; F1 0.5740 -> 0.6140). The aggregate error increase (MAE 17.40m -> 19.77m) is an aggregation artifact of December's 55% surge in severe delays ($\ge 120$m), while within-band error remained constant.
-4. **Physical Drivers:** Turnaround deficit (`ESTIMATED_REMAINING_TURNAROUND_MINUTES` and `IS_TURNAROUND_DEFICIT`) accounts for the dominant non-linear step change. Airframe daily history (`PREV_AIRCRAFT_CONSECUTIVE_DEL15` and `CUMULATIVE_ARR_DELAY_TODAY`) provides a statistically verified $+1.08\%$ ROC-AUC boost, confirming that rotational airframe fatigue is a non-redundant predictive signal.
-5. **Observational Bounds:** Correlation does not equal causality. Buffer deficits represent an observational operational vulnerability rather than a direct mechanical cause."""))
+3. **Out-of-Sample Temporal Generalization:** The model generalizes with stable discrimination from autumn development to winter test (ROC-AUC 0.7932 -> 0.7943; F1 0.5740 -> 0.6140). A formal shift-share decomposition demonstrates that 94.0% to 98.4% of the MAE increase (17.40m -> 19.77m) is driven by population composition shift (a 55% surge in severe delays $\ge 120$m), while within-band error remained flat (+0.04 to +0.25m net effect).
+4. **Physical Drivers & Feature Group Attribution:** Turnaround deficit (`ESTIMATED_REMAINING_TURNAROUND_MINUTES` and `IS_TURNAROUND_DEFICIT`) accounts for the dominant non-linear step change. For Random Forest, Group C (+ route context + airframe history) delivered a +1.08% ROC-AUC gain over Group A. In linear baseline models where Group B was isolated, airframe history (Group B -> Group C) contributed +0.0077 ROC-AUC and +0.0125 AP, and permutation importance confirms that airframe history features carry non-redundant predictive signal within the Random Forest model.
+5. **Permutation Importance Behavior:** For `ESTIMATED_REMAINING_TURNAROUND_MINUTES`, permuting the feature dropped $R^2$ by 0.9185 (from +0.4770 to -0.4415). Because remaining turnaround is an exact algebraic identity ($SCHEDULED\_TURNAROUND\_BUFFER - PREV\_ARR\_DELAY$), permuting it in isolation breaks physical dependency with prior delay and scheduled buffer, creating contradictory feature states that collapse tree predictions into negative $R^2$. This reflects structural reliance on the derived feature rather than causal impact.
+6. **Observational Bounds:** Correlation does not equal causality. Buffer deficits represent an observational operational vulnerability rather than a direct mechanical cause."""))
 
 # Section 22
 cells.append(make_cell("markdown", """---
 ## 21. Threats to Validity & Methodological Limitations
-1. **Unobserved Confounders:** Terminal radar weather (TDWR), convective storms, FAA Ground Delay Programs (GDPs), and connecting flight crew timeouts are partially reflected in arrival delays but lack direct real-time telemetry in BTS data.
+1. **Unobserved Confounders:** Terminal radar weather (TDWR), convective storms, FAA Ground Delay Programs (GDPs), and connecting flight crew timeouts are plausible operational drivers but lack direct telemetry in BTS public records and serve as unverified contextual hypotheses.
 2. **Observational vs Causal:** Finding that a buffer deficit predicts subsequent delays does not guarantee that adding schedule padding will causally eliminate downstream delays in a 1:1 ratio, as airlines adjust operational pacing in response to schedule buffers.
-3. **Severe Delay Degradation:** The model systematically underpredicts severe delays $\ge 120$m (bias = -90.38m) because extreme disruptions are driven by compound administrative interventions (e.g., gate hold programs, crew expirations) rather than turnaround buffer mechanics alone."""))
+3. **Severe Delay Degradation:** The model systematically underpredicts severe delays $\ge 120$m (bias = -90.38m) because extreme disruptions are driven by compound administrative interventions (e.g., gate hold programs, crew expirations) and tree leaf predictions are bounded by training sample averages."""))
 
 # Section 23
 cells.append(make_cell("markdown", """---

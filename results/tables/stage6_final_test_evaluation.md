@@ -24,7 +24,7 @@ The frozen final machine learning models—selected exclusively on the October�
   - **Specificity:** **$92.74\%$** (vs. Validation $94.47\%$)
   - **Accuracy:** **$82.28\%$** (vs. Validation $85.29\%$)
   - **Confusion Matrix:** True Positives = $79,250$ | False Positives = $30,025$ | False Negatives = $69,615$ | True Negatives = $383,312$
-  - **Operational Coverage:** Captures **$53.24\%$** of all propagated flight delays ($79,250$ of $148,865$) while maintaining a false alarm rate below $7.3\%$ ($30,025$ FP out of $413,337$ on-time flights).
+  - **Operational Coverage:** Identifies **$53.24\%$** of all delayed flight operations ($79,250$ of $148,865$) at the selected operating threshold ($T = 0.35$) while maintaining a false alarm rate on on-time flights of **$7.26\%$** ($30,025$ FP out of $413,337$ on-time flights).
 - **Benchmark Comparisons:**
   - **Validation F1 Reference ($T = 0.39$):** Precision = $75.19\%$, Recall = $51.90\%$, F1 = **$0.6141$**, Specificity = $93.83\%$, Accuracy = $82.73\%$.
   - **Default Benchmark ($T = 0.50$):** Precision = $87.52\%$, Recall = **$45.07\%$**, F1 = **$0.5950$**, Specificity = $97.68\%$, Accuracy = $83.75\%$. Misses $81,772$ delays ($54.93\%$ false negative rate).
@@ -54,10 +54,11 @@ The test dataset covers all completed domestic rotation pairs operated between D
 | **Independent Test** | Dec 1 – Dec 31, 2025 | 562,202 | **26.48%** | **+12.23 min** | -4.0 min | **63.91 min** |
 
 ### 2.2 Observed Seasonal Distribution Shift
-December exhibits an expected, pronounced seasonal shift characteristic of North American commercial aviation:
+December exhibits an empirical seasonal distribution shift across the national network:
 1. **Prevalence Increase:** Delays $\ge 15$ minutes rose by **$+6.27$ percentage points** (from $20.21\%$ in validation to $26.48\%$ in test).
 2. **Delay Magnitude Expansion:** The average arrival delay more than doubled from $+5.41$ minutes to $+12.23$ minutes ($+6.82$ min increase), with variance expanding by $50.3\%$ (std from $52.15$ to $63.91$ min).
-3. **Severe Delay Concentration:** Flights delayed by $\ge 120$ minutes increased from $2.60\%$ ($29,657$ flights) in validation to **$4.04\%$** ($22,693$ flights) in December—a **$+55.4\%$ relative increase** in severe delay disruptions driven by winter weather and holiday air traffic volume.
+3. **Severe Delay Concentration:** Flights delayed by $\ge 120$ minutes increased from $2.60\%$ ($29,657$ flights) in validation to **$4.04\%$** ($22,693$ flights) in December—a **$+55.4\%$ relative increase** in severe delay frequency.
+*Methodological Note:* While adverse winter weather, de-icing queues, and holiday travel congestion are plausible operational explanations for this shift, direct meteorological telemetry and airport ground congestion logs are unobserved in the BTS dataset and cannot be established as definitive causal factors.
 
 ---
 
@@ -129,7 +130,7 @@ Residual behavior stratified across the five operational delay regimes on the te
 
 ### Key Observations:
 1. **Low-Delay Regime ($\le 14$ min, $73.5\%$ of operations):** The regressor exhibits strong accuracy, with MAE between $10.6$ and $13.0$ minutes.
-2. **Severe Delay Fatigue ($\ge 120$ min, $4.0\%$ of operations):** The model systematically underpredicts extreme delays ($\text{bias} = -90.38$ min). This reflects the inherent structural limit of tree-based regression ensembles: tree leaf outputs are bounded by training sample means and cannot extrapolate into unobserved extreme tails caused by severe compounding airport ground stops or blizzard disruptions.
+2. **Severe Delay Regime ($\ge 120$ min, $4.0\%$ of operations):** The model systematically underpredicts extreme delays ($\text{bias} = -90.38$ min). This reflects the inherent mathematical limit of tree-based regression ensembles: leaf predictions are bounded by sample averages observed in terminal nodes during training and cannot extrapolate into unobserved extreme tails. Severe delays in December likely involve compound external operational constraints (e.g., air traffic ground delay programs, de-icing queues, crew duty-time limitations), which are unobserved in the BTS feature set and represent plausible contextual hypotheses rather than proven causal drivers.
 
 ---
 

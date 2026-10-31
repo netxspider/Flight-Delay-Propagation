@@ -1,0 +1,63 @@
+{
+  "audit_metadata": {
+    "audit_phase": "Phase 6 Stage 6.1: Scientific Interpretation, Integrity & Publication Correction",
+    "timestamp_utc": "2026-10-31T20:21:30Z",
+    "auditor_role": "Senior ML Engineer & IEEE Paper Methodology Auditor",
+    "baseline_commit": "c44ca21"
+  },
+  "artifact_integrity_verification": {
+    "test_dataset": {
+      "path": "data/processed/modeling_test.parquet",
+      "row_count": 562202,
+      "size_bytes": 12973636,
+      "sha256": "3f0e5494fdb4d934cda7b77f41eaef6b73de41e1cd3927c752dd3e3e90449d1e",
+      "status": "Verified Strictly Unmodified"
+    },
+    "predictions_parquet": {
+      "path": "results/predictions/stage6_test_predictions.parquet",
+      "row_count": 562202,
+      "size_bytes": 6867884,
+      "sha256": "17b53d619416547256a43774ca7996c0a31d1a2f1cf98438894f53ee004a7b07",
+      "status": "Verified Exact Row Alignment & Contents Preserved"
+    },
+    "final_classifier": {
+      "path": "models/final/final_selected_classifier.joblib",
+      "model_class": "RandomForestClassifier",
+      "size_bytes": 2639881,
+      "sha256": "2c05c745055322754a5774c6fc4a052c90412e68ce4cbb0d425a5e37708ad293",
+      "status": "Verified Frozen (No Retraining / Zero Fit Calls)"
+    },
+    "final_regressor": {
+      "path": "models/final/final_selected_regressor.joblib",
+      "model_class": "RandomForestRegressor",
+      "size_bytes": 16396897,
+      "sha256": "33033342b5a80d67d9fe843d492a8f55f6734923271981e0f947d4fa4ceab17c",
+      "status": "Verified Frozen (No Retraining / Zero Fit Calls)"
+    },
+    "final_preprocessor": {
+      "path": "models/final/final_preprocessor_group_c.joblib",
+      "transformer_class": "ColumnTransformer",
+      "size_bytes": 8896,
+      "sha256": "a73c4c4d9ab7094d28720a76e6010e57a9e89706b3f5207005af2834e924f7ce",
+      "status": "Verified Frozen (No Retransformation / Zero Fit Calls)"
+    }
+  },
+  "protocol_compliance_checks": {
+    "test_population_equals_562202": true,
+    "operating_threshold_remains_0_35": true,
+    "no_test_driven_threshold_search": true,
+    "zero_model_retraining": true,
+    "zero_feature_alteration": true,
+    "prohibited_models_strictly_absent": true,
+    "test_metrics_preserved_exact": {
+      "classifier_roc_auc": 0.7943,
+      "classifier_average_precision_ap": 0.715,
+      "classifier_f1_threshold_0_35": 0.614,
+      "classifier_precision_threshold_0_35": 0.7252,
+      "classifier_recall_threshold_0_35": 0.5324,
+      "regressor_mae_minutes": 19.7699,
+      "regressor_rmse_minutes": 45.8629,
+      "regressor_r2_score": 0.485076
+    }
+  }
+}

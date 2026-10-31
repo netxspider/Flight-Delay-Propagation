@@ -13,18 +13,18 @@
 A central methodological requirement of this study is the strict temporal isolation of the test dataset. In operational aviation machine learning, random cross-validation yields inflated performance because flight pairs sharing identical aircraft rotations, convective storm fronts, or carrier ground-handling crunches appear in both partitions. Evaluating models forward in time tests their true operational utility.
 
 ### Generalization Highlights
-1. **Exceptional Classification Discrimination Stability:**
+1. **Stable Classification Discrimination on Independent Test Data:**
    - **ROC-AUC:** $0.7932$ (Validation) $\rightarrow$ **$0.7943$** (Test), a change of only **$+0.0011$** ($+0.14\%$).
-   - The rank-ordering ability of the classifier is invariant to seasonal shifts, demonstrating that turnaround deficit mechanics condition delay propagation reliably across calm autumn and severe winter conditions.
-2. **Prevalence-Driven Precision and Recall Lift:**
-   - **Average Precision (AP):** $0.6600$ (Validation) $\rightarrow$ **$0.7150$** (Test), an increase of **$+0.0550$** ($+8.33\%$).
+   - The ranking discrimination of the classifier is stable across temporal partitions, indicating that turnaround buffer features condition delay propagation consistently across autumn development and winter test periods.
+2. **Prevalence-Driven Precision and Recall Shift:**
+   - **Average Precision (AP):** $0.6600$ (Validation) $\rightarrow$ **$0.7150$** (Test), an increase of **$+0.0550$** ($+8.33\%$). Because AP is sensitive to positive-class prevalence, this increase reflects December's higher baseline delay rate ($26.48\%$ vs. $20.21\%$) rather than an improvement in model parameters.
    - At the primary operational operating point ($T = 0.35$):
      - **Precision:** $69.20\% \rightarrow \mathbf{72.52\%}$ ($+3.32$ percentage points)
      - **Recall:** $49.03\% \rightarrow \mathbf{53.24\%}$ ($+4.21$ percentage points)
      - **F1-Score:** $0.5740 \rightarrow \mathbf{0.6140}$ ($+0.0400$, $+6.97\%$)
-3. **Robust Variance Explained Despite Higher Noise:**
+3. **Variance Explained and Error Decomposition:**
    - **$R^2$ Score:** $0.4516$ (Validation) $\rightarrow$ **$0.4851$** (Test), an improvement of **$+0.0335$** ($+7.41\%$).
-   - Aggregate **MAE** increased from $17.40$ minutes to **$19.77$ minutes** ($+2.37$ min, $+13.62\%$), and **RMSE** from $38.62$ minutes to **$45.86$ minutes** ($+7.24$ min, $+18.75\%$). This error increase is an expected consequence of December's $55\%$ higher proportion of severe delays ($\ge 120$ min).
+   - Aggregate **MAE** increased from $17.40$ minutes to **$19.77$ minutes** ($+2.37$ min, $+13.62\%$), and **RMSE** from $38.62$ minutes to **$45.86$ minutes** ($+7.24$ min, $+18.75\%$). Formal decomposition reveals that $94.0\%–98.4\%$ of this error increase is explained by population composition (a $55\%$ higher share of severe delays $\ge 120$ min carrying larger baseline error magnitudes).
 
 ---
 
@@ -34,12 +34,12 @@ Data serialized in [`results/metrics/stage6_validation_test_comparison.csv`](fil
 
 | Evaluation Category | Metric | Validation (Oct–Nov) | Test (December) | Absolute Change ($\Delta$) | Relative Change (%) | Scientific Interpretation |
 | :--- | :--- | :---: | :---: | :---: | :---: | :--- |
-| **Classification Global** | ROC-AUC | 0.7932 | **0.7943** | +0.0011 | +0.14% | Complete discrimination stability |
+| **Classification Global** | ROC-AUC | 0.7932 | **0.7943** | +0.0011 | +0.14% | Stable ranking discrimination |
 | **Classification Global** | Average Precision (AP)| 0.6600 | **0.7150** | +0.0550 | +8.33% | Lifted by higher positive prevalence |
 | **Classification Global** | Log Loss | 0.3748 | **0.4255** | +0.0507 | +13.52% | Slightly higher entropy due to winter variance |
 | **Operational ($T = 0.35$)**| F1-Score | 0.5740 | **0.6140** | +0.0400 | +6.97% | Strong out-of-sample operational transfer |
 | **Operational ($T = 0.35$)**| Precision | 69.20% | **72.52%** | +3.32 pp | +4.80% | Alert reliability increases with base rate |
-| **Operational ($T = 0.35$)**| Recall | 49.03% | **53.24%** | +4.21 pp | +8.59% | Captures majority of propagated delays |
+| **Operational ($T = 0.35$)**| Recall | 49.03% | **53.24%** | +4.21 pp | +8.59% | Identifies 53.24% of delayed flights |
 | **Operational ($T = 0.35$)**| Accuracy | 85.29% | **82.28%** | -3.01 pp | -3.53% | Reflects larger positive population share |
 | **Operational ($T = 0.35$)**| Specificity | 94.47% | **92.74%** | -1.73 pp | -1.83% | False alarm rate remains low ($< 7.3\%$) |
 | **Default ($T = 0.50$)** | F1-Score | 0.5556 | **0.5950** | +0.0394 | +7.09% | Conservative benchmark |
@@ -72,19 +72,17 @@ The observed performance shifts between October–November and December reflect 
 ```
 
 ### Analysis of Shift Mechanisms:
-1. **Winter Meteorological Disruption:**
-   - December involves widespread de-icing, runway snow clearance, ground delay programs (GDPs), and severe convective winter fronts across major northern hubs (e.g. ORD, DEN, DTW, MSP).
-   - These external disruptions compound with aircraft turnarounds, increasing the frequency of ground deficits.
-2. **Holiday Capacity Compression:**
-   - High passenger load factors and holiday cargo volumes extend boarding and deplaning times, eroding buffer margins (`SCHEDULED_TURNAROUND_BUFFER`).
-3. **Mathematical Invariance of ROC-AUC:**
-   - Because ROC-AUC measures pairwise ranking ($P(\hat{p}_{\text{positive}} > \hat{p}_{\text{negative}})$), it is independent of class balance. The near-perfect agreement between validation ($0.7932$) and test ($0.7943$) proves that the model's fundamental ranking physics did not degrade.
-4. **Average Precision Mechanics:**
-   - Average Precision evaluates the area under the Precision-Recall curve. As the base rate of positive cases increases, the expected precision for any fixed decision rule rises mechanically. Hence, test AP ($0.7150$) exceeds validation AP ($0.6600$) without indicating model overfitting.
+1. **Plausible Operational Context (Unobserved Telemetry):**
+   - In commercial aviation, December operations frequently involve adverse winter weather fronts, aircraft de-icing queues, and holiday passenger congestion that extend turnaround durations.
+   - However, because direct meteorological radar and terminal congestion logs are not present in the BTS database, these factors must be understood as *plausible operational hypotheses* rather than verified causal drivers of the observed distribution shift.
+2. **Mathematical Invariance of ROC-AUC:**
+   - Because ROC-AUC evaluates pairwise ranking ($P(\hat{p}_{\text{positive}} > \hat{p}_{\text{negative}})$), it is mathematically invariant to monotonic shifts in class prevalence. The close alignment between validation ($0.7932$) and test ($0.7943$) indicates that the model's fundamental ranking discrimination was stable across temporal regimes.
+3. **Average Precision Mechanics:**
+   - Average Precision summarizes the Precision-Recall curve and is sensitive to positive-class prevalence. As the baseline proportion of delays increases from $20.21\%$ to $26.48\%$, the precision across recall thresholds rises mechanically. Hence, the test AP increase ($0.6600 \rightarrow 0.7150$) reflects the higher positive base rate rather than an improvement in model parameters.
 
 ---
 
-## 4. Delay Severity Band Generalization
+## 4. Delay Severity Band Generalization & Formal MAE Decomposition
 
 Comparing regression MAE across actual delay bands between Validation and Test:
 
@@ -96,12 +94,21 @@ Comparing regression MAE across actual delay bands between Validation and Test:
 | **Significant Delay ($60–119$ min)** | 45.03 | **42.70** | -2.33 min | -33.85 min | **-30.78 min** |
 | **Severe Delay ($\ge 120$ min)** | 117.91 | **109.98** | -7.93 min | -99.29 min | **-90.38 min** |
 
-### Critical Finding:
-When examined **within** each specific delay severity band, the model's error was remarkably consistent between Validation and Test:
-- For on-time flights, MAE shifted by only $+0.82$ min ($12.19 \rightarrow 13.01$ min).
-- For moderate delays ($15–59$ min), MAE actually improved by $-0.17$ min ($22.44 \rightarrow 22.27$ min).
-- For significant delays ($60–119$ min), MAE improved by $-2.33$ min ($45.03 \rightarrow 42.70$ min).
-- **The $+2.37$ minute increase in overall test MAE ($17.40 \rightarrow 19.77$ min) is almost entirely an aggregation artifact of population composition.** Because December contained $55\%$ more flights in the high-error severe delay band ($\ge 120$ min), the weighted average error increased even though the model's conditional accuracy within each band remained stable or slightly improved.
+### Formal Mathematical Shift-Share (Oaxaca-Blinder) Decomposition:
+To evaluate whether the $+2.37$ minute increase in aggregate test MAE ($17.40 \rightarrow 19.77$ min) reflects algorithmic deterioration or population composition shift, we decomposed the total change:
+
+$$\Delta \text{MAE} = \sum_{i=1}^5 w_i^{(T)} \cdot \text{MAE}_i^{(T)} - \sum_{i=1}^5 w_i^{(V)} \cdot \text{MAE}_i^{(V)} = +2.3674 \text{ minutes}$$
+
+1. **Counterfactual Test MAE (Test Weights Applied to Validation Within-Band Errors):**
+   $$\text{MAE}_{\text{counterfactual}} = \sum_{i=1}^5 w_i^{(T)} \cdot \text{MAE}_i^{(V)} = \mathbf{19.7316 \text{ minutes}}$$
+   - **Population-Composition Effect:** **$+2.3297$ minutes ($98.41\%$ of the total increase)**.
+   - **Within-Band Model Error Effect:** **$+0.0377$ minutes ($1.59\%$ of the total increase)**.
+2. **Symmetric Shapley Decomposition:**
+   - **Composition Effect:** **$+2.2250$ minutes ($93.99\%$)**.
+   - **Within-Band Model Error Effect:** **$+0.1424$ minutes ($6.01\%$)**.
+
+### Scientific Finding:
+The formal decomposition rigorously confirms that between **$94.0\%$ and $98.4\%$** of the aggregate MAE increase is attributable to population-composition change (specifically, the $55\%$ surge in severe delays $\ge 120$ min which carry larger baseline error magnitudes). When evaluated conditionally within each specific delay band, model accuracy was remarkably stable across autumn and winter data.
 
 ---
 
