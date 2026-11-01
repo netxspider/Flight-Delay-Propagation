@@ -106,8 +106,20 @@ function switchView(viewName) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function openFigureModalByFilename(filename) {
-  const catalog = state.figures.catalog;
+async function openFigureModalByFilename(filename) {
+  let catalog = state.figures.catalog;
+  if (!catalog || catalog.length === 0) {
+    try {
+      const res = await fetch(`${API_BASE}/api/figures`);
+      const data = await res.json();
+      if (data.figures && data.figures.length > 0) {
+        state.figures.catalog = data.figures;
+        catalog = data.figures;
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
   if (!catalog || catalog.length === 0) return;
   const idx = catalog.findIndex(f => f.filename === filename);
   if (idx !== -1) {
