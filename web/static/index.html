@@ -2168,115 +2168,1216 @@
       <!-- SECTION 04: EXPLORATORY ANALYSIS                                          -->
       <!-- ========================================================================= -->
       <section id="eda-view" class="dashboard-page">
-        
-        <div class="section-intro-header">
-          <span class="section-tag">Section 04 &bull; Empirical Propagation Dynamics</span>
-          <h1 class="section-main-title">Exploratory Analysis &amp; Contagion Patterns</h1>
-          <p class="section-main-desc">
-            Empirical discoveries across 6.77 million rotations demonstrating the non-linear buffer deficit cliff, diurnal congestion curves, and rotational airframe fatigue.
-          </p>
-        </div>
+        <article class="manuscript-wrapper" style="max-width: 100%;">
 
-        <!-- 4 Key Empirical Mechanics Cards -->
-        <div class="grid-4" style="margin-bottom: 24px;">
-          <div class="card" style="margin-bottom: 0;">
-            <span class="badge-pill" style="color: var(--accent-rose); margin-bottom: 8px;">Physical Discovery 1</span>
-            <h4 style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px;">The Deficit Cliff</h4>
-            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
-              When remaining cushion drops below 0 minutes (turnaround deficit), the propagation probability surges to <strong>99.50%</strong> with an average delay of 121.9 min.
-            </p>
-          </div>
-
-          <div class="card" style="margin-bottom: 0;">
-            <span class="badge-pill" style="color: var(--accent-cyan); margin-bottom: 8px;">Physical Discovery 2</span>
-            <h4 style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px;">Diurnal Accumulation</h4>
-            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
-              Delays rise monotonically across the day: 12.4% for early morning flights (6:00&ndash;9:00) to <strong>28.9%</strong> for evening departures (18:00&ndash;21:00).
-            </p>
-          </div>
-
-          <div class="card" style="margin-bottom: 0;">
-            <span class="badge-pill" style="color: var(--accent-amber); margin-bottom: 8px;">Physical Discovery 3</span>
-            <h4 style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px;">Rotational Fatigue</h4>
-            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
-              Aircraft flying their 4th or higher segment today exhibit a <strong>2.1x higher propagation probability</strong> than clean morning aircraft due to accumulated schedule friction.
-            </p>
-          </div>
-
-          <div class="card" style="margin-bottom: 0;">
-            <span class="badge-pill" style="color: var(--accent-emerald); margin-bottom: 8px;">Physical Discovery 4</span>
-            <h4 style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px;">Buffer Absorption</h4>
-            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5;">
-              Inbound delays under 15 minutes are absorbed by scheduled ground dwell in <strong>86.4%</strong> of cases without causing downstream delay.
-            </p>
-          </div>
-        </div>
-
-        <!-- Visual Evidence Grid from Phase 5 -->
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Figure 1: Empirical Delay Propagation Relationships</h3>
+          <!-- Page Header (No Section Tag Pill) -->
+          <header class="manuscript-header" style="padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 24px;">
+            <h1 style="font-size: 26px; font-weight: 800; color: #fff; line-height: 1.35; margin-bottom: 6px; letter-spacing: -0.02em;">
+              Exploratory Data Analysis &amp; Delay Contagion Patterns
+            </h1>
+            <div style="font-size: 13.5px; color: var(--accent-cyan); font-weight: 500;">
+              Empirical discoveries across 6.77 million rotations demonstrating the non-linear buffer deficit cliff, diurnal congestion curves, and rotational airframe fatigue
             </div>
-            <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig02_delay_propagation_relationships.png')">
-              <img src="figures/fig02_delay_propagation_relationships.png" alt="Delay Propagation Relationships">
-              <div class="figure-card-overlay">
-                <button class="figure-overlay-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> View Full Resolution</button>
+          </header>
+
+          <!-- 6 Headline KPI Cards in a Single Flexible Row -->
+          <div style="display: flex; flex-direction: row; gap: 10px; width: 100%; margin-bottom: 12px; overflow-x: auto;">
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Valid Rotations</div>
+              <div class="stat-value" style="font-size: 20px;">6,768,487</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">100% BTS census</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Base Delay Rate</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-cyan);">22.02%</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">1,490,586 delayed legs</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Propagation Rate</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-rose);">50.19%</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">P(Next Del | Prev Del)</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Relative Risk (RR)</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-rose);">3.59x</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">95% CI: [3.58, 3.60]</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Odds Ratio (OR)</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-rose);">6.20x</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">95% CI: [6.18, 6.23]</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Deficit Delay Rate</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-rose);">99.50%</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Mean +121.86 min</div>
+            </div>
+          </div>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION I: RESEARCH QUESTION, ANALYTICAL OBJECTIVES & CORE FINDINGS -->
+          <section class="manuscript-section" id="eda-overview">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section I
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section I: Research Questions, Analytical Objectives &amp; Core Findings</h2>
+
+            <div class="manuscript-rq-box">
+              <div class="manuscript-rq-title">Primary Research Question</div>
+              <div class="manuscript-rq-text">
+                &ldquo;To what extent do delays from preceding flight operations propagate to subsequent flights operated by the same physical aircraft, and how do scheduled turnaround buffers, diurnal timing, and multi-leg operational fatigue modulate this propagation?&rdquo;
               </div>
             </div>
-            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 10px; line-height: 1.5;">
-              <strong>Figure 1:</strong> Downstream arrival delay as a nonlinear function of predecessor arrival delay. Notice the steep propagation slope approaching 1.0 once buffer cushion is exhausted.
-            </p>
-          </div>
 
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Figure 2: Turnaround Buffer Cushion Dynamics</h3>
-            </div>
-            <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig03_turnaround_buffer_dynamics.png')">
-              <img src="figures/fig03_turnaround_buffer_dynamics.png" alt="Turnaround Buffer Dynamics">
-              <div class="figure-card-overlay">
-                <button class="figure-overlay-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> View Full Resolution</button>
+            <p class="manuscript-p">
+              Exploratory Data Analysis across the complete 2025 census of <strong>6,768,487 validated consecutive flight pairs</strong> demonstrates that delay propagation is not a random operational artifact, but a highly structured, non-linear physical process. Eight key empirical discoveries define this phenomenon:
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin: 20px 0;">
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 14px;">
+                <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent-rose); font-weight: 700; margin-bottom: 4px;">1. CORE PROPAGATION HYPOTHESIS</div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 4px;">Tripled Relative Risk (RR = 3.59x, OR = 6.20x)</div>
+                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                  An incoming delay jumps downstream delay probability from 13.97% to 50.19%, more than tripling outbound risk.
+                </p>
+              </div>
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 14px;">
+                <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">2. BUFFER AS SHOCK ABSORBER</div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 4px;">Non-Linear Turnaround Cushion</div>
+                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                  Delay propagation falls monotonically from 84.01% in tight turns (&lt;45m) to 19.24% in extended turns (&ge;180m).
+                </p>
+              </div>
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 14px;">
+                <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent-rose); font-weight: 700; margin-bottom: 4px;">3. THE DEFICIT CLIFF</div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 4px;">99.50% Deficit Propagation Rate</div>
+                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                  When inbound delay exceeds scheduled buffer (5.66% of pairs), subsequent delay is nearly certain (mean +121.9 min).
+                </p>
+              </div>
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 14px;">
+                <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 700; margin-bottom: 4px;">4. DIURNAL SNOWBALL ESCALATION</div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 4px;">11.14% (05:00) to 71.23% (17:00)</div>
+                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                  Overnight stays absorb early dawn lateness, but schedule friction compounds diurnally to peak at 17:00.
+                </p>
+              </div>
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 14px;">
+                <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">5. CONSECUTIVE DELAY STREAKS</div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 4px;">14.26% &rarr; 76.94% Compound Rate</div>
+                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                  Airframes with 3+ same-day prior delays suffer 76.94% delay probability with mean delay of +69.63 minutes.
+                </p>
+              </div>
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 14px;">
+                <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent-rose); font-weight: 700; margin-bottom: 4px;">6. CARRIER DEFICIT CONVERGENCE</div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 4px;">&gt;98.4% Deficit Delay Across All Carriers</div>
+                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                  Physical buffer depletion overwhelms brand operational superiority, equalizing all airlines under deficit.
+                </p>
+              </div>
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 14px;">
+                <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 700; margin-bottom: 4px;">7. HUB CONGESTION SENSITIVITY</div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 4px;">Slot-Constrained Hub Vulnerability</div>
+                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                  Congested mega-hubs (ORD, DEN, DFW, ATL) propagate delays at &gt;50&ndash;55%, whereas SLC absorbs at 43.17%.
+                </p>
+              </div>
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 14px;">
+                <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700; margin-bottom: 4px;">8. NON-LINEAR RANK DOMINANCE</div>
+                <div style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 4px;">Spearman &rho; = -0.339 vs Pearson r = -0.038</div>
+                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                  Sharp threshold behavior at zero buffer dictates the necessity of non-linear model architectures.
+                </p>
               </div>
             </div>
-            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 10px; line-height: 1.5;">
-              <strong>Figure 2:</strong> Scheduled turnaround buffer distribution and downstream delay rate as a function of remaining turnaround cushion, revealing the 99.5% deficit cliff.
-            </p>
-          </div>
-        </div>
+          </section>
 
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Figure 3: Diurnal and Day-of-Week Congestion Patterns</h3>
+          <hr class="manuscript-divider">
+
+          <!-- SECTION II: TARGET VARIABLE DISTRIBUTIONS & EVALUATION METRICS -->
+          <section class="manuscript-section" id="eda-targets">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section II
+              </span>
             </div>
-            <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig04_temporal_delay_patterns.png')">
-              <img src="figures/fig04_temporal_delay_patterns.png" alt="Temporal Delay Patterns">
-              <div class="figure-card-overlay">
-                <button class="figure-overlay-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> View Full Resolution</button>
+
+            <h2 class="manuscript-sec-title">Section II: Target Variable Distributions &amp; Evaluation Metrics</h2>
+
+            <p class="manuscript-p">
+              The research models delay propagation through two complementary target variables: binary classification (<code>NEXT_ARR_DEL15</code>) and continuous delay regression (<code>NEXT_ARR_DELAY</code>). Summary statistics across all <strong>6,768,487 valid rotation pairs</strong> establish the empirical baseline:
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Distributional Parameter</th>
+                    <th style="text-align: right;">Classification Target (NEXT_ARR_DEL15)</th>
+                    <th style="text-align: right;">Regression Target (NEXT_ARR_DELAY)</th>
+                    <th>Analytical Meaning &amp; Modeling Implications</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Total Valid Observations (N)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">6,768,487</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">6,768,487</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Complete 2025 commercial aircraft rotation census</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Early Arrivals (&lt; 0 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">&mdash;</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">4,125,664 (60.95%)</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Airline block-time schedule padding drives majority early arrivals</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Exact Scheduled Arrival (0 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">&mdash;</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">117,010 (1.73%)</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Exact gate touchdown coincidence</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Minor Lateness (1&ndash;14 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">&mdash;</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,035,227 (15.29%)</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Classified as On-Time under FAA Part 234 standards</td>
+                  </tr>
+                  <tr style="background: rgba(244, 63, 94, 0.06);">
+                    <td><strong>Delayed Operations (&ge; 15 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">1,490,586 (22.02%)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">1,490,586 (22.02%)</td>
+                    <td style="color: var(--accent-rose); font-size: 12.5px; font-weight: 600;">Official delayed flight cohort (Base Rate = 22.02%)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>On-Time Operations (&lt; 15 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">5,277,901 (77.98%)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">&mdash;</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Majority class: 3.54 : 1 imbalance ratio</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Central Tendency</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">Base Rate: 0.2202</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">Mean: +7.78m | Median: -6.00m</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Extreme divergence: median flight arrives 6 min early despite +7.78m mean</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Dispersion &amp; Interquartile Spread</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">Std Dev: 0.4144</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">Std: 57.30m | IQR: [-15m, +11m]</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Middle 50% of flights span 26.0 minutes</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Extreme Tail Quantiles</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">&mdash;</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">P90: +47m | P95: +87m | P99: +214m</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Severe disruption tail extends up to +4,336 minutes</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Metric Selection Rationale -->
+            <p class="manuscript-p" style="margin-top: 16px;">
+              <strong>Metric Selection Rationale:</strong> The continuous delay distribution exhibits severe right-skew: over 60% of operations arrive early (median = -6.0 min), while multi-hour disruptions create an extreme positive tail (P99 = +214.0 min, max = +4,336.0 min). Quadratic loss functions such as Mean Squared Error (MSE / RMSE) are disproportionately distorted by these rare extreme values. Consequently, <strong>Mean Absolute Error (MAE)</strong> and <strong>Median Absolute Error (MedAE)</strong> are mandatory primary metrics for regression evaluation. For classification, the 3.54:1 class imbalance renders raw accuracy deceptive; models must be benchmarked on <strong>Precision-Recall AUC (PR-AUC / Average Precision)</strong>, <strong>ROC-AUC</strong>, and <strong>F1-score</strong>.
+            </p>
+
+            <!-- Figure 1 Embedded Publication Card -->
+            <div class="paper-figure-card">
+              <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('fig01_target_distributions.png')">
+                <img src="figures/fig01_target_distributions.png" alt="Target Variable Distributions">
+                <span class="paper-fig-zoom-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                </span>
+              </div>
+              <div class="paper-fig-caption">
+                <strong>Figure 1: Target Variable Distributions &amp; Imbalance Structure (Full Year 2025, N = 6,768,487).</strong>
+                <em>Panel (A)</em> Binary classification class imbalance showing 22.02% base delay rate (3.54:1 on-time ratio); <em>Panel (B)</em> Continuous arrival delay probability density with median at -6.0 min and extreme heavy right tail; <em>Panel (C)</em> Boxplot displaying interquartile spread [-15 min, +11 min]; <em>Panel (D)</em> Arrival sign breakdown highlighting that 60.95% of flights arrive early due to schedule block-time padding.
               </div>
             </div>
-            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 10px; line-height: 1.5;">
-              <strong>Figure 3:</strong> Mean delay minutes and delay probability stratified across scheduled departure hours (6:00 to 23:00) and days of the week.
-            </p>
-          </div>
+          </section>
 
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Figure 4: Airframe Rotational Fatigue Progression</h3>
+          <hr class="manuscript-divider">
+
+          <!-- SECTION III: CONSECUTIVE DELAY PROPAGATION & EPIDEMIOLOGICAL RISK -->
+          <section class="manuscript-section" id="eda-propagation">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section III
+              </span>
             </div>
-            <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig06_aircraft_level_patterns.png')">
-              <img src="figures/fig06_aircraft_level_patterns.png" alt="Aircraft Rotational Patterns">
-              <div class="figure-card-overlay">
-                <button class="figure-overlay-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> View Full Resolution</button>
+
+            <h2 class="manuscript-sec-title">Section III: Delay Propagation Dynamics &amp; Epidemiological Risk Formulations</h2>
+
+            <p class="manuscript-p">
+              To formalize delay contagion, we construct a 2&times;2 contingency transition matrix across all 6.77 million pairs, evaluating outbound delay probabilities conditioned on inbound airframe status:
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Preceding Flight State (f<sub>prev</sub>)</th>
+                    <th style="text-align: right;">Inbound Denominator</th>
+                    <th style="text-align: right;">Outbound On-Time (&lt; 15m)</th>
+                    <th style="text-align: right;">Outbound Delayed (&ge; 15m)</th>
+                    <th style="text-align: right;">Subsequent Delay Probability</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Preceding On-Time (PREV_DEL15 = 0)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">5,263,647</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">4,528,318 (86.03%)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">735,329 (13.97%)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">p<sub>0</sub> = 13.9700%</td>
+                  </tr>
+                  <tr style="background: rgba(244, 63, 94, 0.06);">
+                    <td><strong>Preceding Delayed (PREV_DEL15 = 1)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">1,504,840</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">749,583 (49.81%)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">755,257 (50.19%)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">p<sub>1</sub> = 50.1885%</td>
+                  </tr>
+                  <tr style="border-top: 2px solid var(--border-subtle); background: rgba(255,255,255,0.02);">
+                    <td><strong>Unconditional Fleet Baseline</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">6,768,487</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">5,277,901 (77.98%)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">1,490,586 (22.02%)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">p<sub>base</sub> = 22.0224%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Mathematical Risk Metrics -->
+            <div class="manuscript-formula">
+              <span>Relative Risk: RR = p<sub>1</sub> / p<sub>0</sub> = 0.501885 / 0.139700 = 3.5926 &nbsp;[95% CI: 3.5831, 3.6021]</span>
+              <span class="manuscript-formula-num">(1)</span>
+            </div>
+
+            <div class="manuscript-formula">
+              <span>Odds Ratio: OR = (n<sub>11</sub> &times; n<sub>00</sub>) / (n<sub>10</sub> &times; n<sub>01</sub>) = 6.2048 &nbsp;[95% CI: 6.1798, 6.2299]</span>
+              <span class="manuscript-formula-num">(2)</span>
+            </div>
+
+            <p class="manuscript-p">
+              The relative risk demonstrates that an inbound delay more than triples the probability of outbound delay (3.59&times;), while the odds ratio of 6.20 confirms a powerful statistical association between consecutive operations.
+            </p>
+
+            <h3 class="manuscript-subsec-title">Granular Predecessor Delay Bins Progression</h3>
+
+            <p class="manuscript-p">
+              Stratifying incoming arrival delays into eight operational bins reveals how downstream delay severity scales monotonically with predecessor lateness:
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Preceding Arrival Delay Bin</th>
+                    <th style="text-align: right;">Pair Count</th>
+                    <th style="text-align: right;">Outbound Delayed</th>
+                    <th style="text-align: right;">Subsequent Delay Rate</th>
+                    <th style="text-align: right;">Mean Next Delay</th>
+                    <th style="text-align: right;">Median Next Delay</th>
+                    <th style="text-align: right;">P90 Next Delay</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>1. Early (&lt; 0 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">4,112,539</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">511,189</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">12.43%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">-2.05 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">-9.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+20.0 min</td>
+                  </tr>
+                  <tr>
+                    <td><strong>2. On-Time (0&ndash;14 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,151,108</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">224,140</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">19.47%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+4.82 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">-4.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+31.0 min</td>
+                  </tr>
+                  <tr>
+                    <td><strong>3. Moderate (15&ndash;29 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">504,631</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">174,611</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">34.60%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+14.21 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+5.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+46.0 min</td>
+                  </tr>
+                  <tr>
+                    <td><strong>4. Significant (30&ndash;44 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">276,984</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">140,826</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">50.84%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+23.29 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+15.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+61.0 min</td>
+                  </tr>
+                  <tr>
+                    <td><strong>5. Heavy (45&ndash;59 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">174,340</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">103,514</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">59.38%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+31.95 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+26.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+76.0 min</td>
+                  </tr>
+                  <tr>
+                    <td><strong>6. Severe (60&ndash;89 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">208,414</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">129,564</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">62.17%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+42.85 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+39.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+96.0 min</td>
+                  </tr>
+                  <tr>
+                    <td><strong>7. Extreme (90&ndash;119 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">116,398</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">72,581</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">62.36%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+57.26 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+57.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+124.0 min</td>
+                  </tr>
+                  <tr style="background: rgba(244, 63, 94, 0.06);">
+                    <td><strong>8. Catastrophic (&ge; 120 min)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">224,073</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">134,161</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">59.88%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">+92.56 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">+55.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">+229.0 min</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Figure 2 Embedded Publication Card -->
+            <div class="paper-figure-card">
+              <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('fig02_delay_propagation_relationships.png')">
+                <img src="figures/fig02_delay_propagation_relationships.png" alt="Delay Propagation Relationships">
+                <span class="paper-fig-zoom-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                </span>
+              </div>
+              <div class="paper-fig-caption">
+                <strong>Figure 2: Empirical Delay Propagation Dynamics &amp; Risk Transitions.</strong>
+                <em>Panel (A)</em> Joint delay hexbin density comparing incoming arrival delay against downstream arrival delay with the identity line y = x; <em>Panel (B)</em> Monotonic delay propagation probability scaling across 8 predecessor delay bins (12.4% for early arrivals to 62.4% for extreme delays); <em>Panel (C)</em> Downstream arrival delay magnitude trajectory; <em>Panel (D)</em> 2&times;2 contingency matrix establishing relative risk RR = 3.59x and odds ratio OR = 6.20x.
               </div>
             </div>
-            <p style="font-size: 12px; color: var(--text-secondary); margin-top: 10px; line-height: 1.5;">
-              <strong>Figure 4:</strong> Propagation probability indexed by daily flight sequence number (legs 1 through 8+) and prior accumulated delays on that specific physical aircraft tail.
-            </p>
-          </div>
-        </div>
+          </section>
 
+          <hr class="manuscript-divider">
+
+          <!-- SECTION IV: GROUND TURNAROUND BUFFER DYNAMICS & THE DEFICIT CLIFF -->
+          <section class="manuscript-section" id="eda-buffer">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section IV
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section IV: Ground Turnaround Buffer Dynamics &amp; The Deficit Cliff</h2>
+
+            <p class="manuscript-p">
+              The primary physical mechanism modulating delay propagation is the scheduled turnaround buffer. Stratifying all 6.77 million pairs into seven scheduled ground time bins demonstrates how buffer duration acts as an operational shock absorber:
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Scheduled Buffer Bin</th>
+                    <th style="text-align: right;">Total Pairs</th>
+                    <th style="text-align: right;">Inbound Delayed Denom</th>
+                    <th style="text-align: right;">Outbound Delayed Num</th>
+                    <th style="text-align: right;">Propagation Rate (p<sub>1</sub>)</th>
+                    <th style="text-align: right;">Inbound On-Time Denom</th>
+                    <th style="text-align: right;">Outbound Delayed Num</th>
+                    <th style="text-align: right;">Baseline Rate (p<sub>0</sub>)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background: rgba(244, 63, 94, 0.06);">
+                    <td><strong>1. Highly Constrained (&lt; 45m)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,215,531</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">229,986</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">193,201</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">84.01%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">985,545</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">197,997</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">20.09%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>2. Short Turn (45&ndash;59m)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,611,459</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">300,064</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">223,956</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">74.64%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,311,395</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">154,121</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">11.75%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>3. Standard Turn (60&ndash;74m)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,204,319</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">214,754</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">138,479</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">64.48%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">989,565</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">124,927</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">12.62%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>4. Generous Turn (75&ndash;89m)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">444,824</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">83,386</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">42,946</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">51.50%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">361,438</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">45,068</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">12.47%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>5. Extended Turn (90&ndash;119m)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">312,241</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">68,635</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">29,402</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">42.84%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">243,606</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">30,178</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">12.39%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>6. Layover (120&ndash;179m)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">196,609</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">55,503</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">20,956</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">37.76%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">141,106</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">18,338</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">13.00%</td>
+                  </tr>
+                  <tr style="background: rgba(16, 185, 129, 0.06);">
+                    <td><strong>7. Long / Overnight (&ge; 180m)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,783,504</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">552,512</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">106,317</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">19.24%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,230,992</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">164,700</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">13.38%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Figure 3 Embedded Publication Card -->
+            <div class="paper-figure-card">
+              <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('fig03_turnaround_buffer_dynamics.png')">
+                <img src="figures/fig03_turnaround_buffer_dynamics.png" alt="Turnaround Buffer Dynamics">
+                <span class="paper-fig-zoom-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                </span>
+              </div>
+              <div class="paper-fig-caption">
+                <strong>Figure 3: Scheduled Turnaround Buffer &amp; Remaining Cushion Dynamics.</strong>
+                <em>Panel (A)</em> Scheduled turnaround buffer distribution across 6.77M pairs showing major peaks at 45m and 60m; <em>Panel (B)</em> Kernel density estimate of remaining turnaround cushion, revealing the cliff at zero minutes; <em>Panel (C)</em> Buffer shielding curve showing delay propagation collapse as scheduled buffer increases; <em>Panel (D)</em> Deficit vs. non-deficit contrast demonstrating the 99.50% delay cliff.
+              </div>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION V: TEMPORAL, DIURNAL & MULTI-LEG ROTATIONAL FATIGUE -->
+          <section class="manuscript-section" id="eda-temporal">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section V
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section V: Diurnal Snowball Escalation &amp; Multi-Leg Rotational Fatigue</h2>
+
+            <p class="manuscript-p">
+              Delay propagation varies drastically across the operating day. In early dawn departures (05:00), incoming delays propagate at only <strong>11.14%</strong>, as long overnight ground stays absorb previous day disruptions. By 10:00, propagation surges to <strong>51.76%</strong>, peaking at <strong>71.23% at 17:00</strong> during peak afternoon departure banks:
+            </p>
+
+            <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+              <table class="data-table">
+                <thead style="position: sticky; top: 0; background: var(--bg-card); z-index: 2;">
+                  <tr>
+                    <th>Scheduled Dep Hour</th>
+                    <th style="text-align: right;">Total Pairs</th>
+                    <th style="text-align: right;">Prev Delayed Denom</th>
+                    <th style="text-align: right;">Next Delayed Num</th>
+                    <th style="text-align: right;">P(Next Del | Prev Del)</th>
+                    <th style="text-align: right;">P(Next Del | Prev On-Time)</th>
+                    <th style="text-align: right;">Unconditional Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>05:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">191,900</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">61,764</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">6,878</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">11.14%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">7.33%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">8.56%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>06:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">465,444</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">144,272</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">18,423</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">12.77%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">8.41%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">9.76%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>07:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">491,319</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">131,707</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">22,480</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">17.07%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">10.76%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">12.45%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>08:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">469,159</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">92,241</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">22,837</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">24.76%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">11.55%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">14.15%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>09:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">384,422</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">57,315</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">22,416</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">39.11%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">11.37%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">15.51%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>10:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">422,262</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">58,381</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">30,218</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">51.76%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">11.35%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">16.94%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>11:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">426,967</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">62,396</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">36,242</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">58.08%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">12.43%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">19.10%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>12:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">403,737</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">62,125</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">39,816</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">64.09%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">12.98%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">20.85%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>13:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">406,341</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">66,725</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">43,430</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">65.09%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">14.08%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">22.46%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>14:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">393,071</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">71,864</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">48,981</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">68.16%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">15.95%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">25.49%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>15:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">390,053</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">77,562</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">53,651</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">69.17%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">17.34%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">27.65%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>16:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">389,527</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">83,631</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">58,512</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">69.96%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">18.24%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">29.35%</td>
+                  </tr>
+                  <tr style="background: rgba(244, 63, 94, 0.08);">
+                    <td><strong>17:00 (Peak Window)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700;">424,337</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">100,823</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">71,813</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">71.23%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">18.37%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">30.93%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>18:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">400,863</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">104,351</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">72,955</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">69.91%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">17.97%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">31.50%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>19:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">365,256</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">106,608</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">72,933</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">68.41%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">17.42%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">32.31%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>20:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">297,016</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">88,550</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">57,847</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">65.33%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">17.16%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">31.52%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>21:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">224,819</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">67,522</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">40,583</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">60.10%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">15.37%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">28.81%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>22:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">150,551</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">46,226</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">26,965</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">58.33%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">15.50%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">28.65%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>23:00</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">54,830</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">15,805</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">6,520</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">41.25%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">11.17%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">19.84%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="manuscript-subsec-title">Consecutive Delay Compounding &amp; Rotational Fatigue</h3>
+
+            <p class="manuscript-p">
+              Same-day airframe delay momentum exhibits steep cumulative risk. Once an airframe incurs consecutive disruptions, recovery becomes statistically improbable without schedule intervention:
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Prior Consecutive Delays Today</th>
+                    <th style="text-align: right;">Total Rotation Pairs</th>
+                    <th style="text-align: right;">Outbound Delayed</th>
+                    <th style="text-align: right;">Subsequent Delay Rate</th>
+                    <th style="text-align: right;">Mean Next Delay</th>
+                    <th style="text-align: right;">Median Next Delay</th>
+                    <th style="text-align: right;">P90 Next Delay</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>0 prior delays</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">5,768,036</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">822,567</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">14.2608%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">-0.13 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">-8.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+24.0 min</td>
+                  </tr>
+                  <tr>
+                    <td><strong>1 prior delay</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">612,913</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">383,309</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">62.5389%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+47.44 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+25.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+123.0 min</td>
+                  </tr>
+                  <tr>
+                    <td><strong>2 prior delays</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">244,011</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">174,285</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose); font-weight: 700;">71.4251%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+58.61 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+36.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+141.0 min</td>
+                  </tr>
+                  <tr style="background: rgba(244, 63, 94, 0.06);">
+                    <td><strong>3+ prior delays</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">143,527</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">110,425</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">76.9367%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">+69.63 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">+44.0 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">+156.0 min</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Figure 4 & Figure 5 Embedded Publication Cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 16px; margin: 20px 0;">
+              <div class="paper-figure-card" style="margin: 0;">
+                <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('fig04_temporal_delay_patterns.png')">
+                  <img src="figures/fig04_temporal_delay_patterns.png" alt="Temporal Delay Patterns">
+                  <span class="paper-fig-zoom-pill">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                  </span>
+                </div>
+                <div class="paper-fig-caption">
+                  <strong>Figure 4: Temporal, Diurnal, and Day-of-Week Contagion Dynamics.</strong>
+                  <em>Panel (A)</em> Monthly delay rate trajectory across 2025; <em>Panel (B)</em> Day-of-week propagation rates showing weekday peak on Thursday and Friday; <em>Panel (C)</em> Diurnal hourly progression from 05:00 (11.1%) to 17:00 (71.2%); <em>Panel (D)</em> Propagation penalty gap between delayed and on-time predecessors.
+                </div>
+              </div>
+
+              <div class="paper-figure-card" style="margin: 0;">
+                <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('fig06_aircraft_level_patterns.png')">
+                  <img src="figures/fig06_aircraft_level_patterns.png" alt="Aircraft Level Patterns">
+                  <span class="paper-fig-zoom-pill">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                  </span>
+                </div>
+                <div class="paper-fig-caption">
+                  <strong>Figure 5: Airframe Operational Volume, Fleet Gini Inequality, and Multi-Leg Fatigue Progression.</strong>
+                  <em>Panel (A)</em> Annual flight rotations distribution across 6,124 tails; <em>Panel (B)</em> Lorenz curve of positive delay minutes (G = 0.2890); <em>Panel (C)</em> Multi-leg consecutive delay streak progression; <em>Panel (D)</em> Cumulative same-day delay response curve.
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION VI: OPERATING CARRIER & HUB AIRPORT HETEROGENEITY -->
+          <section class="manuscript-section" id="eda-heterogeneity">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section VI
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section VI: Operating Carrier &amp; Hub Airport Heterogeneity</h2>
+
+            <p class="manuscript-p">
+              Operational network topologies differ substantially across airlines. However, while baseline delay rates vary from 17.14% (Hawaiian) to 27.69% (Frontier), <strong>all carriers suffer &gt;98.4% delay rates under turnaround deficits</strong>:
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Operating Carrier</th>
+                    <th style="text-align: right;">Total Rotation Pairs</th>
+                    <th style="text-align: right;">Conditional Propagation (p<sub>1</sub>)</th>
+                    <th style="text-align: right;">Baseline Delay Rate (p<sub>0</sub>)</th>
+                    <th style="text-align: right;">Overall Delay Rate</th>
+                    <th style="text-align: right;">Deficit Delay Rate</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>WN (Southwest Airlines)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,360,344</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">54.84%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">12.00%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">21.16%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">99.74%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>DL (Delta Air Lines)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,004,257</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">46.91%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">12.86%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">19.58%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">99.92%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>AA (American Airlines)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">938,063</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">47.25%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">17.97%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">25.49%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">99.82%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>OO (SkyWest Airlines)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">813,971</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">53.50%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">11.59%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">20.22%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">98.91%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>UA (United Airlines)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">761,401</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">40.23%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">15.93%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">21.16%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">99.87%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>YX (Republic Airways)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">324,042</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">50.97%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">13.23%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">21.27%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">98.47%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>MQ (Envoy Air)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">288,809</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">51.52%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">12.59%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">20.76%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">98.85%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>AS (Alaska Airlines)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">237,026</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">46.49%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">15.94%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">22.99%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">99.88%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>OH (PSA Airlines)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">231,833</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">59.13%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">15.11%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">27.11%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">98.85%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>B6 (JetBlue Airways)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">221,472</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">48.95%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">17.68%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">25.83%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">99.82%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>F9 (Frontier Airlines)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">191,381</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">57.61%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">16.18%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">27.69%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">99.92%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>NK (Spirit Airlines)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">189,081</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">50.12%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">13.31%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">21.12%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">99.91%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>G4 (Allegiant Air)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">127,874</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">59.58%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">13.17%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">24.63%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">99.98%</td>
+                  </tr>
+                  <tr>
+                    <td><strong>HA (Hawaiian Airlines)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">78,933</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">47.86%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">10.76%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">17.14%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">99.95%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Figure 6 Embedded Publication Card -->
+            <div class="paper-figure-card">
+              <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('fig05_carrier_airport_heterogeneity.png')">
+                <img src="figures/fig05_carrier_airport_heterogeneity.png" alt="Carrier and Airport Heterogeneity">
+                <span class="paper-fig-zoom-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                </span>
+              </div>
+              <div class="paper-fig-caption">
+                <strong>Figure 6: Operating Carrier Sensitivity Profiles &amp; Turnaround Hub Heterogeneity.</strong>
+                <em>Panel (A)</em> Carrier propagation sensitivity comparing unconditional baseline delay rate against propagation rate under delayed predecessor; <em>Panel (B)</em> Deficit delay rate convergence showing &gt;98.4% delay rates across all airlines under buffer deficit; <em>Panel (C)</em> Top 15 turnaround hub airports ranked by propagation rate; <em>Panel (D)</em> US geographic distribution of commercial turnaround airports.
+              </div>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION VII: FLEET GINI ANALYSIS & FEATURE CORRELATIONS -->
+          <section class="manuscript-section" id="eda-correlations">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section VII
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section VII: Fleet Delay Burden Gini Analysis &amp; Feature Correlations</h2>
+
+            <p class="manuscript-p">
+              To evaluate fleet-level concentration, the Gini coefficient was calculated on non-negative positive delay minutes across all <strong>6,124 unique commercial aircraft</strong> operating the 6,768,487 outbound legs. The resulting Gini coefficient of <strong>G = 0.2890</strong> demonstrates moderate concentration of total delay burden:
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Fleet Concentration Parameter</th>
+                    <th style="text-align: right;">Empirical Value</th>
+                    <th>Methodological Scope &amp; Population Definition</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Active Commercial Airframes Evaluated</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">6,124 unique tails</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Aircraft with completed target flight legs in rotation-pair callset</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Total Positive Delay Minutes Accumulated</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">112,174,297 min</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">&sum; max(0, NEXT_ARR_DELAY) across 6,768,487 evaluated outbound legs</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Mean / Median Positive Delay per Airframe</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">18,317m / 17,458m</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Approximately 305.3 / 291.0 positive delay hours per aircraft per year</td>
+                  </tr>
+                  <tr style="background: rgba(56, 189, 248, 0.06);">
+                    <td><strong>Fleet Gini Coefficient (G)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan); font-size: 14px;">0.2890</td>
+                    <td style="color: var(--accent-cyan); font-size: 12.5px; font-weight: 600;">Moderate fleet inequality in gross delay accumulation</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Top 10% Fleet Share</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">20.08%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">22,525,607 positive delay minutes</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Top 20% Fleet Share</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">34.67%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">38,891,895 positive delay minutes</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Top 50% Fleet Share</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">70.00%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">78,522,008 positive delay minutes</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="manuscript-callout alert" style="margin-top: 18px;">
+              <strong style="color: #fff; display: block; margin-bottom: 6px; font-size: 14.5px;">
+                Critical Methodological Limitation: Unnormalized Volume vs. Mechanical Reliability
+              </strong>
+              <p style="margin: 0; font-size: 13.5px; line-height: 1.65; color: #cbd5e1;">
+                This Gini calculation measures inequality in <strong>unnormalized gross delay volume</strong> (&sum; max(0, delay)). Because it is not normalized by departure counts or scheduled block hours, aircraft flying high rotation volumes (&gt;1,400 legs/year) naturally accumulate more total delay minutes than low-volume aircraft. Consequently, this metric <strong>does not prove that delays are concentrated among persistently defective airframes</strong>. Assessing mechanical reliability requires normalized metrics and operational route controls.
+              </p>
+            </div>
+
+            <h3 class="manuscript-subsec-title">Predictor Feature Correlations: Linear vs. Non-Linear Rank Orders</h3>
+
+            <p class="manuscript-p">
+              Comparing Pearson linear correlations (<em>r</em>) with Spearman rank correlations (<em>&rho;</em>) illuminates critical non-linear features that standard linear models fail to capture:
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Candidate Predictor Feature</th>
+                    <th>Feature Taxonomy Group</th>
+                    <th style="text-align: right;">Pearson Linear (r)</th>
+                    <th style="text-align: right;">Spearman Rank (&rho;)</th>
+                    <th>Predictive Role &amp; Non-Linear Dynamics</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background: rgba(56, 189, 248, 0.06);">
+                    <td><code>PREV_AIRCRAFT_CONSECUTIVE_DEL15</code></td>
+                    <td>Group D (Aircraft History)</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.3195</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">+0.4085</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Strongest monotonic rank predictor; captures same-day delay streaks</td>
+                  </tr>
+                  <tr style="background: rgba(244, 63, 94, 0.06);">
+                    <td><code>IS_TURNAROUND_DEFICIT</code></td>
+                    <td>Group C (Turnaround Cushion)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">+0.4909</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.3779</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Strongest linear predictor; captures physical buffer exhaustion</td>
+                  </tr>
+                  <tr style="background: rgba(16, 185, 129, 0.06);">
+                    <td><code>ESTIMATED_REMAINING_TURNAROUND_MINUTES</code></td>
+                    <td>Group C (Turnaround Cushion)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">-0.0377</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">-0.3387</td>
+                    <td style="color: var(--accent-emerald); font-size: 12.5px; font-weight: 600;">Monotonic rank dominance: 9.0x stronger in Spearman than Pearson</td>
+                  </tr>
+                  <tr>
+                    <td><code>PREV_ARR_DEL15</code></td>
+                    <td>Group B (Preceding Leg)</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.2735</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.3252</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Inbound binary delay status (Relative Risk RR = 3.59x)</td>
+                  </tr>
+                  <tr>
+                    <td><code>PREV_ARR_DELAY</code></td>
+                    <td>Group B (Preceding Leg)</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.3244</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.3228</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Raw incoming delay magnitude in minutes</td>
+                  </tr>
+                  <tr>
+                    <td><code>PREV_AIRCRAFT_CUMULATIVE_ARR_DELAY_TODAY</code></td>
+                    <td>Group D (Aircraft History)</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.3815</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.2895</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Cumulative delay minutes accumulated earlier today on same airframe</td>
+                  </tr>
+                  <tr>
+                    <td><code>PREV_DEP_DELAY</code></td>
+                    <td>Group B (Preceding Leg)</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.2969</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.2827</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Preceding departure delay (collinear with PREV_ARR_DELAY)</td>
+                  </tr>
+                  <tr>
+                    <td><code>NEXT_CRS_DEP_HOUR</code></td>
+                    <td>Group A (Scheduled Target)</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.1175</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+0.1778</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Diurnal scheduled departure hour representing system congestion</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Figure 7 Embedded Publication Card -->
+            <div class="paper-figure-card">
+              <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('fig07_feature_correlations.png')">
+                <img src="figures/fig07_feature_correlations.png" alt="Feature Correlation Matrices">
+                <span class="paper-fig-zoom-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                </span>
+              </div>
+              <div class="paper-fig-caption">
+                <strong>Figure 7: Predictor Feature Correlation Structures &amp; Non-Linear Monotonic Rank Dominance.</strong>
+                <em>Panel (A)</em> Pearson linear correlation matrix (r) evaluating pairwise linear associations across all continuous candidate predictors; <em>Panel (B)</em> Spearman rank correlation matrix (&rho;) revealing that continuous buffer margin exhibits a 9.0x stronger rank-order correlation (&rho; = -0.3387) than linear correlation (r = -0.0377), proving non-linear threshold dynamics.
+              </div>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION VIII: SYLLABUS-ALIGNED MODEL RECOMMENDATIONS -->
+          <section class="manuscript-section" id="eda-models">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section VIII
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section VIII: Syllabus-Aligned Model Recommendations &amp; Phase 5/6 Handoff</h2>
+
+            <p class="manuscript-p">
+              In accordance with project syllabus constraints, out-of-syllabus models (such as Support Vector Regression and Gradient Boosted Trees including XGBoost, LightGBM, and CatBoost) have been <strong>strictly excluded</strong>. The approved candidate model families for comparative benchmarking are:
+            </p>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; margin: 20px 0;">
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 18px;">
+                <h4 style="font-size: 14px; font-weight: 700; color: var(--accent-cyan); margin-bottom: 8px;">Permitted Classification Models (NEXT_ARR_DEL15)</h4>
+                <ul style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.7; padding-left: 18px; margin: 0;">
+                  <li><strong>Logistic Regression (L1 / L2 Regularized):</strong> Interpretable linear benchmark with calibrated probabilities validating empirical log-odds (OR = 6.20).</li>
+                  <li><strong>Decision Tree Classifier (CART):</strong> Non-parametric partition discovering discrete threshold step changes (e.g. buffer &le; 0).</li>
+                  <li><strong>Random Forest Classifier:</strong> Bagged ensemble capturing non-linear feature interactions without high variance.</li>
+                  <li><strong>Support Vector Classifier (Linear &amp; RBF SVC):</strong> Maximal-margin classification boundary on standardized sample subsets.</li>
+                  <li><strong>Multi-Layer Perceptron (MLPClassifier):</strong> Feedforward neural network learning continuous representation manifolds.</li>
+                </ul>
+              </div>
+
+              <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 18px;">
+                <h4 style="font-size: 14px; font-weight: 700; color: var(--accent-emerald); margin-bottom: 8px;">Permitted Regression Models (NEXT_ARR_DELAY)</h4>
+                <ul style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.7; padding-left: 18px; margin: 0;">
+                  <li><strong>Linear &amp; Multiple Regression (OLS):</strong> Baseline parametric continuous estimator for delay minutes.</li>
+                  <li><strong>Regularized Linear Models (Ridge &amp; Lasso):</strong> Penalized regression mitigating collinearity between distance and block time.</li>
+                  <li><strong>Polynomial Regression (Degree 2):</strong> Quadratic buffer capacity curves within a linear framework.</li>
+                  <li><strong>Decision Tree Regressor (CART):</strong> Captures discrete step changes in delay minutes across buffer intervals.</li>
+                  <li><strong>Random Forest Regressor:</strong> Variance-reduced non-linear ensemble for continuous delay estimation.</li>
+                  <li><strong>Multi-Layer Perceptron (MLPRegressor):</strong> Dense feedforward neural network mapping timing predictors to continuous delay.</li>
+                </ul>
+              </div>
+            </div>
+
+            <p class="manuscript-p">
+              <strong>Chronological Split Requirement:</strong> Random cross-validation leaks contiguous timeline information across rotations. All model evaluations must enforce chronological partitioning: <strong>Training on January&ndash;September 2025</strong>, <strong>Validation on October&ndash;November 2025</strong>, and <strong>Final Evaluation on held-out December 2025</strong>.
+            </p>
+          </section>
+
+        </article>
       </section>
 
       <!-- ========================================================================= -->
