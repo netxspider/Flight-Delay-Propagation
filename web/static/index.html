@@ -557,12 +557,12 @@
 
           <hr class="manuscript-divider">
 
-          <!-- SECTION VIII: THREATS TO VALIDITY & LIMITATIONS -->
+          <!-- SECTION VI: THREATS TO VALIDITY & LIMITATIONS -->
           <section class="manuscript-section" id="manuscript-threats">
             <div class="manuscript-sec-header">
               <span class="manuscript-sec-tag">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                Section VIII
+                Section VI
               </span>
             </div>
 
@@ -742,145 +742,710 @@
       <!-- ========================================================================= -->
       <section id="dataset-view" class="dashboard-page">
         
+        <!-- SECTION 1: TITLE, SOURCE & DATASET STATISTICS -->
         <div class="section-intro-header">
           <span class="section-tag">Section 02 &bull; Data Scale &amp; Integrity</span>
-          <h1 class="section-main-title">Dataset Source, Scale and Composition</h1>
-          <p class="section-main-desc">
-            Complete census of 6.77 million verified consecutive flight rotation pairs across 352 commercial airports and 14 airlines from the Bureau of Transportation Statistics (BTS) TranStats 2025.
+          <h1 class="section-main-title">2025 U.S. Airline On-Time Performance</h1>
+          <p class="section-main-desc" style="color: var(--accent-cyan); font-weight: 600; font-size: 15px; margin-top: 4px;">
+            Source: U.S. Bureau of Transportation Statistics (BTS)
           </p>
         </div>
 
-        <!-- Partitions Matrix Card -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Chronological Partitions Matrix</h3>
-              <p class="card-subtitle">Strict non-overlapping temporal partitioning preventing data leakage</p>
-            </div>
-            <span class="badge-pill" style="color: var(--accent-emerald);">Zero Leakage Verified</span>
+        <!-- 6 Stat Cards Grid -->
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; margin-bottom: 24px;">
+          <div class="stat-card">
+            <div class="stat-header">Raw Flight Records</div>
+            <div class="stat-value">7,001,619</div>
+            <div class="stat-footer">12 Monthly BTS CSV files</div>
           </div>
-
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Partition</th>
-                  <th>Temporal Window</th>
-                  <th style="text-align: right;">Total Observations</th>
-                  <th style="text-align: right;">Delayed (&ge; 15m)</th>
-                  <th style="text-align: right;">Base Delay Rate</th>
-                  <th>Primary Purpose</th>
-                </tr>
-              </thead>
-              <tbody id="partitions-tbody">
-                <tr>
-                  <td><strong style="color: #fff;">Training Set</strong></td>
-                  <td>Jan 1, 2025 &ndash; Sep 30, 2025</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">5,065,376</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">1,092,540</td>
-                  <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">21.57%</td>
-                  <td>Estimator fitting, linear baselines, feature scaling</td>
-                </tr>
-                <tr>
-                  <td><strong style="color: #fff;">Validation Set</strong></td>
-                  <td>Oct 1, 2025 &ndash; Nov 30, 2025</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">1,140,909</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">230,521</td>
-                  <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">20.21%</td>
-                  <td>Hyperparameter tuning, threshold selection (T=0.35)</td>
-                </tr>
-                <tr>
-                  <td><strong style="color: #fff;">Independent Test Set</strong></td>
-                  <td>Dec 1, 2025 &ndash; Dec 31, 2025</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">562,202</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">148,865</td>
-                  <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">26.48%</td>
-                  <td>Final out-of-sample generalization audit &amp; error decomposition</td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="stat-card">
+            <div class="stat-header">Valid Rotations</div>
+            <div class="stat-value" style="color: var(--accent-emerald);">6,768,487</div>
+            <div class="stat-footer">Verified consecutive pairs</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">Monthly Datasets</div>
+            <div class="stat-value">12</div>
+            <div class="stat-footer">Jan 1 &ndash; Dec 31, 2025</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">Source Fields</div>
+            <div class="stat-value" style="color: var(--accent-cyan);">46</div>
+            <div class="stat-footer">Audited raw attributes</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">Airlines</div>
+            <div class="stat-value">14</div>
+            <div class="stat-footer">Commercial reporting carriers</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-header">Airports</div>
+            <div class="stat-value">352</div>
+            <div class="stat-footer">Active commercial stations</div>
           </div>
         </div>
 
-        <!-- Missing Values Audit Matrix -->
-        <div class="card">
+        <!-- SECTION 2: ABOUT THE DATA SOURCE -->
+        <div class="card" style="margin-bottom: 24px;">
           <div class="card-header">
             <div>
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><polyline points="20 6 9 17 4 12"/></svg> Missing Values Analysis &amp; Data Hygiene</h3>
-              <p class="card-subtitle">Verification of 0.00% missing values across all 18 modeling attributes</p>
+              <h3 class="card-title">About the Data Source</h3>
+              <p class="card-subtitle">Federal regulatory reporting mandate and complete national census scope</p>
             </div>
-            <span class="badge-pill" style="color: var(--accent-emerald);">0.00% Missing</span>
+            <span class="badge-pill" style="color: var(--accent-emerald);">100% Census Coverage</span>
+          </div>
+          <p style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.8; margin: 0;">
+            The empirical foundation of this research is the <strong>Airline On-Time Performance database</strong> published by the <strong>U.S. Department of Transportation (DOT) Bureau of Transportation Statistics (BTS)</strong> under the federal reporting mandate of 14 CFR Part 234. Certified domestic passenger air carriers accounting for at least 0.5% of total domestic passenger revenues are legally required to file monthly summaries of all scheduled domestic commercial operations. Because this reporting is compulsory, the dataset represents a complete observational census rather than a sample, capturing <strong>7,001,619 raw operations across 12 monthly CSV files</strong> for calendar year 2025. The database encompasses <strong>14 major carriers</strong> and <strong>352 active commercial airports</strong> across all 50 states and U.S. territories, recording scheduled versus actual departure/arrival times, physical aircraft tail numbers, gate taxi intervals, runway wheel timestamps, cancellations, diversions, and delay cause categories.
+          </p>
+        </div>
+
+        <!-- SECTION 3: 46-COLUMN SOURCE SCHEMA TABLE -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Source Fields &amp; Schema Catalog (All 46 Columns)</h3>
+              <p class="card-subtitle">Comprehensive field definitions, physical units, data types, and downstream pipeline roles</p>
+            </div>
+            <span class="badge-pill" style="color: var(--accent-cyan);">46 Source Fields</span>
           </div>
           
-          <div style="background: rgba(52, 211, 153, 0.06); border: 1px solid rgba(52, 211, 153, 0.2); padding: 14px 18px; border-radius: var(--radius-sm); margin-bottom: 16px; font-size: 13px; color: var(--accent-emerald);">
-            <strong>Data Integrity Guarantee:</strong> All 6,768,487 rotation pairs undergo strict programmatic continuity audits. Flights with missing tail numbers, non-contiguous airports, or unrecorded delay timestamps are eliminated during the reconstruction funnel.
-          </div>
-
-          <div class="table-responsive">
+          <div class="table-responsive" style="max-height: 520px; overflow-y: auto;">
             <table class="data-table">
-              <thead>
+              <thead style="position: sticky; top: 0; background: var(--bg-card); z-index: 2;">
                 <tr>
-                  <th>Feature Name</th>
-                  <th>Feature Domain</th>
-                  <th>Data Type</th>
-                  <th style="text-align: right;">Train Missing</th>
-                  <th style="text-align: right;">Val Missing</th>
-                  <th style="text-align: right;">Test Missing</th>
-                  <th>Audit Status</th>
+                  <th style="width: 45px; text-align: center;">#</th>
+                  <th style="width: 190px;">Field Name</th>
+                  <th>Description &amp; Operational Meaning</th>
+                  <th style="width: 110px;">Data Type</th>
+                  <th style="width: 220px;">Pipeline Usage / Role</th>
                 </tr>
               </thead>
               <tbody>
                 <tr>
-                  <td><code>PREV_ARR_DELAY</code></td>
-                  <td>Turnaround Physics</td>
-                  <td>Float64 (min)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td><span class="badge-pill" style="color: var(--accent-emerald);">Verified Clean</span></td>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">1</td>
+                  <td><code style="color: #fff; font-weight: 600;">YEAR</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Flight operation year (2025)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-purple); font-size: 11px;">BIGINT</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Keep</td>
                 </tr>
                 <tr>
-                  <td><code>SCHEDULED_TURNAROUND_BUFFER</code></td>
-                  <td>Turnaround Physics</td>
-                  <td>Float64 (min)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td><span class="badge-pill" style="color: var(--accent-emerald);">Verified Clean</span></td>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">2</td>
+                  <td><code style="color: #fff; font-weight: 600;">QUARTER</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Flight calendar quarter (1-4)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-purple); font-size: 11px;">BIGINT</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Keep</td>
                 </tr>
                 <tr>
-                  <td><code>ESTIMATED_REMAINING_TURNAROUND_MINUTES</code></td>
-                  <td>Turnaround Physics</td>
-                  <td>Float64 (min)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td><span class="badge-pill" style="color: var(--accent-emerald);">Verified Clean</span></td>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">3</td>
+                  <td><code style="color: #fff; font-weight: 600;">MONTH</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Flight calendar month (1-12)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-purple); font-size: 11px;">BIGINT</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Keep</td>
                 </tr>
                 <tr>
-                  <td><code>IS_TURNAROUND_DEFICIT</code></td>
-                  <td>Turnaround Physics</td>
-                  <td>Int64 (0/1)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td><span class="badge-pill" style="color: var(--accent-emerald);">Verified Clean</span></td>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">4</td>
+                  <td><code style="color: #fff; font-weight: 600;">DAY_OF_MONTH</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Day of month (1-31)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-purple); font-size: 11px;">BIGINT</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Keep</td>
                 </tr>
                 <tr>
-                  <td><code>PREV_AIRCRAFT_DELAYED_FLIGHTS_TODAY</code></td>
-                  <td>Airframe History</td>
-                  <td>Int64 (count)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">0 (0.0%)</td>
-                  <td><span class="badge-pill" style="color: var(--accent-emerald);">Verified Clean</span></td>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">5</td>
+                  <td><code style="color: #fff; font-weight: 600;">DAY_OF_WEEK</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Day of week (1=Monday, 7=Sunday)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-purple); font-size: 11px;">BIGINT</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Feature Candidate</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">6</td>
+                  <td><code style="color: #fff; font-weight: 600;">FL_DATE</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Flight operating date timestamp</td>
+                  <td><span class="badge-pill" style="color: var(--accent-amber); font-size: 11px;">TIMESTAMP</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Core Identifier/Sorting</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">7</td>
+                  <td><code style="color: #fff; font-weight: 600;">OP_UNIQUE_CARRIER</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Reporting airline 2-letter IATA code</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Feature Candidate</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">8</td>
+                  <td><code style="color: #fff; font-weight: 600;">OP_CARRIER_AIRLINE_ID</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Unique BTS DOT airline identifier</td>
+                  <td><span class="badge-pill" style="color: var(--accent-purple); font-size: 11px;">BIGINT</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Alternative Airline ID</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">9</td>
+                  <td><code style="color: #fff; font-weight: 600;">TAIL_NUM</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Aircraft registration tail number</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Core Entity for Rotation</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">10</td>
+                  <td><code style="color: #fff; font-weight: 600;">OP_CARRIER_FL_NUM</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Flight operational number</td>
+                  <td><span class="badge-pill" style="color: var(--accent-purple); font-size: 11px;">BIGINT</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Flight Key</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">11</td>
+                  <td><code style="color: #fff; font-weight: 600;">ORIGIN_AIRPORT_ID</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Origin airport DOT identifier</td>
+                  <td><span class="badge-pill" style="color: var(--accent-purple); font-size: 11px;">BIGINT</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Core Rotation Join Key</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">12</td>
+                  <td><code style="color: #fff; font-weight: 600;">ORIGIN</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Origin airport 3-letter IATA code</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Airport Identifier</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">13</td>
+                  <td><code style="color: #fff; font-weight: 600;">ORIGIN_CITY_NAME</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Origin airport city & state name</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Descriptive</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">14</td>
+                  <td><code style="color: #fff; font-weight: 600;">DEST_AIRPORT_ID</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Destination airport DOT identifier</td>
+                  <td><span class="badge-pill" style="color: var(--accent-purple); font-size: 11px;">BIGINT</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Core Rotation Join Key</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">15</td>
+                  <td><code style="color: #fff; font-weight: 600;">DEST</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Destination airport 3-letter IATA code</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Airport Identifier</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">16</td>
+                  <td><code style="color: #fff; font-weight: 600;">DEST_CITY_NAME</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Destination airport city & state name</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Descriptive</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">17</td>
+                  <td><code style="color: #fff; font-weight: 600;">CRS_DEP_TIME</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Scheduled local departure time (HHMM)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Scheduled Feature</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">18</td>
+                  <td><code style="color: #fff; font-weight: 600;">DEP_TIME</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Actual local departure time (HHMM)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Turnaround Reconstruction</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">19</td>
+                  <td><code style="color: #fff; font-weight: 600;">DEP_DELAY</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Departure delay in minutes</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Turnaround / Preceding Delay</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">20</td>
+                  <td><code style="color: #fff; font-weight: 600;">DEP_DELAY_NEW</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Departure delay truncated at zero (non-negative)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Derived</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">21</td>
+                  <td><code style="color: #fff; font-weight: 600;">DEP_DEL15</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Departure delay >= 15 min indicator (1/0)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Derived</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">22</td>
+                  <td><code style="color: #fff; font-weight: 600;">DEP_DELAY_GROUP</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Departure delay grouped in 15-min intervals</td>
+                  <td><span class="badge-pill" style="color: var(--accent-purple); font-size: 11px;">BIGINT</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Descriptive</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">23</td>
+                  <td><code style="color: #fff; font-weight: 600;">DEP_TIME_BLK</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Scheduled departure time block (e.g. 0600-0659)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Scheduled Feature</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">24</td>
+                  <td><code style="color: #fff; font-weight: 600;">TAXI_OUT</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Taxi-out ground time in minutes</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Ground Operation</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">25</td>
+                  <td><code style="color: #fff; font-weight: 600;">WHEELS_OFF</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Actual local wheels-off time (HHMM)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Flight Lifecycle</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">26</td>
+                  <td><code style="color: #fff; font-weight: 600;">WHEELS_ON</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Actual local wheels-on time (HHMM)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Flight Lifecycle</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">27</td>
+                  <td><code style="color: #fff; font-weight: 600;">TAXI_IN</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Taxi-in ground time in minutes</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Ground Operation</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">28</td>
+                  <td><code style="color: #fff; font-weight: 600;">CRS_ARR_TIME</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Scheduled local arrival time (HHMM)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Scheduled Feature</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">29</td>
+                  <td><code style="color: #fff; font-weight: 600;">ARR_TIME</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Actual local arrival time (HHMM)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Turnaround Reconstruction</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">30</td>
+                  <td><code style="color: #fff; font-weight: 600;">ARR_DELAY</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Arrival delay in minutes (can be negative)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Prediction Target / Prior Delay</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">31</td>
+                  <td><code style="color: #fff; font-weight: 600;">ARR_DELAY_NEW</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Arrival delay truncated at zero (non-negative)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Derived</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">32</td>
+                  <td><code style="color: #fff; font-weight: 600;">ARR_DEL15</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Arrival delay >= 15 min indicator (1/0)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Classification Target</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">33</td>
+                  <td><code style="color: #fff; font-weight: 600;">ARR_DELAY_GROUP</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Arrival delay grouped in 15-min intervals</td>
+                  <td><span class="badge-pill" style="color: var(--accent-purple); font-size: 11px;">BIGINT</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Descriptive</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">34</td>
+                  <td><code style="color: #fff; font-weight: 600;">ARR_TIME_BLK</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Scheduled arrival time block</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Scheduled Feature</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">35</td>
+                  <td><code style="color: #fff; font-weight: 600;">CANCELLED</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Flight cancellation indicator (1.0 = cancelled)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Exclusion Filter</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">36</td>
+                  <td><code style="color: #fff; font-weight: 600;">CANCELLATION_CODE</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Reason for cancellation (A, B, C, D)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">VARCHAR</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Descriptive / Nullable</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">37</td>
+                  <td><code style="color: #fff; font-weight: 600;">DIVERTED</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Flight diversion indicator (1.0 = diverted)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Exclusion Filter</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">38</td>
+                  <td><code style="color: #fff; font-weight: 600;">CRS_ELAPSED_TIME</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Scheduled gate-to-gate elapsed time in minutes</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Scheduled Feature</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">39</td>
+                  <td><code style="color: #fff; font-weight: 600;">ACTUAL_ELAPSED_TIME</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Actual gate-to-gate elapsed time in minutes</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Flight Operation</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">40</td>
+                  <td><code style="color: #fff; font-weight: 600;">AIR_TIME</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Airborne time in minutes (wheels-off to wheels-on)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Flight Operation</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">41</td>
+                  <td><code style="color: #fff; font-weight: 600;">DISTANCE</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Great-circle flight distance in statute miles</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Scheduled Feature</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">42</td>
+                  <td><code style="color: #fff; font-weight: 600;">CARRIER_DELAY</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Carrier-caused delay in minutes (retrospective)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Retrospective / Banned in Pre-dep Model</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">43</td>
+                  <td><code style="color: #fff; font-weight: 600;">WEATHER_DELAY</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Weather-caused delay in minutes (retrospective)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Retrospective / Banned in Pre-dep Model</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">44</td>
+                  <td><code style="color: #fff; font-weight: 600;">NAS_DELAY</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">National Airspace System delay minutes (retrospective)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Retrospective / Banned in Pre-dep Model</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">45</td>
+                  <td><code style="color: #fff; font-weight: 600;">SECURITY_DELAY</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Security delay in minutes (retrospective)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Retrospective / Banned in Pre-dep Model</td>
+                </tr>
+                <tr>
+                  <td style="color: var(--text-muted); font-family: var(--font-mono); font-size: 11.5px;">46</td>
+                  <td><code style="color: #fff; font-weight: 600;">LATE_AIRCRAFT_DELAY</code></td>
+                  <td style="color: var(--text-secondary); font-size: 12.5px;">Delay attributed to late aircraft arrival (retrospective)</td>
+                  <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">DOUBLE</span></td>
+                  <td style="color: var(--text-secondary); font-size: 12px;">Retrospective / Banned in Pre-dep Model</td>
                 </tr>
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- Interactive Parquet Data Explorer (DuckDB) -->
+        <!-- SECTION 4: DATA PREPROCESSING AND CLEANING -->
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <div>
+              <h3 class="card-title">Data Preprocessing and Cleaning</h3>
+              <p class="card-subtitle">End-to-end ingestion, schema validation, cohort isolation, and timestamp normalization</p>
+            </div>
+            <span class="badge-pill" style="color: var(--accent-emerald);">Phase 2 Verified</span>
+          </div>
+
+          <!-- Visual Pipeline (Matching Reference Diagram) -->
+          <div style="background: #0b0f17; border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 36px 20px; margin: 16px 0 28px 0; display: flex; flex-direction: column; align-items: center; text-align: center;">
+
+            <!-- Step 1: 12 Monthly BTS CSV Files -->
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <div style="color: #94a3b8; margin-bottom: 6px;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+              </div>
+              <div style="font-size: 16px; font-weight: 700; color: #fff; line-height: 1.35;">12 Monthly BTS CSV Files</div>
+              <div style="font-size: 13px; color: #94a3b8; margin-top: 2px;">2025 raw flight records</div>
+            </div>
+
+            <!-- Arrow Down -->
+            <div style="color: #64748b; margin: 14px 0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            </div>
+
+            <!-- Step 2: Schema and data validation -->
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <div style="font-size: 16px; font-weight: 700; color: #fff; line-height: 1.35;">Schema and data validation</div>
+              <div style="font-size: 13px; color: #94a3b8; margin-top: 2px;">46 fields &bull; duplicate and consistency checks</div>
+            </div>
+
+            <!-- Arrow Down -->
+            <div style="color: #64748b; margin: 14px 0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            </div>
+
+            <!-- Step 3: Data cleaning -->
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <div style="font-size: 16px; font-weight: 700; color: #fff; line-height: 1.35;">Data cleaning</div>
+              <div style="font-size: 13px; color: #94a3b8; margin-top: 2px;">Separate completed, cancelled and diverted flights</div>
+            </div>
+
+            <!-- Arrow Down -->
+            <div style="color: #64748b; margin: 14px 0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            </div>
+
+            <!-- Step 4: Timestamp normalization -->
+            <div style="display: flex; flex-direction: column; align-items: center;">
+              <div style="font-size: 16px; font-weight: 700; color: #fff; line-height: 1.35;">Timestamp normalization</div>
+              <div style="font-size: 13px; color: #94a3b8; margin-top: 2px;">Airport time zones, UTC conversion and DST handling</div>
+            </div>
+
+            <!-- Arrow Down -->
+            <div style="color: #64748b; margin: 14px 0;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+            </div>
+
+            <!-- Step 5: Processed flight records (Highlighted Card) -->
+            <div style="background: rgba(30, 58, 138, 0.18); border: 1.5px solid #2563eb; border-radius: 12px; padding: 22px 28px; width: 100%; max-width: 540px; box-shadow: 0 0 28px rgba(37, 99, 235, 0.18);">
+              <div style="color: #38bdf8; margin-bottom: 6px;">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+              </div>
+              <div style="font-size: 15px; font-weight: 600; color: #f1f5f9;">Processed flight records</div>
+              <div style="font-size: 32px; font-weight: 800; color: #ffffff; letter-spacing: -0.02em; font-family: var(--font-mono); margin: 6px 0;">6,879,483</div>
+              <div style="font-size: 13px; color: #94a3b8;">Completed valid flights</div>
+            </div>
+
+          </div>
+
+          <!-- Summary Tables from Phase 2 Reports -->
+          
+          <!-- Table 1: Operational Category Reconciliation -->
+          <div style="margin-bottom: 24px;">
+            <h4 style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+              TABLE 1 &bull; Operational Category Reconciliation (Full 2025 Census)
+            </h4>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Operational Category</th>
+                    <th style="text-align: right;">Record Count</th>
+                    <th style="text-align: right;">% of Ingested</th>
+                    <th>Processing Disposition</th>
+                    <th>Exclusion / Inclusion Rationale</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong style="color: #fff;">Category A: Completed &amp; Valid</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">6,879,483</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">98.256%</td>
+                    <td><code>flights_cleaned.parquet</code> (356.68 MB)</td>
+                    <td>Complete rotation candidate pool; valid tail number, observed arrival delay, positive duration.</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: #fff;">Category B: Cancelled Flights</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">102,876</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1.469%</td>
+                    <td><code>cancelled_flights.parquet</code> (2.60 MB)</td>
+                    <td>Excluded from primary rotation reconstruction because no aircraft operation was completed.</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: #fff;">Category C: Diverted Flights</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">19,258</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">0.275%</td>
+                    <td><code>diverted_flights.parquet</code> (0.73 MB)</td>
+                    <td>Excluded from primary rotation reconstruction because scheduled destination &ne; landing airport.</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: #fff;">Category D: Invalid / Incomplete</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">2</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">0.00003%</td>
+                    <td>Flagged &amp; Documented</td>
+                    <td>Excluded: YX 5859 (missing arrival observation) and OO 5262 (negative scheduled elapsed time of -60 min).</td>
+                  </tr>
+                  <tr style="border-top: 1px solid var(--border-medium); background: rgba(255,255,255,0.02);">
+                    <td><strong style="color: var(--accent-cyan);">TOTAL INGESTED</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">7,001,619</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">100.000%</td>
+                    <td><strong>Reconciles 100%</strong></td>
+                    <td><strong style="color: var(--accent-emerald);">Zero records lost, zero double-counted.</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Table 2: Timestamp Consistency & Mathematical Identity Audit -->
+          <div style="margin-bottom: 24px;">
+            <h4 style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              TABLE 2 &bull; Timestamp Consistency &amp; Mathematical Identity Audit
+            </h4>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Consistency Check / Identity</th>
+                    <th style="text-align: right;">Evaluated Records</th>
+                    <th style="text-align: right;">Exact Matches</th>
+                    <th style="text-align: right;">Mismatches</th>
+                    <th style="text-align: right;">Conformance</th>
+                    <th>Operational Finding</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Gate Elapsed Identity:</strong> <code>ACTUAL_ELAPSED = AIR_TIME + TAXI_OUT + TAXI_IN</code></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">6,879,483</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">6,879,483</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">0</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 700;">100.000%</td>
+                    <td>Exact physical identity holds across 100% of flights.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Delay Identity:</strong> <code>ARR_DELAY = DEP_DELAY + ACTUAL_ELAPSED - CRS_ELAPSED</code></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">6,879,483</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">6,879,372</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">111</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 700;">99.998%</td>
+                    <td>111 carrier-reported rounding discrepancies (&lt; 0.002%).</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Departure Clock Math:</strong> <code>(CRS_DEP + DEP_DELAY) &equiv; DEP_TIME (mod 1440)</code></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">6,879,483</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">6,879,460</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">23</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 700;">99.999%</td>
+                    <td>Confirms local departure clock accounts for &lsquo;2400&rsquo; and early pushes.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Arrival Clock Math:</strong> <code>(CRS_ARR + ARR_DELAY) &equiv; ARR_TIME (mod 1440)</code></td>
+                    <td style="text-align: right; font-family: var(--font-mono);">6,879,483</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">6,879,407</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">76</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 700;">99.999%</td>
+                    <td>Local arrival clock matches destination local touchdown minutes.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Table 3: Missing-Value Treatment & Retention Policy -->
+          <div style="margin-bottom: 24px;">
+            <h4 style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              TABLE 3 &bull; Missing-Value Treatment &amp; Retention Policy
+            </h4>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Field Group / Variables</th>
+                    <th>Category A Completeness</th>
+                    <th>Categories B &amp; C Policy</th>
+                    <th>Methodological Treatment &amp; Target Leakage Prevention</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Target Variables &amp; Core Delays:</strong> <code>ARR_DELAY</code>, <code>DEP_DELAY</code>, <code>ARR_DEL15</code>, <code>DEP_DEL15</code></td>
+                    <td><strong style="color: var(--accent-emerald);">0 missing (100.0% complete)</strong></td>
+                    <td>Preserved as NULL</td>
+                    <td>Every completed flight has observed delays; no synthetic imputation required.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Aircraft Identifier:</strong> <code>TAIL_NUM</code></td>
+                    <td><strong style="color: var(--accent-emerald);">0 missing (100.0% complete)</strong></td>
+                    <td>12,501 NULLs in B</td>
+                    <td>All missing tail numbers occurred exclusively on cancelled flights (unassigned aircraft).</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Flight Lifecycle Times:</strong> <code>CRS_DEP_TIME</code>, <code>DEP_TIME</code>, <code>CRS_ARR_TIME</code>, <code>ARR_TIME</code>, <code>WHEELS_OFF/ON</code></td>
+                    <td><strong style="color: var(--accent-emerald);">0 missing (100.0% complete)</strong></td>
+                    <td>Preserved as NULL</td>
+                    <td>Complete gate and runway timestamps enable unambiguous UTC conversion.</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Retrospective Delay Causes:</strong> <code>CARRIER_DELAY</code>, <code>WEATHER_DELAY</code>, <code>NAS_DELAY</code>, <code>SECURITY_DELAY</code>, <code>LATE_AIRCRAFT_DELAY</code></td>
+                    <td>Preserved structural NULLs (78.1%)</td>
+                    <td>Preserved as NULL</td>
+                    <td>Under BTS regulations, populated ONLY when ARR_DELAY &ge; 15 min. Preserved as structural NULLs (not zero-imputed) so models cannot exploit non-reporting as target leakage.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Table 4: Chronological Partitioning of 2025 BTS Rotations -->
+          <div>
+            <h4 style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 10px; display: flex; align-items: center; gap: 8px;">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+              TABLE 4 &bull; Chronological Partitioning of 2025 BTS Rotations
+            </h4>
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Partition</th>
+                    <th>Date Range (2025)</th>
+                    <th style="text-align: right;">Total Observations</th>
+                    <th style="text-align: right;">Class 0 (On-Time)</th>
+                    <th style="text-align: right;">Class 1 (Delayed)</th>
+                    <th style="text-align: right;">Base Delay Rate</th>
+                    <th>Primary Purpose</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong style="color: #fff;">Training Set</strong></td>
+                    <td>Jan 1 &ndash; Sep 30, 2025</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">5,065,376</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">3,972,836</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,092,540</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">21.57%</td>
+                    <td>Estimator fitting, linear baselines, feature scaling</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: #fff;">Validation Set</strong></td>
+                    <td>Oct 1 &ndash; Nov 30, 2025</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1,140,909</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">910,388</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">230,521</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">20.21%</td>
+                    <td>Hyperparameter tuning, threshold selection (T=0.35)</td>
+                  </tr>
+                  <tr>
+                    <td><strong style="color: #fff;">Independent Test Set</strong></td>
+                    <td>Dec 1 &ndash; Dec 31, 2025</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">562,202</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">413,337</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">148,865</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">26.48%</td>
+                    <td>Out-of-sample generalization audit &amp; shift-share decomposition</td>
+                  </tr>
+                  <tr style="border-top: 1px solid var(--border-medium); background: rgba(255,255,255,0.02);">
+                    <td><strong style="color: var(--accent-cyan);">Total Population</strong></td>
+                    <td><strong>Jan 1 &ndash; Dec 31, 2025</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">6,768,487</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700;">5,277,901</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700;">1,490,586</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">22.02%</td>
+                    <td>Complete domestic rotation pairs census</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- SECTION 5: INTERACTIVE PARQUET DATA EXPLORER (DUCKDB) -->
         <div class="card">
           <div class="card-header">
             <div>
@@ -982,7 +1547,7 @@
           </div>
         </div>
 
-        <!-- Google Drive Hosting Guide -->
+        <!-- SECTION 6: GOOGLE DRIVE CLOUD HOSTING GUIDE -->
         <div class="card">
           <div class="card-header">
             <div>
@@ -1033,9 +1598,6 @@ print(df)
 
       </section>
 
-      <!-- ========================================================================= -->
-      <!-- SECTION 03: METHODOLOGY                                                   -->
-      <!-- ========================================================================= -->
       <section id="methodology-view" class="dashboard-page">
         
         <div class="section-intro-header">
