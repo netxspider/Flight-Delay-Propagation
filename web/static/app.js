@@ -67,7 +67,8 @@ function initNavigation() {
   // Handle URL hash routing
   if (window.location.hash) {
     const hashView = window.location.hash.replace("#", "");
-    if (["overview", "dataset", "performance", "figures", "prediction", "findings"].includes(hashView)) {
+    const validViews = ["overview", "dataset", "methodology", "eda", "models", "results", "visualizations", "conclusion"];
+    if (validViews.includes(hashView)) {
       switchView(hashView);
     }
   }
@@ -89,18 +90,32 @@ function switchView(viewName) {
 
   // Update top bar title
   const titles = {
-    overview: "Project Overview & Theoretical Framework",
-    dataset: "Dataset Exploration & BTS Pipeline Analytics",
-    performance: "Model Performance & Empirical Validation",
-    figures: "Research Figures & Visualizations Gallery (32+ Publication Artifacts)",
-    prediction: "Live Aircraft Turnaround & Delay Dispatch Simulator",
-    findings: "Scientific Findings, Implications & IEEE Publication"
+    overview: "01 \u2014 Overview: Research Question & Abstract",
+    dataset: "02 \u2014 Dataset: Source, Scale & Composition",
+    methodology: "03 \u2014 Methodology: Aircraft Rotation Reconstruction",
+    eda: "04 \u2014 Exploratory Analysis: Delay Propagation Patterns",
+    models: "05 \u2014 Models: Training & Model Comparison",
+    results: "06 \u2014 Results: Test Metrics & Evaluation",
+    visualizations: "07 \u2014 Visualizations: Figures & Interactive Charts",
+    conclusion: "08 \u2014 Conclusion: Findings & Limitations"
   };
-    findings: "Scientific Findings, Implications & IEEE Publication"
-  };
-  document.getElementById("top-bar-page-title").textContent = titles[viewName] || "Research Dashboard";
+  const titleEl = document.getElementById("top-bar-page-title");
+  if (titleEl) {
+    titleEl.textContent = titles[viewName] || "Research Dashboard";
+  }
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
+
+function openFigureModalByFilename(filename) {
+  const catalog = state.figures.catalog;
+  if (!catalog || catalog.length === 0) return;
+  const idx = catalog.findIndex(f => f.filename === filename);
+  if (idx !== -1) {
+    state.figures.filtered = catalog;
+    openFigureModal(idx);
+  }
+}
+window.openFigureModalByFilename = openFigureModalByFilename;
 
 // Overview Data Loader
 async function loadOverviewData() {
@@ -108,10 +123,14 @@ async function loadOverviewData() {
     const res = await fetch(`${API_BASE}/api/overview`);
     const data = await res.json();
     if (data.key_metrics) {
-      document.getElementById("stat-total-rotations").textContent = data.key_metrics.total_rotations.toLocaleString();
-      document.getElementById("stat-test-auc").textContent = data.key_metrics.test_roc_auc.toFixed(4);
-      document.getElementById("stat-test-r2").textContent = (data.key_metrics.test_r2 * 100).toFixed(1) + "%";
-      document.getElementById("stat-deficit-delay-rate").textContent = (data.key_metrics.deficit_delay_rate * 100).toFixed(1) + "%";
+      const elTot = document.getElementById("stat-total-rotations");
+      if (elTot) elTot.textContent = data.key_metrics.total_rotations.toLocaleString();
+      const elAuc = document.getElementById("stat-test-auc");
+      if (elAuc) elAuc.textContent = data.key_metrics.test_roc_auc.toFixed(4);
+      const elR2 = document.getElementById("stat-test-r2");
+      if (elR2) elR2.textContent = (data.key_metrics.test_r2 * 100).toFixed(1) + "%";
+      const elDef = document.getElementById("stat-deficit-delay-rate");
+      if (elDef) elDef.textContent = (data.key_metrics.deficit_delay_rate * 100).toFixed(1) + "%";
     }
   } catch (err) {
     console.error("Error loading overview data:", err);
@@ -414,6 +433,26 @@ function renderModelsSection(data) {
       </tr>
     `).join("");
   }
+
+  // Test Generalization Table
+  const testGenTbody = document.getElementById("test-gen-tbody");
+  if (testGenTbody && data.test_generalization) {
+    testGenTbody.innerHTML = data.test_generalization.map(row => {
+      const isPositive = String(row.delta).startsWith("+");
+      const deltaColor = (row.metric.includes("MAE") || row.metric.includes("RMSE") || row.metric.includes("Log Loss"))
+        ? (isPositive ? "var(--accent-rose)" : "var(--accent-emerald)")
+        : (isPositive ? "var(--accent-emerald)" : "var(--accent-rose)");
+      return `
+        <tr>
+          <td><strong style="color: #fff;">${row.metric}</strong></td>
+          <td style="text-align: right; font-family: var(--font-mono);">${row.validation}</td>
+          <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">${row.test}</td>
+          <td style="text-align: right; font-family: var(--font-mono); font-weight: 600; color: ${deltaColor};">${row.delta}</td>
+          <td style="color: var(--text-secondary); font-size: 12px;">${row.interpretation}</td>
+        </tr>
+      `;
+    }).join("");
+  }
 }
 
 // Interactive Threshold Simulator
@@ -492,6 +531,18 @@ function updateThresholdSimulation(t) {
     }
   }
 }
+
+function setSimulatorThreshold(val) {
+  const slider = document.getElementById("threshold-slider");
+  if (slider) {
+    slider.value = val;
+    state.threshold = val;
+    const valueDisplay = document.getElementById("threshold-val-display");
+    if (valueDisplay) valueDisplay.textContent = Number(val).toFixed(2);
+    updateThresholdSimulation(val);
+  }
+}
+window.setSimulatorThreshold = setSimulatorThreshold;
 
 // Interactive Live Prediction Playground
 function initPredictionForm() {
