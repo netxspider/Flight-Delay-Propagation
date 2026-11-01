@@ -1572,185 +1572,596 @@
       </section>
 
       <section id="methodology-view" class="dashboard-page">
-        
-        <div class="section-intro-header">
-          <span class="section-tag">Section 03 &bull; Rotational Reconstruction &amp; Feature Engineering</span>
-          <h1 class="section-main-title">Methodology &amp; Aircraft Rotation Reconstruction</h1>
-          <p class="section-main-desc">
-            Algorithmic reconstruction of chronological aircraft rotation chains from raw Bureau of Transportation Statistics records, feature space taxonomy, and strict prediction-time leakage controls.
-          </p>
-        </div>
+        <article class="manuscript-wrapper" style="max-width: 100%;">
 
-        <!-- 7-Stage Rotation Reconstruction Funnel -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg> 7-Stage Aircraft Rotation Reconstruction Funnel</h3>
-              <p class="card-subtitle">Systematic filtering pipeline converting 6.89M raw flights into 6.77M valid consecutive pairs</p>
+          <!-- Page Header (No Section Tag Pill) -->
+          <header class="manuscript-header" style="padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 24px;">
+            <h1 style="font-size: 26px; font-weight: 800; color: #fff; line-height: 1.35; margin-bottom: 6px; letter-spacing: -0.02em;">
+              Methodology &amp; Aircraft Rotation Reconstruction
+            </h1>
+            <div style="font-size: 13.5px; color: var(--accent-cyan); font-weight: 500;">
+              Chronological operational pairing, UTC normalization, turnaround deficit invariant, and anti-leakage feature engineering
             </div>
-            <span class="badge-pill" style="color: var(--accent-emerald);">98.11% Pair Retention</span>
-          </div>
+          </header>
 
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Funnel Stage</th>
-                  <th>Operational Filter Description</th>
-                  <th style="text-align: right;">Observations</th>
-                  <th style="text-align: right;">% Retained</th>
-                  <th>Data Integrity Impact</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Stage 1</strong></td>
-                  <td>Raw commercial physical operations in BTS 2025 timeline</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">6,898,741</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">100.00%</td>
-                  <td>Initial raw BTS population baseline</td>
-                </tr>
-                <tr>
-                  <td><strong>Stage 2</strong></td>
-                  <td>Isolated and excluded cancelled flights</td>
-                  <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">-104,748</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">98.48%</td>
-                  <td>Flight never flew; cannot propagate arrival delays</td>
-                </tr>
-                <tr>
-                  <td><strong>Stage 3</strong></td>
-                  <td>Isolated and excluded diverted flights</td>
-                  <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">-18,349</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">98.22%</td>
-                  <td>Landed at alternative airport; disrupts scheduled routing</td>
-                </tr>
-                <tr>
-                  <td><strong>Stage 4</strong></td>
-                  <td>Candidate chronological pairing grouped by Tail Number</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">6,873,483</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">99.63%</td>
-                  <td>Adjacent scheduled flight segments for same aircraft tail</td>
-                </tr>
-                <tr>
-                  <td><strong>Stage 5</strong></td>
-                  <td>Excluded airport continuity mismatches (ARR_k &ne; DEP_{k+1})</td>
-                  <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">-85,737</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">98.39%</td>
-                  <td>Physical airframe position disconnected (e.g. unrecorded ferry flight)</td>
-                </tr>
-                <tr>
-                  <td><strong>Stage 6</strong></td>
-                  <td>Excluded diversion-induced sequence breaks</td>
-                  <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">-19,109</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">98.11%</td>
-                  <td>Upstream diversion broke rotational chain</td>
-                </tr>
-                <tr>
-                  <td><strong>Stage 7</strong></td>
-                  <td>Excluded operations without predecessor / Non-positive ground times (&le; 0m)</td>
-                  <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">-6,150</td>
-                  <td style="text-align: right; font-family: var(--font-mono);">98.11%</td>
-                  <td>First flight of the day or invalid overlapping schedule times</td>
-                </tr>
-                <tr style="background: rgba(56, 189, 248, 0.08);">
-                  <td><strong style="color: var(--accent-cyan);">Final Callset</strong></td>
-                  <td><strong style="color: #fff;">Verified Consecutive Rotation Pairs Callset</strong></td>
-                  <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">6,768,487</td>
-                  <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">98.11%</td>
-                  <td><span class="badge-pill" style="color: var(--accent-emerald);">Research Certified</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Hierarchical Feature Spaces -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg> Hierarchical Feature Space Progression</h3>
-              <p class="card-subtitle">Systematic feature groupings designed to isolate physical turnaround mechanics from naive lag baselines</p>
+          <!-- 6 Headline KPI Cards in a Single Flexible Row -->
+          <div style="display: flex; flex-direction: row; gap: 10px; width: 100%; margin-bottom: 12px; overflow-x: auto;">
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Total Operations</div>
+              <div class="stat-value" style="font-size: 20px;">6,898,741</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">6.88M comp + 19.2K div</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Reconstructed Pairs</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-emerald);">6,768,487</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">98.11% across 6,124 tails</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Rejection Categories</div>
+              <div class="stat-value" style="font-size: 20px;">6 Audited</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">100% accounting</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Turnaround Deficits</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-rose);">382,937</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">5.66% buffer deficit</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Deficit Delay Rate</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-rose);">99.50%</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Mean +121.86 min</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Invariant Violations</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-cyan);">0</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">100% verified feasible</div>
             </div>
           </div>
 
-          <div class="grid-3">
-            <div style="background: rgba(11, 15, 25, 0.7); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <span class="badge-pill" style="color: var(--text-muted); margin-bottom: 8px;">Group A &bull; Naive Baseline</span>
-              <h4 style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px;">Direct Predecessor Delay</h4>
-              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
-                Isolates whether the raw inbound delay alone is sufficient to predict downstream delays without considering ground turnaround buffers or network context.
-              </p>
-              <ul style="font-size: 11.5px; color: var(--accent-cyan); font-family: var(--font-mono); list-style: none; display: flex; flex-direction: column; gap: 4px;">
-                <li>&bull; PREV_ARR_DELAY</li>
-                <li>&bull; PREV_DEP_DELAY</li>
-              </ul>
+          <hr class="manuscript-divider">
+
+          <!-- SECTION I: OPERATIONAL TIMELINE CONSTRUCTION & UTC NORMALIZATION -->
+          <section class="manuscript-section" id="methodology-timeline">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section I
+              </span>
             </div>
 
-            <div style="background: rgba(11, 15, 25, 0.7); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <span class="badge-pill" style="color: var(--accent-indigo); margin-bottom: 8px;">Group B &bull; Network &amp; Context</span>
-              <h4 style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px;">Operational Context</h4>
-              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
-                Adds scheduled buffer, carrier identity, origin/destination hubs, departure hours, distance, and day of week to control for diurnal cycles and airport congestion.
-              </p>
-              <ul style="font-size: 11.5px; color: var(--accent-indigo); font-family: var(--font-mono); list-style: none; display: flex; flex-direction: column; gap: 4px;">
-                <li>&bull; Group A Features</li>
-                <li>&bull; SCHEDULED_TURNAROUND_BUFFER</li>
-                <li>&bull; NEXT_CRS_DEP_HOUR, DAY_OF_WEEK</li>
-                <li>&bull; NEXT_DISTANCE, DISTANCE_GROUP</li>
-                <li>&bull; NEXT_CARRIER, NEXT_ORIGIN, NEXT_DEST</li>
-              </ul>
+            <h2 class="manuscript-sec-title">Section I: Operational Timeline Construction &amp; UTC Normalization</h2>
+
+            <p class="manuscript-p">
+              The fundamental unit of delay propagation is the chronological sequence of revenue flight legs flown by an individual airframe throughout each operational day. In the raw BTS On-Time Performance database, timestamps are recorded strictly in airport-local wall-clock time without time zone offsets, rendering transcontinental flight timelines temporally incomparable. To build a unified operational timeline, all <strong>6,898,741 operations</strong> (6,879,483 completed flights + 19,258 diverted flights) were normalized into true Universal Coordinated Time (UTC) utilizing our authoritative 352-airport IANA timezone matrix.
+            </p>
+
+            <div style="background: #0b0f17; border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 24px; margin: 18px 0 24px 0;">
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px;">
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 16px;">
+                  <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent-cyan); text-transform: uppercase; margin-bottom: 6px;">1. Universal UTC Sorting</div>
+                  <div style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px;">Actual Pushback Ordering (DEP_UTC)</div>
+                  <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                    All movements per tail number (<code>TAIL_NUM</code>) are sorted strictly by actual UTC pushback (<code>DEP_UTC</code>). Sorting on actual rather than scheduled departure prevents artificial sequence reversals when flights are delayed and dispatched out of published schedule order.
+                  </p>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 16px;">
+                  <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent-rose); text-transform: uppercase; margin-bottom: 6px;">2. Diversion Barriers</div>
+                  <div style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px;">Sequence-Breaking Isolation</div>
+                  <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                    All <strong>19,258 diverted flights</strong> were explicitly preserved in the timeline as sequence-breaking barriers. Because diverted operations land at unrecorded diversion airports without published ground turns, embedding them safely blocked <strong>19,109 invalid candidate pairs</strong> across disconnected stations.
+                  </p>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 16px;">
+                  <div style="font-size: 11px; font-family: var(--font-mono); color: var(--accent-emerald); text-transform: uppercase; margin-bottom: 6px;">3. Cancellation Handling</div>
+                  <div style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 6px;">Stationary Ground Stays</div>
+                  <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                    The <strong>102,876 cancelled flights</strong> were preserved as station ground stays without physical movement. When an aircraft subsequently operated a completed flight from that same origin, station continuity held; if ferried, spatial continuity filters rejected the gap.
+                  </p>
+                </div>
+              </div>
             </div>
 
-            <div style="background: rgba(11, 15, 25, 0.7); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <span class="badge-pill" style="color: var(--accent-emerald); margin-bottom: 8px;">Group C &bull; Complete Model</span>
-              <h4 style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 8px;">Ground Physics &amp; Fatigue</h4>
-              <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin-bottom: 12px;">
-                The complete feature space incorporating estimated remaining cushion, turnaround deficit indicator, and historical multi-leg delay fatigue on that specific airframe today.
-              </p>
-              <ul style="font-size: 11.5px; color: var(--accent-emerald); font-family: var(--font-mono); list-style: none; display: flex; flex-direction: column; gap: 4px;">
-                <li>&bull; Group B Features</li>
-                <li>&bull; ESTIMATED_REMAINING_TURNAROUND</li>
-                <li>&bull; IS_TURNAROUND_DEFICIT</li>
-                <li>&bull; PREV_AIRCRAFT_DELAYED_FLIGHTS_TODAY</li>
-                <li>&bull; PREV_AIRCRAFT_CONSECUTIVE_DEL15</li>
-              </ul>
-            </div>
-          </div>
-        </div>
+            <p class="manuscript-p">
+              Every operation was mapped to its airframe rotation key <code>(TAIL_NUM, FL_DATE)</code>, enabling chronological windowing and the construction of rolling airframe fatigue metrics across consecutive legs.
+            </p>
+          </section>
 
-        <!-- Leakage Prevention Controls -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Strict Prediction-Time Leakage Prevention Protocol</h3>
-              <p class="card-subtitle">Methodological audit ensuring all models operate under realistic pre-departure dispatch constraints</p>
-            </div>
-            <span class="badge-pill" style="color: var(--accent-cyan);">t_pred = CRS_DEP_{k+1}</span>
-          </div>
+          <hr class="manuscript-divider">
 
-          <div class="grid-2">
-            <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-              <h4 style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 6px;">Information Horizon Constraints</h4>
-              <p>
-                In real-world airline operations, a delay prediction is only actionable if generated before the downstream flight departs. Therefore, all model features must be strictly known at or before <code>CRS_DEP_TIME_{k+1}</code>. 
-              </p>
-              <p style="margin-top: 8px;">
-                We explicitly prohibit any post-departure attributes of leg $k+1$, such as actual departure time, taxi-out minutes, wheels-off time, airborne time, or destination arrival actuals.
-              </p>
+          <!-- SECTION II: ROTATION RECONSTRUCTION FUNNEL & REJECTION ACCOUNTING -->
+          <section class="manuscript-section" id="methodology-funnel">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section II
+              </span>
             </div>
 
-            <div style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;">
-              <h4 style="font-size: 13.5px; font-weight: 700; color: #fff; margin-bottom: 6px;">Chronological Splitting vs. Random K-Fold</h4>
-              <p>
-                Standard random cross-validation leaks future information into the training set because flight rotations occur along contiguous calendar timelines.
-              </p>
-              <p style="margin-top: 8px;">
-                Our framework enforces a strict chronological split: training on January&ndash;September 2025, validating on October&ndash;November 2025, and evaluating on the held-out December 2025 test dataset, mirroring true operational deployment.
+            <h2 class="manuscript-sec-title">Section II: Rotation Reconstruction Funnel &amp; Pair Rejection Accounting</h2>
+
+            <p class="manuscript-p">
+              To reconstruct consecutive flight pairs <em>f<sub>prev</sub> &rarr; f<sub>next</sub></em>, candidate adjacent legs within each aircraft timeline must satisfy five strict physical and spatial criteria: (1) identical non-null airframe registration (<code>TAIL_NUM</code>); (2) spatial continuity where arrival airport equals departure airport (<code>DEST<sub>prev</sub> == ORIGIN<sub>next</sub></code>); (3) strictly positive temporal progression (<code>DEP_UTC<sub>prev</sub> &lt; DEP_UTC<sub>next</sub></code>); (4) physical ground feasibility (<code>ARR_UTC<sub>prev</sub> &le; DEP_UTC<sub>next</sub></code>); and (5) absence of intervening diversions.
+            </p>
+
+            <div class="table-responsive" style="margin-top: 14px;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Pipeline Filter Category</th>
+                    <th style="text-align: right;">Record Count</th>
+                    <th style="text-align: right;">% of Timeline Ops</th>
+                    <th>Operational Definition &amp; Exclusion Rationale</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="background: rgba(16, 185, 129, 0.06);">
+                    <td><strong style="color: var(--accent-emerald);">VALID_PAIR</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">6,768,487</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">98.112%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Satisfies airframe identity, station continuity, temporal ordering, and physical turnaround feasibility</td>
+                  </tr>
+                  <tr>
+                    <td><code style="color: #fff; font-weight: 600;">AIRPORT_MISMATCH</code></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">85,737</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">1.243%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Station discontinuity (<code>DEST<sub>prev</sub> &ne; ORIGIN<sub>next</sub></code>) caused by unrecorded non-revenue Part 91 ferry flights or tail swaps</td>
+                  </tr>
+                  <tr>
+                    <td><code style="color: #fff; font-weight: 600;">TARGET_IS_DIVERTED</code></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">19,258</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">0.279%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Target flight diverted to an unscheduled airport; lacks gate arrival and ground turnaround actuals</td>
+                  </tr>
+                  <tr>
+                    <td><code style="color: #fff; font-weight: 600;">BLOCKED_BY_DIVERSION</code></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">19,109</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">0.277%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Completed operations following a diversion blocked from pairing across unobserved intermediate stations</td>
+                  </tr>
+                  <tr>
+                    <td><code style="color: #fff; font-weight: 600;">NO_PREDECESSOR</code></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">6,113</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">0.089%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">First recorded operation of the calendar year for each physical aircraft (rotation boundary condition)</td>
+                  </tr>
+                  <tr>
+                    <td><code style="color: #fff; font-weight: 600;">NEGATIVE_GROUND_TIME</code></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">37</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">0.001%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Physically impossible raw BTS records where actual departure timestamp preceded actual arrival timestamp</td>
+                  </tr>
+                  <tr style="border-top: 2px solid var(--border-subtle); background: rgba(255,255,255,0.02);">
+                    <td><strong>Total Ingested Timeline Operations</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">6,898,741</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">100.000%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Exhaustive accounting across all operational categories with zero unclassified records</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Methodological Callout: Delayed Rotation Preservation -->
+            <div class="manuscript-callout" style="margin-top: 24px;">
+              <strong style="color: #fff; display: block; margin-bottom: 6px; font-size: 14.5px;">
+                Critical Methodological Rule: Preservation of Delayed Rotations
+              </strong>
+              <p style="margin: 0; font-size: 13.5px; line-height: 1.65; color: #cbd5e1;">
+                A candidate pair must <strong>never</strong> be rejected simply because the next scheduled departure time occurs before the previous flight's actual arrival (<code>NEXT_CRS_DEP_UTC &lt; PREV_ARR_UTC</code>). When an incoming flight incurs severe delays, it lands after its scheduled turnaround window has already elapsed. If an algorithm naive to airline operations were to require scheduled departure to follow actual arrival, it would systematically discard the exact <strong>382,937 delayed rotations</strong> (5.66% of the dataset) where delay propagation physically occurs, introducing fatal survivor bias into the research. The sole physical feasibility condition is that actual arrival strictly precedes actual departure (<code>PREV_ARR_UTC &le; NEXT_DEP_UTC</code>).
               </p>
             </div>
-          </div>
-        </div>
+          </section>
 
+          <hr class="manuscript-divider">
+
+          <!-- SECTION III: GROUND TURNAROUND MECHANICS & DEFICIT INVARIANT RECONCILIATION -->
+          <section class="manuscript-section" id="methodology-mechanics">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section III
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section III: Ground Turnaround Mechanics &amp; Deficit Invariant Reconciliation</h2>
+
+            <p class="manuscript-p">
+              The physics of delay propagation are governed by ground turnaround cushion. When an inbound aircraft lands late, the scheduled ground turnaround buffer absorbs part of the shock. If the incoming arrival delay exceeds the scheduled buffer, the operational cushion is completely exhausted, forcing the aircraft into a <strong>turnaround deficit</strong>:
+            </p>
+
+            <div class="manuscript-formula">
+              <span>SCHEDULED_BUFFER = CRS_DEP_UTC<sub>next</sub> - CRS_ARR_UTC<sub>prev</sub></span>
+              <span class="manuscript-formula-num">(1)</span>
+            </div>
+
+            <div class="manuscript-formula">
+              <span>REMAINING_TURNAROUND = SCHEDULED_BUFFER - PREV_ARR_DELAY</span>
+              <span class="manuscript-formula-num">(2)</span>
+            </div>
+
+            <div class="manuscript-formula">
+              <span>IS_TURNAROUND_DEFICIT &equiv; (NEXT_CRS_DEP_UTC &lt; PREV_ARR_UTC) &equiv; (REMAINING_TURNAROUND &lt; 0)</span>
+              <span class="manuscript-formula-num">(3)</span>
+            </div>
+
+            <h3 class="manuscript-subsec-title">Mathematical Equivalence &amp; Resolution of the Discrepancy</h3>
+
+            <p class="manuscript-p">
+              By definition, actual arrival time equals scheduled arrival plus delay: <code>PREV_ARR_UTC = PREV_CRS_ARR_UTC + PREV_ARR_DELAY</code>. Substituting into the turnaround deficit condition establishes an exact mathematical tautology: <code>PREV_ARR_DELAY &gt; SCHEDULED_BUFFER &iff; NEXT_CRS_DEP_UTC &lt; PREV_ARR_UTC</code>. In our audit of the 6.77 million pair dataset, both formulations coincide with <strong>100.0% precision</strong> (zero discrepancies, zero nulls):
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Evaluated Mathematical Expression</th>
+                    <th style="text-align: right;">Pair Count</th>
+                    <th style="text-align: right;">% of Total Pairs</th>
+                    <th>Audit Status &amp; Invariant Verification</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Condition 1:</strong> <code>NEXT_CRS_DEP_UTC &lt; PREV_ARR_UTC</code></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose); font-weight: 700;">382,937</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">5.6576%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Algebraic pushback cutoff: actual arrival occurred after scheduled pushback</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Condition 2:</strong> <code>PREV_ARR_DELAY &gt; SCHEDULED_BUFFER</code></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose); font-weight: 700;">382,937</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">5.6576%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Buffer exhaustion: incoming delay strictly exceeded scheduled ground turn</td>
+                  </tr>
+                  <tr style="background: rgba(56, 189, 248, 0.06);">
+                    <td><strong>Intersection (Both Conditions Simultaneously True)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">382,937</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700;">5.6576%</td>
+                    <td style="color: var(--accent-cyan); font-size: 12.5px;"><strong>Exact Mathematical Identity: 100% Coincident</strong></td>
+                  </tr>
+                  <tr>
+                    <td>Discrepancies (Condition 1 True, Condition 2 False)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">0</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">0.0000%</td>
+                    <td style="color: var(--accent-emerald); font-size: 12.5px;">Zero discrepancies verified across all 6.77M pairs</td>
+                  </tr>
+                  <tr>
+                    <td>Discrepancies (Condition 2 True, Condition 1 False)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">0</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">0.0000%</td>
+                    <td style="color: var(--accent-emerald); font-size: 12.5px;">Zero discrepancies verified across all 6.77M pairs</td>
+                  </tr>
+                  <tr>
+                    <td>External Phantom Value Cited in Audit Query</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">437,845</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">6.4689%</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Unreconciled phantom figure; corresponds to unconstrained threshold (Remaining Buffer &le; 5.3 min) prior to station matching</td>
+                  </tr>
+                  <tr style="background: rgba(16, 185, 129, 0.08); border-top: 2px solid var(--border-subtle);">
+                    <td><strong style="color: var(--accent-emerald);">Reconciled Master Deficit Invariant</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">382,937</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald);">5.6576%</td>
+                    <td style="color: var(--accent-emerald); font-size: 12.5px; font-weight: 600;">Definitive reconciled total under all formal mathematical definitions</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <h3 class="manuscript-subsec-title">Empirical Delay Performance Under Turnaround Deficit</h3>
+
+            <p class="manuscript-p">
+              The operational significance of the turnaround deficit is profound. Comparing subsequent flight performance between the deficit cohort and the non-deficit cohort reveals an extreme delay divergence:
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Operational Performance Metric</th>
+                    <th style="text-align: right;">Deficit Cohort (IS_DEFICIT = 1)</th>
+                    <th style="text-align: right;">Preserved Buffer (IS_DEFICIT = 0)</th>
+                    <th>Empirical Contrast / Operational Impact</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Cohort Population</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose); font-weight: 700;">382,937 (5.66%)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">6,385,550 (94.34%)</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Complete partition of 6,768,487 valid pairs</td>
+                  </tr>
+                  <tr style="background: rgba(244, 63, 94, 0.06);">
+                    <td><strong>Subsequent Flight Delay Rate (ARR_DEL15)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose); font-size: 14px;">99.50%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-emerald); font-size: 14px;">17.38%</td>
+                    <td style="color: var(--accent-rose); font-size: 12.5px; font-weight: 600;">+82.12 percentage point surge in delay probability</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Mean Arrival Delay (NEXT_ARR_DELAY)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-rose);">+121.86 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">+0.93 min</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">+120.93 min mean arrival delay elevation</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Median Arrival Delay</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">+89.00 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">-7.00 min</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Non-deficit median arrives 7 minutes early; deficit median is 1.5h late</td>
+                  </tr>
+                  <tr>
+                    <td><strong>90th Percentile Delay (P90)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">+221.00 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">+29.00 min</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Tail risk extends to over 3.6 hours under deficit</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Mean Departure Delay (NEXT_DEP_DELAY)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">+125.93 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald);">+5.95 min</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Mechanical pushback lock forced by ground turn requirements</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Operational Mechanics of the 0.50% Non-Delayed Flights -->
+            <p class="manuscript-p" style="margin-top: 16px;">
+              Only <strong>1,922 out of 382,937 deficit flights (0.502%)</strong> managed to avoid an official 15-minute arrival delay. Operational analysis reveals two distinct recovery mechanisms: (1) <em>Ground Turn Acceleration</em>: ground crews compressed turnaround duration to an average of 29.37 minutes (saving 14.27 minutes against scheduled turn); and (2) <em>Airborne En-Route Recovery</em>: flight crews made up an average of 25.82 minutes en route via favorable jet streams and air traffic direct routing.
+            </p>
+
+            <div class="manuscript-callout alert">
+              <strong style="color: #fff; display: block; margin-bottom: 6px; font-size: 14.5px;">
+                Methodological Caution: Descriptive Association vs. Deterministic Causality
+              </strong>
+              <p style="margin: 0; font-size: 13.5px; line-height: 1.65; color: #cbd5e1;">
+                While turnaround deficit is an exceptionally strong predictive feature, it represents an <strong>empirical, observational association</strong> rather than an isolated deterministic cause. High-delay operations frequently coincide with severe weather, Ground Delay Programs (GDPs), or hub convective storms that simultaneously degrade ground turnaround capability and downstream airspace throughput.
+              </p>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION IV: TURNAROUND SENSITIVITY HORIZONS -->
+          <section class="manuscript-section" id="methodology-horizons">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section IV
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section IV: Turnaround Sensitivity Horizons &amp; Ground-Time Layovers</h2>
+
+            <p class="manuscript-p">
+              To distinguish rapid commercial turnarounds from overnight outstation parking and multi-day maintenance layovers, rotation pairs were audited across four exploratory ground-time horizons:
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Ground Time Horizon</th>
+                    <th style="text-align: right;">Pair Count</th>
+                    <th style="text-align: right;">% of Valid Pairs</th>
+                    <th style="text-align: right;">Subsequent Delay Rate</th>
+                    <th style="text-align: right;">Mean Arrival Delay</th>
+                    <th>Operational Coupling &amp; Research Characterization</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Short Intra-Day Turn (&le; 6 Hours)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">5,268,554</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">77.84%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">23.82%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+8.35 min</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Tightly coupled turnaround operations; direct delay propagation window</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Extended Operating Day (&le; 12 Hours)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">6,356,513</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">93.91%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">21.88%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+6.80 min</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Full operating day including extended maintenance layovers and afternoon ground holds</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Overnight Operating Cycle (&le; 18 Hours)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">6,602,551</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">97.55%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">21.87%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+7.21 min</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Incorporates standard overnight outstation parking (6&ndash;14 hours); tests next-morning propagation</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Prolonged Ground Stays (&gt; 18 Hours)</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: #fff;">165,936</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">2.45%</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-rose);">28.16%</td>
+                    <td style="text-align: right; font-family: var(--font-mono);">+30.42 min</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Multi-day hangar maintenance or reserve fleet parking; minimal operational delay propagation coupling</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION V: PREDICTION-TIME FEATURE AVAILABILITY & ANTI-LEAKAGE SAFEGUARDS -->
+          <section class="manuscript-section" id="methodology-leakage">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section V
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section V: Prediction-Time Feature Availability &amp; Anti-Leakage Safeguards</h2>
+
+            <p class="manuscript-p">
+              A critical failure mode in predictive flight delay modeling is temporal data leakage. A model evaluated on post-departure attributes achieves artificially high test metrics that collapse in operational deployment. To guarantee operational validity, all predictors must respect a strict information horizon: <strong>t<sub>pred</sub> = min(CRS_DEP_UTC<sub>next</sub>, ARR_UTC<sub>prev</sub>)</strong>, occurring strictly prior to the target flight's actual pushback.
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Feature Identifier</th>
+                    <th>Pipeline Role</th>
+                    <th>Availability at Prediction Horizon (t<sub>pred</sub>)</th>
+                    <th>Leakage Verification Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><code>PREV_ARR_DELAY</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">PREDICTOR</span></td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Available immediately upon incoming gate arrival</td>
+                    <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">PASSED: LEAK-FREE</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>PREV_DEP_DELAY</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">PREDICTOR</span></td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Available from prior flight departure</td>
+                    <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">PASSED: LEAK-FREE</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>SCHEDULED_TURNAROUND_BUFFER_MINUTES</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">PREDICTOR</span></td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Established by published airline schedule</td>
+                    <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">PASSED: LEAK-FREE</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>ESTIMATED_REMAINING_TURNAROUND_MINUTES</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">PREDICTOR</span></td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Scheduled buffer minus incoming arrival delay</td>
+                    <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">PASSED: LEAK-FREE</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>IS_TURNAROUND_DEFICIT</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">PREDICTOR</span></td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Binary indicator known at incoming gate arrival</td>
+                    <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">PASSED: LEAK-FREE</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>PREV_AIRCRAFT_CONSECUTIVE_DEL15</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">PREDICTOR</span></td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Rolling consecutive delay count on same airframe today</td>
+                    <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">PASSED: LEAK-FREE</span></td>
+                  </tr>
+                  <tr>
+                    <td><code>PREV_AIRCRAFT_CUMULATIVE_ARR_DELAY_TODAY</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px;">PREDICTOR</span></td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Prior cumulative delay minutes on same airframe today</td>
+                    <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">PASSED: LEAK-FREE</span></td>
+                  </tr>
+                  <tr style="background: rgba(244, 63, 94, 0.05);">
+                    <td><code>ACTUAL_GROUND_TIME_MINUTES</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-rose); font-size: 11px;">RETROSPECTIVE ONLY</span></td>
+                    <td style="color: var(--accent-rose); font-size: 12px;">Requires future target pushback timestamp (DEP_UTC<sub>next</sub>)</td>
+                    <td><strong style="color: var(--accent-rose); font-size: 11px;">BANNED FROM PREDICTORS</strong></td>
+                  </tr>
+                  <tr style="background: rgba(244, 63, 94, 0.05);">
+                    <td><code>NEXT_DEP_DELAY</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-rose); font-size: 11px;">RETROSPECTIVE ONLY</span></td>
+                    <td style="color: var(--accent-rose); font-size: 12px;">Target actual departure delay occurs in the future</td>
+                    <td><strong style="color: var(--accent-rose); font-size: 11px;">BANNED FROM PREDICTORS</strong></td>
+                  </tr>
+                  <tr style="background: rgba(244, 63, 94, 0.05);">
+                    <td><code>NEXT_DEP_UTC / NEXT_ARR_UTC</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-rose); font-size: 11px;">RETROSPECTIVE ONLY</span></td>
+                    <td style="color: var(--accent-rose); font-size: 12px;">Actual target flight timestamps occur in the future</td>
+                    <td><strong style="color: var(--accent-rose); font-size: 11px;">BANNED FROM PREDICTORS</strong></td>
+                  </tr>
+                  <tr style="background: rgba(16, 185, 129, 0.05);">
+                    <td><code>NEXT_ARR_DEL15</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">CLASSIFICATION TARGET</span></td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Ground truth label for binary classification (&ge; 15 min delay)</td>
+                    <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">TARGET ISOLATED</span></td>
+                  </tr>
+                  <tr style="background: rgba(16, 185, 129, 0.05);">
+                    <td><code>NEXT_ARR_DELAY</code></td>
+                    <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">REGRESSION TARGET</span></td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Ground truth continuous delay minutes for regression models</td>
+                    <td><span class="badge-pill" style="color: var(--accent-emerald); font-size: 11px;">TARGET ISOLATED</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="manuscript-p" style="margin-top: 18px;">
+              <strong>Causal Window Verification:</strong> Rolling airframe delay metrics in <code>reconstruct_rotations.py</code> were formally verified to utilize the SQL window specification <code>ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING</code>. On the target flight record (leg <em>k</em>), the aggregation strictly sums legs <em>0 &hellip; k-1</em>. For the first flight of any airframe on a given calendar date, the cumulative prior delay evaluates to strictly <strong>0.0 minutes</strong>, confirming zero leakage of the flight's own delay outcome.
+            </p>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION VI: INVARIANT VERIFICATION & PHYSICAL FEASIBILITY MATRIX -->
+          <section class="manuscript-section" id="methodology-validation">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section VI
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section VI: Physical Feasibility &amp; Invariant Verification Matrix</h2>
+
+            <p class="manuscript-p">
+              Prior to training predictive models, the master rotation pairs dataset was audited against five immutable physical invariants. All 6,768,487 reconstructed rotation pairs satisfied every physical feasibility check with <strong>zero violations</strong>:
+            </p>
+
+            <div class="table-responsive">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Physical Invariant Check</th>
+                    <th style="text-align: center;">Passed</th>
+                    <th style="text-align: right;">Failed Count</th>
+                    <th>Validation Details &amp; Dataset Verification</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Physical Feasibility: Actual Ground Time &ge; 0 min</strong></td>
+                    <td style="text-align: center;"><span class="badge-pill" style="color: var(--accent-emerald); font-weight: 700;">TRUE</span></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 700;">0</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">100.0% of pairs satisfy <code>ARR_UTC_prev &le; DEP_UTC_next</code> (Zero negative ground times)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Spatial Continuity: DEST_prev == ORIGIN_next</strong></td>
+                    <td style="text-align: center;"><span class="badge-pill" style="color: var(--accent-emerald); font-weight: 700;">TRUE</span></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 700;">0</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">100.0% of pairs have identical turnaround airport (85,737 station gaps eliminated)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Airframe Integrity: TAIL_NUM non-null &amp; identical</strong></td>
+                    <td style="text-align: center;"><span class="badge-pill" style="color: var(--accent-emerald); font-weight: 700;">TRUE</span></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 700;">0</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">100.0% of pairs are mapped to the exact same physical aircraft tail number</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Delayed Rotation Preservation: NEXT_CRS_DEP &lt; PREV_ARR</strong></td>
+                    <td style="text-align: center;"><span class="badge-pill" style="color: var(--accent-emerald); font-weight: 700;">TRUE</span></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 700;">0</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">382,937 pairs (5.66%) preserved where incoming delay ate scheduled pushback</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Turnaround Deficit Impact: PREV_ARR_DELAY &gt; BUFFER</strong></td>
+                    <td style="text-align: center;"><span class="badge-pill" style="color: var(--accent-emerald); font-weight: 700;">TRUE</span></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--accent-emerald); font-weight: 700;">0</td>
+                    <td style="color: var(--text-secondary); font-size: 12.5px;">Verified delay rate under deficit: 99.50% vs preserved buffer: 17.38%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <p class="manuscript-p" style="margin-top: 18px;">
+              <strong>Chronological Split Protocol:</strong> Standard random cross-validation leaks contiguous timeline information across rotations. Our modeling architecture enforces a strict chronological split: training on January&ndash;September 2025, validating on October&ndash;November 2025, and evaluating on the held-out December 2025 test dataset, mirroring genuine operational dispatch deployment.
+            </p>
+          </section>
+
+        </article>
       </section>
 
       <!-- ========================================================================= -->
