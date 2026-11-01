@@ -4343,13 +4343,13 @@
       </section>
 
 
-            <!-- ========================================================================= -->
+                  <!-- ========================================================================= -->
       <!-- SECTION 07: VISUALIZATIONS & FIGURE REPOSITORY                            -->
       <!-- ========================================================================= -->
       <section id="visualizations-view" class="dashboard-page">
         <article class="manuscript-wrapper" style="max-width: 100%;">
 
-          <!-- Page Header (No Section Tag Pill) -->
+          <!-- Page Header -->
           <header class="manuscript-header" style="padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 24px;">
             <h1 style="font-size: 26px; font-weight: 800; color: #fff; line-height: 1.35; margin-bottom: 6px; letter-spacing: -0.02em;">
               Research Visualizations &amp; Empirical Figure Repository
@@ -4360,34 +4360,34 @@
           </header>
 
           <!-- 6 Headline KPI Summary Cards in a Single Flexible Row -->
-          <div style="display: flex; flex-direction: row; gap: 10px; width: 100%; margin-bottom: 12px; overflow-x: auto;">
+          <div style="display: flex; flex-direction: row; gap: 10px; width: 100%; margin-bottom: 24px; overflow-x: auto;">
             <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
               <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Total Repository</div>
               <div class="stat-value" style="font-size: 20px;">40 Figures</div>
               <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">300 DPI publication quality</div>
             </div>
             <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
-              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Phase 4: EDA</div>
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Exploratory Analysis</div>
               <div class="stat-value" style="font-size: 20px; color: var(--accent-blue);">9 Figures</div>
               <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dynamics &amp; buffer physics</div>
             </div>
             <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
-              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Stage 4: Validation</div>
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Model Validation</div>
               <div class="stat-value" style="font-size: 20px; color: var(--accent-emerald);">7 Figures</div>
               <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">5 model families &amp; ablation</div>
             </div>
             <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
-              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Stage 5: Tuning</div>
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Hyperparameter Tuning</div>
               <div class="stat-value" style="font-size: 20px; color: var(--accent-purple);">3 Figures</div>
               <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Grids &amp; threshold curves</div>
             </div>
             <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
-              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Stage 6: Test Audit</div>
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Independent Test Audit</div>
               <div class="stat-value" style="font-size: 20px; color: var(--accent-emerald);">11 Figures</div>
               <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">December test &amp; shift-share</div>
             </div>
             <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
-              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">IEEE Conference</div>
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">IEEE Publication</div>
               <div class="stat-value" style="font-size: 20px; color: var(--accent-amber);">8 Figures</div>
               <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Camera-ready manuscript</div>
             </div>
@@ -4395,42 +4395,8 @@
 
           <hr class="manuscript-divider">
 
-          <!-- Unboxed Filter & Search Controls Toolbar -->
-          <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 24px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 12px;">
-              <div style="font-size: 13px; font-weight: 700; color: #fff;">
-                Filter Figures by Analytical Research Phase
-              </div>
-              <span id="gallery-count-badge" class="badge-pill" style="font-size: 12px; padding: 4px 12px; color: var(--accent-cyan);">Showing 40 of 40 Figures</span>
-            </div>
-
-            <div id="figure-category-pills" class="category-filters" style="margin-bottom: 12px;">
-              <button type="button" class="cat-pill active" data-cat="all">All Research Phases (40)</button>
-              <button type="button" class="cat-pill" data-cat="eda">Phase 4: EDA &amp; Dynamics (9)</button>
-              <button type="button" class="cat-pill" data-cat="stage4">Stage 4: Model Validation (7)</button>
-              <button type="button" class="cat-pill" data-cat="stage5">Stage 5: Tuning &amp; Thresholds (3)</button>
-              <button type="button" class="cat-pill" data-cat="stage6">Stage 6: Independent Test (11)</button>
-              <button type="button" class="cat-pill" data-cat="macro">Longitudinal Macro Trends (2)</button>
-              <button type="button" class="cat-pill" data-cat="ieee">IEEE Paper Publication (8)</button>
-            </div>
-
-            <div style="display: flex; gap: 12px; align-items: center;">
-              <div style="flex: 1; position: relative;">
-                <input type="text" id="figures-search-input" class="filter-input" placeholder="Search figures by title, stage, or keyword (e.g. 'ROC', 'buffer', 'cushion', 'residual', 'calibration', 'importance', 'deficit')..." style="width: 100%; padding-left: 36px;">
-                <span style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 14px;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
-              </div>
-              <button type="button" id="clear-figures-search" class="btn-secondary" style="padding: 7px 14px; font-size: 12px;">Clear Search</button>
-            </div>
-          </div>
-
-          <!-- Empty State Container (Hidden by Default) -->
-          <div id="figures-empty-state" style="display: none; text-align: center; padding: 48px; background: rgba(15, 23, 42, 0.4); border-radius: var(--radius-md); border: 1px dashed var(--border-subtle); margin: 24px 0;">
-            <p style="font-size: 15px; color: var(--text-muted); margin-bottom: 12px;">No research figures match the active search or filter criteria.</p>
-            <button type="button" class="btn-secondary" onclick="resetFigureFilters()">Reset All Filters</button>
-          </div>
-
-          <!-- Section I: Phase 4 &bull; Exploratory Data Analysis &amp; Network Propagation Dynamics -->
-          <section class="manuscript-section" id="vis-section-eda" data-phase="eda">
+          <!-- Section I: Exploratory Data Analysis &amp; Network Propagation Dynamics -->
+          <section class="manuscript-section" id="vis-section-eda">
             <div class="manuscript-sec-header">
               <span class="manuscript-sec-tag">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
@@ -4438,13 +4404,13 @@
               </span>
             </div>
 
-            <h2 class="manuscript-sec-title">Section I: Phase 4 &bull; Exploratory Data Analysis &amp; Network Propagation Dynamics</h2>
+            <h2 class="manuscript-sec-title">Section I: Exploratory Data Analysis &amp; Network Propagation Dynamics</h2>
             <p class="manuscript-p">
               Full-year 2025 census analysis across all 6,768,487 validated flight pairs. Investigates empirical delay propagation dynamics, turnaround ground buffer absorption distributions, the non-linear deficit cliff, diurnal congestion peaks, carrier heterogeneity, and airframe rotational fatigue.
             </p>
 
-            <div id="fig-grid-eda" class="figures-gallery-grid" style="margin-top: 18px;">
-              <div class="figure-gallery-card" data-category="eda" data-filename="fig01_target_distributions.png">
+            <div class="figures-gallery-grid" style="margin-top: 18px;">
+              <div class="figure-gallery-card">
                 <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig01_target_distributions.png')">
                   <img src="figures/fig01_target_distributions.png" alt="Target Arrival Delay Distributions &amp; Binary Balance" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
                   <div class="figure-card-overlay">
@@ -4457,7 +4423,7 @@
                 <div class="figure-card-body">
                   <div class="figure-card-meta">
                     <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">
-                      Phase 5 EDA
+                      Exploratory Analysis
                     </span>
                     <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig01_target_distributions.png</span>
                   </div>
@@ -4472,7 +4438,8 @@
                     </button>
                   </div>
                 </div>
-              </div>\n              <div class="figure-gallery-card" data-category="eda" data-filename="fig02_delay_propagation_relationships.png">
+              </div>
+              <div class="figure-gallery-card">
                 <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig02_delay_propagation_relationships.png')">
                   <img src="figures/fig02_delay_propagation_relationships.png" alt="Empirical Delay Propagation Dynamics" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
                   <div class="figure-card-overlay">
@@ -4485,7 +4452,7 @@
                 <div class="figure-card-body">
                   <div class="figure-card-meta">
                     <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">
-                      Phase 5 EDA
+                      Exploratory Analysis
                     </span>
                     <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig02_delay_propagation_relationships.png</span>
                   </div>
@@ -4500,7 +4467,8 @@
                     </button>
                   </div>
                 </div>
-              </div>\n              <div class="figure-gallery-card" data-category="eda" data-filename="fig03_turnaround_buffer_dynamics.png">
+              </div>
+              <div class="figure-gallery-card">
                 <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig03_turnaround_buffer_dynamics.png')">
                   <img src="figures/fig03_turnaround_buffer_dynamics.png" alt="Turnaround Ground Buffer Dynamics &amp; Deficit Cliff" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
                   <div class="figure-card-overlay">
@@ -4513,7 +4481,7 @@
                 <div class="figure-card-body">
                   <div class="figure-card-meta">
                     <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">
-                      Phase 5 EDA
+                      Exploratory Analysis
                     </span>
                     <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig03_turnaround_buffer_dynamics.png</span>
                   </div>
@@ -4528,7 +4496,8 @@
                     </button>
                   </div>
                 </div>
-              </div>\n              <div class="figure-gallery-card" data-category="eda" data-filename="fig04_temporal_delay_patterns.png">
+              </div>
+              <div class="figure-gallery-card">
                 <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig04_temporal_delay_patterns.png')">
                   <img src="figures/fig04_temporal_delay_patterns.png" alt="Diurnal and Day-of-Week Congestion Patterns" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
                   <div class="figure-card-overlay">
@@ -4541,7 +4510,7 @@
                 <div class="figure-card-body">
                   <div class="figure-card-meta">
                     <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">
-                      Phase 5 EDA
+                      Exploratory Analysis
                     </span>
                     <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig04_temporal_delay_patterns.png</span>
                   </div>
@@ -4556,7 +4525,8 @@
                     </button>
                   </div>
                 </div>
-              </div>\n              <div class="figure-gallery-card" data-category="eda" data-filename="fig05_carrier_airport_heterogeneity.png">
+              </div>
+              <div class="figure-gallery-card">
                 <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig05_carrier_airport_heterogeneity.png')">
                   <img src="figures/fig05_carrier_airport_heterogeneity.png" alt="Carrier &amp; Major Hub Airport Heterogeneity" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
                   <div class="figure-card-overlay">
@@ -4569,7 +4539,7 @@
                 <div class="figure-card-body">
                   <div class="figure-card-meta">
                     <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">
-                      Phase 5 EDA
+                      Exploratory Analysis
                     </span>
                     <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig05_carrier_airport_heterogeneity.png</span>
                   </div>
@@ -4584,7 +4554,8 @@
                     </button>
                   </div>
                 </div>
-              </div>\n              <div class="figure-gallery-card" data-category="eda" data-filename="fig06_aircraft_level_patterns.png">
+              </div>
+              <div class="figure-gallery-card">
                 <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig06_aircraft_level_patterns.png')">
                   <img src="figures/fig06_aircraft_level_patterns.png" alt="Airframe Rotational Fatigue &amp; Daily Flight Sequence" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
                   <div class="figure-card-overlay">
@@ -4597,7 +4568,7 @@
                 <div class="figure-card-body">
                   <div class="figure-card-meta">
                     <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">
-                      Phase 5 EDA
+                      Exploratory Analysis
                     </span>
                     <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig06_aircraft_level_patterns.png</span>
                   </div>
@@ -4612,7 +4583,8 @@
                     </button>
                   </div>
                 </div>
-              </div>\n              <div class="figure-gallery-card" data-category="eda" data-filename="fig07_feature_correlations.png">
+              </div>
+              <div class="figure-gallery-card">
                 <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig07_feature_correlations.png')">
                   <img src="figures/fig07_feature_correlations.png" alt="Multivariate Feature Correlation Heatmap" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
                   <div class="figure-card-overlay">
@@ -4625,7 +4597,7 @@
                 <div class="figure-card-body">
                   <div class="figure-card-meta">
                     <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">
-                      Phase 5 EDA
+                      Exploratory Analysis
                     </span>
                     <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig07_feature_correlations.png</span>
                   </div>
@@ -4640,7 +4612,8 @@
                     </button>
                   </div>
                 </div>
-              </div>\n              <div class="figure-gallery-card" data-category="eda" data-filename="airport_geographic_distribution.png">
+              </div>
+              <div class="figure-gallery-card">
                 <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('airport_geographic_distribution.png')">
                   <img src="figures/airport_geographic_distribution.png" alt="Geographic Distribution of 352 Network Airports" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
                   <div class="figure-card-overlay">
@@ -4653,7 +4626,7 @@
                 <div class="figure-card-body">
                   <div class="figure-card-meta">
                     <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">
-                      Phase 5 EDA
+                      Exploratory Analysis
                     </span>
                     <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">airport_geographic_distribution.png</span>
                   </div>
@@ -4668,7 +4641,8 @@
                     </button>
                   </div>
                 </div>
-              </div>\n              <div class="figure-gallery-card" data-category="eda" data-filename="annual_arrival_delay_distribution.png">
+              </div>
+              <div class="figure-gallery-card">
                 <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('annual_arrival_delay_distribution.png')">
                   <img src="figures/annual_arrival_delay_distribution.png" alt="Full-Year Arrival Delay Density (BTS 2025)" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
                   <div class="figure-card-overlay">
@@ -4681,7 +4655,7 @@
                 <div class="figure-card-body">
                   <div class="figure-card-meta">
                     <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-blue); background: rgba(56, 189, 248, 0.1); border-color: rgba(56, 189, 248, 0.3);">
-                      Phase 5 EDA
+                      Exploratory Analysis
                     </span>
                     <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">annual_arrival_delay_distribution.png</span>
                   </div>
@@ -4699,6 +4673,1010 @@
               </div>
             </div>
           </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- Section II: Model Architectures, Feature Ablation &amp; Validation Benchmarking -->
+          <section class="manuscript-section" id="vis-section-stage4">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section II
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section II: Model Architectures, Feature Ablation &amp; Validation Benchmarking</h2>
+            <p class="manuscript-p">
+              Controlled benchmark across five model families (Random Forest, Gradient Boosting, XGBoost, Linear/Ridge, Logistic/SGD) on October&ndash;November frozen validation (N = 1,140,909). Documents hierarchical feature ablation from Group A (airframe history) to Group B (+turnaround buffers) to Group C (+network context).
+            </p>
+
+            <div class="figures-gallery-grid" style="margin-top: 18px;">
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('classification_roc_curve.png')">
+                  <img src="figures/classification_roc_curve.png" alt="Stage 4 Validation Receiver Operating Characteristic (ROC) Curves" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-emerald); background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+                      Model Validation
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">classification_roc_curve.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 4 Validation Receiver Operating Characteristic (ROC) Curves</h4>
+                  <p class="figure-card-desc">Validation set ROC curves comparing Majority Baseline, Logistic Regression, Decision Tree, MLP (alpha=0), and Random Forest across Groups A, B, and C.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Random Forest Group C achieves the top validation discrimination of AUC = 0.7932, outperforming linear baselines (0.7775).
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('classification_roc_curve.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('classification_precision_recall_curve.png')">
+                  <img src="figures/classification_precision_recall_curve.png" alt="Stage 4 Validation Precision-Recall Curves" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-emerald); background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+                      Model Validation
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">classification_precision_recall_curve.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 4 Validation Precision-Recall Curves</h4>
+                  <p class="figure-card-desc">Precision-Recall curves highlighting Average Precision (AP) against the 20.21% validation positive baseline across all tested estimators.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Random Forest Group C delivers AP = 0.6600, demonstrating strong positive class precision retention across diverse operational operating thresholds.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('classification_precision_recall_curve.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('classification_confusion_matrix.png')">
+                  <img src="figures/classification_confusion_matrix.png" alt="Stage 4 Validation Confusion Matrix (T=0.50)" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-emerald); background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+                      Model Validation
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">classification_confusion_matrix.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 4 Validation Confusion Matrix (T=0.50)</h4>
+                  <p class="figure-card-desc">Confusion matrix counts and normalized proportions for the selected Random Forest classifier evaluated at default decision threshold T=0.50 on 1.14M validation flights.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Achieves 86.68% precision with 40.88% recall, proving high precision reliability with an opportunity for threshold optimization.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('classification_confusion_matrix.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('regression_actual_vs_predicted.png')">
+                  <img src="figures/regression_actual_vs_predicted.png" alt="Stage 4 Continuous Regression: Actual vs. Predicted Delay" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-emerald); background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+                      Model Validation
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">regression_actual_vs_predicted.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 4 Continuous Regression: Actual vs. Predicted Delay</h4>
+                  <p class="figure-card-desc">Scatter hexbin density of actual vs predicted continuous arrival delay on the validation dataset (N=1,140,909) with unity reference line.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Demonstrates R2 = 0.4516 and MAE = 17.40 minutes, closely tracking delays up to 100 minutes before exhibiting conservative compression on extreme outliers.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('regression_actual_vs_predicted.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('regression_residual_distribution.png')">
+                  <img src="figures/regression_residual_distribution.png" alt="Stage 4 Regression Residual Density &amp; Calibration" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-emerald); background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+                      Model Validation
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">regression_residual_distribution.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 4 Regression Residual Density &amp; Calibration</h4>
+                  <p class="figure-card-desc">Histogram and kernel density of validation residuals (Actual - Predicted) demonstrating mean bias of +0.94 minutes.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Unconditional calibration error is under 1 minute across 1.14 million validation predictions, confirming unbiased central expectations.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('regression_residual_distribution.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('regression_error_by_delay_band.png')">
+                  <img src="figures/regression_error_by_delay_band.png" alt="Stage 4 Error Stratification Across 5 Delay Bands" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-emerald); background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+                      Model Validation
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">regression_error_by_delay_band.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 4 Error Stratification Across 5 Delay Bands</h4>
+                  <p class="figure-card-desc">Mean Absolute Error broken down into Early/On-Time (&lt;=0m), Minor Delay (1-14m), Moderate Delay (15-44m), Large Delay (45-119m), and Severe Delay (&gt;=120m).</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Early and minor flights achieve low errors (12.19m and 16.54m MAE), while severe delays (&gt;=120m) account for the bulk of global error variance.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('regression_error_by_delay_band.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('permutation_importance_comparison.png')">
+                  <img src="figures/permutation_importance_comparison.png" alt="Stage 4 Permutation Feature Importance Across Estimator Families" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-emerald); background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+                      Model Validation
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">permutation_importance_comparison.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 4 Permutation Feature Importance Across Estimator Families</h4>
+                  <p class="figure-card-desc">Empirical drop in validation metric when permuting each of the 18 Group C features across Random Forest, MLP, Decision Tree, and Logistic Regression.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Consistently identifies ESTIMATED_REMAINING_TURNAROUND_MINUTES and PREV_ARR_DELAY as the top two predictive drivers across all architectures.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('permutation_importance_comparison.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- Section III: Hyperparameter Grid Search &amp; Decision Threshold Optimization -->
+          <section class="manuscript-section" id="vis-section-stage5">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section III
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section III: Hyperparameter Grid Search &amp; Decision Threshold Optimization</h2>
+            <p class="manuscript-p">
+              Systematic hyperparameter tuning landscapes across tree depth, estimator counts, and leaf split constraints. Establishes the operational decision threshold curve, evaluating F1-score optimization and precision-recall trade-offs across candidate operating points.
+            </p>
+
+            <div class="figures-gallery-grid" style="margin-top: 18px;">
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage5_threshold_curves.png')">
+                  <img src="figures/stage5_threshold_curves.png" alt="Stage 5 Decision Threshold Trade-off Curves" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-purple); background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">
+                      Hyperparameter Tuning
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage5_threshold_curves.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 5 Decision Threshold Trade-off Curves</h4>
+                  <p class="figure-card-desc">Validation Precision, Recall, and F1 trajectories across thresholds 0.05 to 0.95. Highlights operational trade-off point T=0.35 and grid optimum T=0.39.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Lowering threshold from 0.50 to 0.35 increases recall from 40.88% to 49.03% with a minimal precision drop to 69.20%, yielding superior operational alerting.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage5_threshold_curves.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage5_tuning_curves.png')">
+                  <img src="figures/stage5_tuning_curves.png" alt="Stage 5 Random Forest Hyperparameter Grid Trajectories" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-purple); background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">
+                      Hyperparameter Tuning
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage5_tuning_curves.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 5 Random Forest Hyperparameter Grid Trajectories</h4>
+                  <p class="figure-card-desc">Validation AUC, F1, and MAE across tree depth limits (10 to 30) and ensemble sizes (50 to 300 estimators).</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Identified optimal trade-off at n_estimators=200 and max_depth=20, balancing generalization against memory footprint and sub-15ms inference latency.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage5_tuning_curves.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage5_final_model_diagnostics.png')">
+                  <img src="figures/stage5_final_model_diagnostics.png" alt="Stage 5 Selected Final Model Comprehensive Diagnostics" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-purple); background: rgba(168, 85, 247, 0.1); border-color: rgba(168, 85, 247, 0.3);">
+                      Hyperparameter Tuning
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage5_final_model_diagnostics.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 5 Selected Final Model Comprehensive Diagnostics</h4>
+                  <p class="figure-card-desc">Multi-panel summary verifying convergence, reliability calibration, learning curves, and residual normality before freezing weights for test evaluation.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Formally cleared the frozen Random Forest Group C pipeline for final untouched December test evaluation.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage5_final_model_diagnostics.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- Section IV: Final Independent Test Evaluation &amp; Generalization Audit -->
+          <section class="manuscript-section" id="vis-section-stage6">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section IV
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section IV: Final Independent Test Evaluation &amp; Generalization Audit</h2>
+            <p class="manuscript-p">
+              Strict forward out-of-sample evaluation on 562,202 held-out December 2025 flights across all 352 active airports. Documents ROC/PR curves, probability calibration reliability, residual error moments, 5-strata error performance, and out-of-sample permutation feature importance.
+            </p>
+
+            <div class="figures-gallery-grid" style="margin-top: 18px;">
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage6_test_roc_curve.png')">
+                  <img src="figures/stage6_test_roc_curve.png" alt="Stage 6 Final Test ROC Curve (AUC = 0.7943)" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+                      Independent Test Audit
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage6_test_roc_curve.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 6 Final Test ROC Curve (AUC = 0.7943)</h4>
+                  <p class="figure-card-desc">Out-of-sample Receiver Operating Characteristic curve evaluated on 562,202 independent December 2025 flights, outperforming validation (0.7932).</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Zero temporal performance degradation, proving that the learned propagation mechanisms generalize across distinct winter seasonal conditions.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage6_test_roc_curve.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage6_test_precision_recall_curve.png')">
+                  <img src="figures/stage6_test_precision_recall_curve.png" alt="Stage 6 Final Test Precision-Recall Curve (AP = 0.7150)" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+                      Independent Test Audit
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage6_test_precision_recall_curve.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 6 Final Test Precision-Recall Curve (AP = 0.7150)</h4>
+                  <p class="figure-card-desc">Out-of-sample Precision-Recall curve on December 2025 test dataset against the 26.48% baseline delay prevalence.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Average Precision rose from 0.6600 (validation) to 0.7150 (test), reflecting robust true positive capture during heavy holiday disruption periods.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage6_test_precision_recall_curve.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage6_test_confusion_matrix.png')">
+                  <img src="figures/stage6_test_confusion_matrix.png" alt="Stage 6 Test Confusion Matrix at Operational Threshold (T=0.35)" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+                      Independent Test Audit
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage6_test_confusion_matrix.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 6 Test Confusion Matrix at Operational Threshold (T=0.35)</h4>
+                  <p class="figure-card-desc">Final December test confusion matrix: TP = 79,255, FP = 29,997, FN = 69,610, TN = 383,340 on 562,202 operations.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Confirms 72.52% precision and 53.24% recall at the operational threshold, maintaining 92.74% specificity on on-time operations.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage6_test_confusion_matrix.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage6_test_calibration_curve.png')">
+                  <img src="figures/stage6_test_calibration_curve.png" alt="Stage 6 Probability Calibration &amp; Reliability Diagram" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+                      Independent Test Audit
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage6_test_calibration_curve.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 6 Probability Calibration &amp; Reliability Diagram</h4>
+                  <p class="figure-card-desc">Reliability curve comparing predicted probabilities against empirical observed delay frequencies in 10 uniform probability deciles.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Exhibits tight calibration along the diagonal line with Brier score = 0.1341, confirming that predicted probabilities reflect true empirical risk.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage6_test_calibration_curve.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage6_test_actual_vs_predicted.png')">
+                  <img src="figures/stage6_test_actual_vs_predicted.png" alt="Stage 6 Test Continuous Delay: Actual vs. Predicted" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+                      Independent Test Audit
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage6_test_actual_vs_predicted.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 6 Test Continuous Delay: Actual vs. Predicted</h4>
+                  <p class="figure-card-desc">Scatter hexbin comparison on December 2025 test set (N=562,202) showing R2 = 0.4851 and MAE = 19.77 minutes.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> The model explains 48.51% of continuous arrival delay variance out-of-sample, outperforming validation R2 (0.4516) by +0.0335.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage6_test_actual_vs_predicted.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage6_test_residual_distribution.png')">
+                  <img src="figures/stage6_test_residual_distribution.png" alt="Stage 6 Test Residual Distribution &amp; Higher Moments" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+                      Independent Test Audit
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage6_test_residual_distribution.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 6 Test Residual Distribution &amp; Higher Moments</h4>
+                  <p class="figure-card-desc">Histogram and distribution fit of test residuals showing unconditional bias of +1.21 minutes and median error of -4.32 minutes.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Confirms absence of significant systemic drift, with near-zero macroscopic bias across the independent evaluation cohort.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage6_test_residual_distribution.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage6_test_residual_vs_predicted.png')">
+                  <img src="figures/stage6_test_residual_vs_predicted.png" alt="Stage 6 Residuals vs. Predicted Delay (Heteroscedasticity Analysis)" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+                      Independent Test Audit
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage6_test_residual_vs_predicted.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 6 Residuals vs. Predicted Delay (Heteroscedasticity Analysis)</h4>
+                  <p class="figure-card-desc">Residual scatter against predicted arrival delay minutes, examining variance stability across small, medium, and large predicted delays.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Shows stable variance up to 45 minutes of delay, with expected heteroscedastic dispersion in high-delay regimes caused by unobserved NAS weather shocks.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage6_test_residual_vs_predicted.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage6_test_delay_band_performance.png')">
+                  <img src="figures/stage6_test_delay_band_performance.png" alt="Stage 6 Test Error Stratified Across 5 Delay Bands" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+                      Independent Test Audit
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage6_test_delay_band_performance.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 6 Test Error Stratified Across 5 Delay Bands</h4>
+                  <p class="figure-card-desc">Mean Absolute Error across Early/On-Time (12.44m), Minor (18.17m), Moderate (23.95m), Large (37.75m), and Severe (93.93m) bands.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Within-band error rates remained nearly identical to validation; overall MAE increased from 17.40m to 19.77m solely due to December&#x27;s higher severe delay share.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage6_test_delay_band_performance.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage6_test_feature_importance.png')">
+                  <img src="figures/stage6_test_feature_importance.png" alt="Stage 6 Out-of-Sample Permutation Feature Importance" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+                      Independent Test Audit
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage6_test_feature_importance.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 6 Out-of-Sample Permutation Feature Importance</h4>
+                  <p class="figure-card-desc">Independent test permutation importance rankings for the 18 Group C features on December 2025 flights.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> ESTIMATED_REMAINING_TURNAROUND_MINUTES and PREV_ARR_DELAY account for over 70% of total permutation importance, solidifying ground turnaround physics as paramount.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage6_test_feature_importance.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage6_test_threshold_comparison.png')">
+                  <img src="figures/stage6_test_threshold_comparison.png" alt="Stage 6 Operating Threshold Performance Comparison" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+                      Independent Test Audit
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage6_test_threshold_comparison.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Stage 6 Operating Threshold Performance Comparison</h4>
+                  <p class="figure-card-desc">Side-by-side bar comparison of Precision, Recall, F1, and Accuracy across candidate thresholds T=0.35, T=0.39, and T=0.50 on the test set.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Demonstrates that T=0.35 captures 53.24% of all delayed flights while preserving 72.52% precision and 92.74% specificity on on-time flights.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage6_test_threshold_comparison.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('stage6_validation_test_comparison.png')">
+                  <img src="figures/stage6_validation_test_comparison.png" alt="Validation vs. Test Generalization Metrics Comparison" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-cyan); background: rgba(6, 182, 212, 0.1); border-color: rgba(6, 182, 212, 0.3);">
+                      Independent Test Audit
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">stage6_validation_test_comparison.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Validation vs. Test Generalization Metrics Comparison</h4>
+                  <p class="figure-card-desc">Comparative radar and bar visualization of ROC-AUC, AP, R2, MAE, RMSE, and Specificity across temporal validation and test cohorts.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Validates temporal robustness and rules out overfitting across the chronological threshold.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('stage6_validation_test_comparison.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- Section V: Longitudinal Macro Trends &amp; Seasonal Trajectories -->
+          <section class="manuscript-section" id="vis-section-macro">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section V
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section V: Longitudinal Macro Trends &amp; Seasonal Trajectories</h2>
+            <p class="manuscript-p">
+              Longitudinal trajectory analysis across all 12 BTS monthly census files from January to December 2025. Tracks month-by-month delay rate fluctuations, flight volume rhythms, cancellation spikes, and severe holiday weather disruption concentrations.
+            </p>
+
+            <div class="figures-gallery-grid" style="margin-top: 18px;">
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('monthly_delay_rate_trend.png')">
+                  <img src="figures/monthly_delay_rate_trend.png" alt="Longitudinal Monthly Delay Rate Trajectory (Jan-Dec 2025)" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-rose); background: rgba(244, 63, 94, 0.1); border-color: rgba(244, 63, 94, 0.3);">
+                      Longitudinal Trajectory
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">monthly_delay_rate_trend.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Longitudinal Monthly Delay Rate Trajectory (Jan-Dec 2025)</h4>
+                  <p class="figure-card-desc">Proportion of flights delayed &gt;= 15 minutes across all 12 months of 2025 in the Bureau of Transportation Statistics database.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Reveals clear seasonal peaks in June/July (convective summer storms) and December (holiday winter volume at 26.48%).
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('monthly_delay_rate_trend.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('monthly_flight_volume_cancellations.png')">
+                  <img src="figures/monthly_flight_volume_cancellations.png" alt="Monthly Flight Volume &amp; Cancellation Dynamics" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-rose); background: rgba(244, 63, 94, 0.1); border-color: rgba(244, 63, 94, 0.3);">
+                      Longitudinal Trajectory
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">monthly_flight_volume_cancellations.png</span>
+                  </div>
+                  <h4 class="figure-card-title">Monthly Flight Volume &amp; Cancellation Dynamics</h4>
+                  <p class="figure-card-desc">Total monthly scheduled flight volume and cancelled operations, establishing the stability of commercial flight density.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Confirms high volume consistency (~580k flights/month) with low cancellation rates (&lt;2%), validating the integrity of rotational chain reconstruction.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('monthly_flight_volume_cancellations.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- Section VI: IEEE Conference Manuscript Publication Figures -->
+          <section class="manuscript-section" id="vis-section-ieee">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section VI
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section VI: IEEE Conference Manuscript Publication Figures</h2>
+            <p class="manuscript-p">
+              Vector-rendered, camera-ready figures formatted to exact IEEE conference two-column specifications, corresponding directly to Figures 1 through 6 in the official 6-page research manuscript.
+            </p>
+
+            <div class="figures-gallery-grid" style="margin-top: 18px;">
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig_propagation_relationships.png')">
+                  <img src="figures/fig_propagation_relationships.png" alt="IEEE Fig 1: Empirical Delay Propagation Dynamics" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+                      IEEE Publication
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig_propagation_relationships.png</span>
+                  </div>
+                  <h4 class="figure-card-title">IEEE Fig 1: Empirical Delay Propagation Dynamics</h4>
+                  <p class="figure-card-desc">Dual-panel paper figure showing mean next arrival delay vs inbound delay and next delay probability vs scheduled turnaround buffer.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Core empirical visualization for Section III of the IEEE paper establishing the rotational propagation problem.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('fig_propagation_relationships.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig_turnaround_buffer.png')">
+                  <img src="figures/fig_turnaround_buffer.png" alt="IEEE Fig 2: Turnaround Buffer Cushion &amp; Deficit Mechanics" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+                      IEEE Publication
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig_turnaround_buffer.png</span>
+                  </div>
+                  <h4 class="figure-card-title">IEEE Fig 2: Turnaround Buffer Cushion &amp; Deficit Mechanics</h4>
+                  <p class="figure-card-desc">Dual-panel distribution of scheduled turnaround buffers and subsequent delay rate as a function of remaining cushion.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Illustrates the mathematical turnaround cushion formula and the deficit threshold triggering a 99.5% propagation rate.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('fig_turnaround_buffer.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig_test_roc.png')">
+                  <img src="figures/fig_test_roc.png" alt="IEEE Fig 3(a): Test ROC Curve (AUC = 0.7943)" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+                      IEEE Publication
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig_test_roc.png</span>
+                  </div>
+                  <h4 class="figure-card-title">IEEE Fig 3(a): Test ROC Curve (AUC = 0.7943)</h4>
+                  <p class="figure-card-desc">High-resolution ROC curve for Section V-A of the conference paper demonstrating out-of-sample discrimination.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Sub-panel figure showing model discrimination on 562,202 independent test flights.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('fig_test_roc.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig_test_pr.png')">
+                  <img src="figures/fig_test_pr.png" alt="IEEE Fig 3(b): Test Precision-Recall Curve (AP = 0.7150)" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+                      IEEE Publication
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig_test_pr.png</span>
+                  </div>
+                  <h4 class="figure-card-title">IEEE Fig 3(b): Test Precision-Recall Curve (AP = 0.7150)</h4>
+                  <p class="figure-card-desc">High-resolution Precision-Recall curve with random classifier baseline comparison for the IEEE paper.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Demonstrates Average Precision substantially exceeding the 26.5% no-skill prevalence baseline.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('fig_test_pr.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig_test_confusion_matrix.png')">
+                  <img src="figures/fig_test_confusion_matrix.png" alt="IEEE Fig 4: Operational Confusion Matrix at T=0.35" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+                      IEEE Publication
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig_test_confusion_matrix.png</span>
+                  </div>
+                  <h4 class="figure-card-title">IEEE Fig 4: Operational Confusion Matrix at T=0.35</h4>
+                  <p class="figure-card-desc">Publication heat-matrix showing true positives, false positives, false negatives, and true negatives on December test data.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Visualizes the 72.52% precision and 92.74% specificity achieved at the selected operating threshold.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('fig_test_confusion_matrix.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig_actual_vs_predicted.png')">
+                  <img src="figures/fig_actual_vs_predicted.png" alt="IEEE Fig 5(a): Continuous Delay Regression Hexbin" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+                      IEEE Publication
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig_actual_vs_predicted.png</span>
+                  </div>
+                  <h4 class="figure-card-title">IEEE Fig 5(a): Continuous Delay Regression Hexbin</h4>
+                  <p class="figure-card-desc">Regression calibration hexbin comparing actual and predicted continuous arrival delays in minutes (R2 = 0.4851).</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Featured in Section V-B of the paper showing tight adherence along the 45-degree reference line.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('fig_actual_vs_predicted.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig_delay_band_performance.png')">
+                  <img src="figures/fig_delay_band_performance.png" alt="IEEE Fig 5(b): MAE Across Delay Strata" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+                      IEEE Publication
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig_delay_band_performance.png</span>
+                  </div>
+                  <h4 class="figure-card-title">IEEE Fig 5(b): MAE Across Delay Strata</h4>
+                  <p class="figure-card-desc">Mean Absolute Error bar chart across the 5 delay strata in December test evaluation.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Visualizes the error distribution showing that prediction error is highly concentrated in severe disruption flights.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('fig_delay_band_performance.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="figure-gallery-card">
+                <div class="figure-card-img-wrap" onclick="openFigureModalByFilename('fig_feature_importance.png')">
+                  <img src="figures/fig_feature_importance.png" alt="IEEE Fig 6: Top Permutation Feature Importances" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
+                  <div class="figure-card-overlay">
+                    <button class="figure-overlay-btn" type="button">
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                      Inspect Full Resolution
+                    </button>
+                  </div>
+                </div>
+                <div class="figure-card-body">
+                  <div class="figure-card-meta">
+                    <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: var(--accent-amber); background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+                      IEEE Publication
+                    </span>
+                    <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--accent-cyan);">fig_feature_importance.png</span>
+                  </div>
+                  <h4 class="figure-card-title">IEEE Fig 6: Top Permutation Feature Importances</h4>
+                  <p class="figure-card-desc">Bar plot of the most influential features ranked by permutation importance drop in the independent test evaluation.</p>
+                  <div class="figure-card-takeaway">
+                    <strong style="color: var(--accent-cyan);">Key Finding:</strong> Demonstrates the dominance of remaining turnaround cushion, inbound arrival delay, and deficit indicator.
+                  </div>
+                  <div style="display: flex; justify-content: flex-end; margin-top: auto; padding-top: 8px;">
+                    <button type="button" class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModalByFilename('fig_feature_importance.png')">
+                      Inspect &rarr;
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+        </article>
+      </section>
 
           <hr class="manuscript-divider">\n\n          <!-- Section II: Phase 5 (Stage 4) &bull; Model Architectures, Feature Ablation &amp; Validation Benchmarks -->
           <section class="manuscript-section" id="vis-section-stage4" data-phase="stage4">

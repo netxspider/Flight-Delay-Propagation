@@ -816,40 +816,10 @@ function copySnippet(elementId) {
 window.copySnippet = copySnippet;
 
 // =============================================================================
-// RESEARCH FIGURES & VISUALIZATIONS GALLERY (32+ FIGURES)
+// RESEARCH FIGURES & VISUALIZATIONS GALLERY (40 FIGURES)
 // =============================================================================
 
 function initFiguresGallery() {
-  // Category Pill Buttons
-  const catPills = document.querySelectorAll("#figure-category-pills .cat-pill");
-  catPills.forEach(pill => {
-    pill.addEventListener("click", () => {
-      catPills.forEach(p => p.classList.remove("active"));
-      pill.classList.add("active");
-      state.figures.activeCategory = pill.getAttribute("data-cat");
-      filterAndRenderFigures();
-    });
-  });
-
-  // Search Input Listener
-  const searchInput = document.getElementById("figures-search-input");
-  if (searchInput) {
-    searchInput.addEventListener("input", (e) => {
-      state.figures.searchQuery = e.target.value.toLowerCase().trim();
-      filterAndRenderFigures();
-    });
-  }
-
-  // Clear Search Button
-  const clearBtn = document.getElementById("clear-figures-search");
-  if (clearBtn) {
-    clearBtn.addEventListener("click", () => {
-      if (searchInput) searchInput.value = "";
-      state.figures.searchQuery = "";
-      filterAndRenderFigures();
-    });
-  }
-
   // Keyboard navigation for Lightbox modal
   document.addEventListener("keydown", (e) => {
     const modal = document.getElementById("figure-modal");
@@ -871,95 +841,12 @@ async function loadFiguresCatalog() {
     const data = await res.json();
     if (data.figures && data.figures.length > 0) {
       state.figures.catalog = data.figures;
-      filterAndRenderFigures();
+      state.figures.filtered = data.figures;
     }
   } catch (err) {
     console.error("Failed to load figures catalog:", err);
   }
 }
-
-function filterAndRenderFigures() {
-  const { catalog, activeCategory, searchQuery } = state.figures;
-  
-  let filtered = catalog || [];
-
-  if (activeCategory && activeCategory !== "all") {
-    filtered = filtered.filter(f => f.category_id === activeCategory);
-  }
-
-  if (searchQuery) {
-    filtered = filtered.filter(f => {
-      const titleMatch = (f.title || "").toLowerCase().includes(searchQuery);
-      const descMatch = (f.description || "").toLowerCase().includes(searchQuery);
-      const stageMatch = (f.stage || "").toLowerCase().includes(searchQuery);
-      const catMatch = (f.category || "").toLowerCase().includes(searchQuery);
-      const fileMatch = (f.filename || "").toLowerCase().includes(searchQuery);
-      return titleMatch || descMatch || stageMatch || catMatch || fileMatch;
-    });
-  }
-
-  state.figures.filtered = filtered;
-
-  // Filter sections and cards in the DOM
-  const sections = document.querySelectorAll("#visualizations-view .manuscript-section[data-phase]");
-  let totalVisible = 0;
-
-  sections.forEach(sec => {
-    const phase = sec.getAttribute("data-phase");
-    const phaseAllowed = (!activeCategory || activeCategory === "all" || activeCategory === phase);
-    const cards = sec.querySelectorAll(".figure-gallery-card");
-    let visibleInSec = 0;
-
-    cards.forEach(card => {
-      const fn = card.getAttribute("data-filename");
-      const isCardInFiltered = filtered.length === 0 && !searchQuery && activeCategory === "all" 
-        ? true 
-        : filtered.some(f => f.filename === fn);
-        
-      if (phaseAllowed && isCardInFiltered) {
-        card.style.display = "";
-        visibleInSec++;
-        totalVisible++;
-      } else {
-        card.style.display = "none";
-      }
-    });
-
-    sec.style.display = visibleInSec > 0 ? "" : "none";
-    const divider = sec.nextElementSibling;
-    if (divider && divider.classList.contains("manuscript-divider")) {
-      divider.style.display = visibleInSec > 0 ? "" : "none";
-    }
-  });
-
-  // Update gallery counter badge
-  const counterBadge = document.getElementById("gallery-count-badge");
-  if (counterBadge) {
-    const totalCatalog = (catalog && catalog.length > 0) ? catalog.length : 40;
-    counterBadge.textContent = `Showing ${totalVisible} of ${totalCatalog} Figures`;
-  }
-
-  // Toggle empty state
-  const emptyState = document.getElementById("figures-empty-state");
-  if (emptyState) {
-    emptyState.style.display = totalVisible === 0 ? "block" : "none";
-  }
-}
-
-function resetFigureFilters() {
-  state.figures.activeCategory = "all";
-  state.figures.searchQuery = "";
-  const searchInput = document.getElementById("figures-search-input");
-  if (searchInput) searchInput.value = "";
-  
-  const catPills = document.querySelectorAll("#figure-category-pills .cat-pill");
-  catPills.forEach(p => {
-    p.classList.toggle("active", p.getAttribute("data-cat") === "all");
-  });
-
-  filterAndRenderFigures();
-}
-window.resetFigureFilters = resetFigureFilters;
 
 // Lightbox Modal Functions
 function openFigureModal(index) {
