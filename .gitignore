@@ -30,3 +30,13 @@ models/*.joblib
 # Matplotlib cache
 .matplotlib/
 
+# Personal / course report PDFs
+INT234CA2Report.pdf
+*Report.pdf
+
+# Vercel and Node artifacts
+.vercel/
+node_modules/
+.env*.local
+
+

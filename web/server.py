@@ -13,6 +13,7 @@ import os
 import sys
 import json
 import time
+import math
 import urllib.parse
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from socketserver import ThreadingMixIn
@@ -293,6 +294,52 @@ class DashboardHandler(SimpleHTTPRequestHandler):
         offset = (page - 1) * page_size
 
         try:
+            if not os.path.exists(parquet_file) or DUCKDB_CON is None:
+                sample_path = os.path.join(BASE_DIR, "web", "static", "sample_dataset.json")
+                if os.path.exists(sample_path):
+                    with open(sample_path, "r") as sf:
+                        records = json.load(sf)
+                    filtered = []
+                    for r in records:
+                        if carrier and r.get("NEXT_CARRIER", "").upper() != carrier:
+                            continue
+                        if origin and r.get("NEXT_ORIGIN", "").upper() != origin:
+                            continue
+                        if dest and r.get("NEXT_DEST", "").upper() != dest:
+                            continue
+                        if status == "delayed" and r.get("NEXT_ARR_DEL15") != 1:
+                            continue
+                        if status == "ontime" and r.get("NEXT_ARR_DEL15") != 0:
+                            continue
+                        if deficit == "deficit" and r.get("IS_TURNAROUND_DEFICIT") != 1:
+                            continue
+                        if deficit == "sufficient" and r.get("IS_TURNAROUND_DEFICIT") != 0:
+                            continue
+                        if search:
+                            s = search.lower()
+                            if s not in str(r.get("TAIL_NUM", "")).lower() and \
+                               s not in str(r.get("NEXT_CARRIER", "")).lower() and \
+                               s not in str(r.get("NEXT_ORIGIN", "")).lower() and \
+                               s not in str(r.get("NEXT_DEST", "")).lower():
+                                continue
+                        filtered.append(r)
+                    
+                    reverse = (order_dir == "DESC")
+                    filtered.sort(key=lambda x: x.get(sort_by, 0) or 0, reverse=reverse)
+                    total_records = len(filtered)
+                    total_pages = max(1, (total_records + page_size - 1) // page_size)
+                    sliced = filtered[offset:offset + page_size]
+                    self.send_json({
+                        "partition": partition,
+                        "file": "sample_dataset.json (fallback)",
+                        "total": total_records,
+                        "page": page,
+                        "page_size": page_size,
+                        "total_pages": total_pages,
+                        "data": sliced
+                    })
+                    return
+
             count_sql = f"SELECT COUNT(*) FROM '{parquet_file}' WHERE {where_sql}"
             total_records = DUCKDB_CON.execute(count_sql, params).fetchone()[0]
 

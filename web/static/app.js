@@ -101,7 +101,7 @@ function switchView(viewName) {
     models: "05 \u2014 Models: Training & Model Comparison",
     results: "06 \u2014 Results: Test Metrics & Evaluation",
     visualizations: "07 \u2014 Visualizations: Research Figures & Empirical Findings",
-    conclusion: "08 \u2014 Conclusion: Findings & Limitations"
+    conclusion: "08 \u2014 Conclusion: Research Findings & Future Scope"
   };
   const titleEl = document.getElementById("top-bar-page-title");
   if (titleEl) {
