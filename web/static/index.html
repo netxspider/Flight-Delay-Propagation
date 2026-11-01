@@ -3870,147 +3870,269 @@
         </article>
       </section>
 
-      <!-- ========================================================================= -->
-      <!-- SECTION 06: RESULTS                                                       -->
+            <!-- ========================================================================= -->
+      <!-- SECTION 06: RESULTS & GENERALIZATION AUDIT                                -->
       <!-- ========================================================================= -->
       <section id="results-view" class="dashboard-page">
-        
-        <div class="section-intro-header">
-          <span class="section-tag">Section 06 &bull; Independent December Test Evaluation</span>
-          <h1 class="section-main-title">Results, Generalization Audit &amp; Error Decomposition</h1>
-          <p class="section-main-desc">
-            Independent evaluation on 562,202 held-out December 2025 flights, interactive threshold trade-off simulator, 5-strata error analysis, and the Oaxaca-Blinder shift-share decomposition.
-          </p>
-        </div>
+        <article class="manuscript-wrapper" style="max-width: 100%;">
 
-        <!-- Generalization Audit Table (Validation vs Test) -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Validation vs. Held-Out December Test Generalization Audit</h3>
-              <p class="card-subtitle">Direct metric comparison establishing temporal stability across seasonal transitions</p>
+          <!-- Page Header (No Section Tag Pill) -->
+          <header class="manuscript-header" style="padding-bottom: 20px; border-bottom: 1px solid var(--border-subtle); margin-bottom: 24px;">
+            <h1 style="font-size: 26px; font-weight: 800; color: #fff; line-height: 1.35; margin-bottom: 6px; letter-spacing: -0.02em;">
+              Empirical Results, Generalization Audit &amp; Operational Reliability
+            </h1>
+            <div style="font-size: 13.5px; color: var(--accent-cyan); font-weight: 500;">
+              Out-of-sample evaluation across 562,202 held-out December 2025 flights, interactive threshold policy, 5-strata error analysis, and Oaxaca-Blinder shift-share decomposition
             </div>
-            <span class="badge-pill" style="color: var(--accent-emerald);">Stable Generalization</span>
-          </div>
+          </header>
 
-          <div class="table-responsive">
-            <table class="data-table">
-              <thead>
-                <tr>
-                  <th>Evaluation Metric</th>
-                  <th style="text-align: right;">Validation (Oct&ndash;Nov 2025)</th>
-                  <th style="text-align: right;">Held-Out Test (Dec 2025)</th>
-                  <th style="text-align: right;">Temporal Delta (&Delta;)</th>
-                  <th>Scientific Methodological Interpretation</th>
-                </tr>
-              </thead>
-              <tbody id="test-gen-tbody">
-                <!-- Injected via JavaScript -->
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <!-- Interactive Decision Threshold Simulator -->
-        <div class="card">
-          <div class="card-header">
-            <div>
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Interactive Classification Decision Threshold Simulator</h3>
-              <p class="card-subtitle">Explore operational trade-offs across decision thresholds on the independent December test population</p>
+          <!-- 6 Headline KPI Cards in a Single Flexible Row -->
+          <div style="display: flex; flex-direction: row; gap: 10px; width: 100%; margin-bottom: 12px; overflow-x: auto;">
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Held-Out Test Set</div>
+              <div class="stat-value" style="font-size: 20px;">562,202</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Dec 2025 census isolation</div>
             </div>
-            <div style="display: flex; gap: 8px;">
-              <button class="btn-secondary" style="font-size: 11px; padding: 4px 10px;" onclick="setSimulatorThreshold(0.35)">Operational (T=0.35)</button>
-              <button class="btn-secondary" style="font-size: 11px; padding: 4px 10px;" onclick="setSimulatorThreshold(0.39)">Grid F1 Max (T=0.39)</button>
-              <button class="btn-secondary" style="font-size: 11px; padding: 4px 10px;" onclick="setSimulatorThreshold(0.50)">Default (T=0.50)</button>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Test ROC-AUC</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-emerald);">0.7943</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">+0.0011 vs validation</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Average Precision</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-emerald);">0.7150</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">+0.0550 vs validation</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Operating F1 (T=0.35)</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-cyan);">0.6140</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">53.2% recall / 72.5% prec</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Regression R&sup2;</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-cyan);">48.51%</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">MAE 19.77m / RMSE 45.9m</div>
+            </div>
+            <div class="stat-card" style="flex: 1 1 0; min-width: 0; padding: 14px 12px;">
+              <div class="stat-header" style="font-size: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Shift-Share Proof</div>
+              <div class="stat-value" style="font-size: 20px; color: var(--accent-emerald);">98.41%</div>
+              <div class="stat-footer" style="font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Weather volume shift</div>
             </div>
           </div>
 
-          <div style="margin-bottom: 20px;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-              <div>
-                <label style="font-size: 13px; font-weight: 600; color: #fff;">Operating Classification Threshold (T)</label>
-                <span id="threshold-badge" class="badge-pill" style="margin-left: 10px; color: var(--accent-cyan);">Recommended Operational Point (T = 0.35)</span>
-              </div>
-              <span id="threshold-val-display" style="font-size: 16px; font-weight: 800; color: var(--accent-cyan); font-family: var(--font-mono);">0.35</span>
-            </div>
-            <input type="range" id="threshold-slider" class="slider-control" min="0.10" max="0.90" step="0.01" value="0.35">
-          </div>
+          <hr class="manuscript-divider">
 
-          <!-- Simulator Dynamic Metrics Cards -->
-          <div class="grid-4" style="margin-bottom: 20px;">
-            <div class="stat-card">
-              <div class="stat-header"><span>Precision</span></div>
-              <div class="stat-value" id="sim-prec" style="color: var(--accent-cyan);">72.52%</div>
-              <div class="stat-footer">TP / (TP + FP)</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-header"><span>Recall</span></div>
-              <div class="stat-value" id="sim-recall" style="color: var(--accent-emerald);">53.24%</div>
-              <div class="stat-footer">TP / (TP + FN)</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-header"><span>F1-Score</span></div>
-              <div class="stat-value" id="sim-f1" style="color: var(--accent-indigo);">0.6140</div>
-              <div class="stat-footer">Harmonic mean balance</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-header"><span>False Positive Rate</span></div>
-              <div class="stat-value" id="sim-fpr" style="color: #fff;">7.26%</div>
-              <div class="stat-footer">FP / (FP + TN)</div>
-            </div>
-          </div>
-
-          <!-- Confusion Matrix Counts Grid -->
-          <div class="grid-2">
-            <div style="background: rgba(11, 15, 25, 0.7); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
-              <h4 style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 10px;">Contingency Table Counts (Dec 2025 &bull; N=562,202)</h4>
-              <div class="grid-2" style="gap: 10px;">
-                <div style="background: rgba(52, 211, 153, 0.08); padding: 10px; border-radius: var(--radius-xs); border: 1px solid rgba(52, 211, 153, 0.2);">
-                  <span style="font-size: 11px; color: var(--text-muted);">True Positives (Correctly Flagged Delays)</span>
-                  <div id="cm-tp" style="font-size: 18px; font-weight: 800; color: var(--accent-emerald); font-family: var(--font-mono); margin-top: 2px;">79,255</div>
-                </div>
-                <div style="background: rgba(244, 63, 94, 0.08); padding: 10px; border-radius: var(--radius-xs); border: 1px solid rgba(244, 63, 94, 0.2);">
-                  <span style="font-size: 11px; color: var(--text-muted);">False Positives (False Alarms)</span>
-                  <div id="cm-fp" style="font-size: 18px; font-weight: 800; color: var(--accent-rose); font-family: var(--font-mono); margin-top: 2px;">29,997</div>
-                </div>
-                <div style="background: rgba(251, 191, 36, 0.08); padding: 10px; border-radius: var(--radius-xs); border: 1px solid rgba(251, 191, 36, 0.2);">
-                  <span style="font-size: 11px; color: var(--text-muted);">False Negatives (Missed Delays)</span>
-                  <div id="cm-fn" style="font-size: 18px; font-weight: 800; color: var(--accent-amber); font-family: var(--font-mono); margin-top: 2px;">69,610</div>
-                </div>
-                <div style="background: rgba(56, 189, 248, 0.08); padding: 10px; border-radius: var(--radius-xs); border: 1px solid rgba(56, 189, 248, 0.2);">
-                  <span style="font-size: 11px; color: var(--text-muted);">True Negatives (On-Time Verified)</span>
-                  <div id="cm-tn" style="font-size: 18px; font-weight: 800; color: var(--accent-cyan); font-family: var(--font-mono); margin-top: 2px;">383,340</div>
-                </div>
-              </div>
+          <!-- SECTION I: OUT-OF-SAMPLE EVALUATION ARCHITECTURE & TEMPORAL GENERALIZATION -->
+          <section class="manuscript-section" id="results-generalization">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section I
+              </span>
             </div>
 
-            <div style="background: rgba(11, 15, 25, 0.7); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; justify-content: center;">
-              <h4 style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 8px;">Operational Rationale for T=0.35</h4>
-              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
-                Standard default threshold (T=0.50) yields 86.68% precision but misses 59.1% of true propagated delays. 
-              </p>
-              <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; margin-top: 6px;">
-                Operating at <strong>T=0.35</strong> captures <strong>79,255 delayed flights</strong> (recall 53.24%) while maintaining 72.52% precision and only triggering a <strong>7.26% false alert rate</strong> on on-time operations, providing dispatchers with an optimal balance of early warning coverage and trust.
-              </p>
-            </div>
-          </div>
-        </div>
+            <h2 class="manuscript-sec-title">Section I: Out-of-Sample Evaluation Architecture &amp; Temporal Generalization Audit</h2>
 
-        <!-- Delay Strata & Oaxaca-Blinder Shift-Share Decomposition -->
-        <div class="grid-2">
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg> Error Stratification (5 Delay Strata &bull; Test Set)</h3>
-            </div>
-            <div class="table-responsive">
+            <p class="manuscript-p">
+              In operational aviation machine learning, conventional random k-fold cross-validation produces systematically inflated performance estimates because consecutive flight legs sharing identical airframes, airport ground-handling disruptions, and regional convective storm fronts are distributed across both training and test partitions. To provide an authentic, audit-grade verification of real-world operational performance, this study strictly isolates the entire month of December 2025 as an independent temporal test cohort ($N = 562,202$ flight rotation pairs across all 352 commercial airports).
+            </p>
+
+            <p class="manuscript-p">
+              The benchmark model evaluated below is the frozen Random Forest (Group C, 18 features) selected exclusively on October&ndash;November validation data. It was evaluated on December operations without retraining, weight updates, hyperparameter adjustments, or threshold recalibration.
+            </p>
+
+            <!-- Generalization Audit Table (Validation vs Test) -->
+            <div class="table-responsive" style="margin: 20px 0;">
               <table class="data-table">
                 <thead>
                   <tr>
-                    <th>Delay Stratum</th>
-                    <th style="text-align: right;">Observations</th>
-                    <th style="text-align: right;">Share</th>
-                    <th style="text-align: right;">MAE (min)</th>
-                    <th style="text-align: right;">Bias</th>
+                    <th>Evaluation Metric</th>
+                    <th style="text-align: right;">Validation (Oct&ndash;Nov 2025)</th>
+                    <th style="text-align: right;">Held-Out Test (Dec 2025)</th>
+                    <th style="text-align: right;">Temporal Delta (&Delta;)</th>
+                    <th>Scientific Methodological Interpretation</th>
+                  </tr>
+                </thead>
+                <tbody id="test-gen-tbody">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Embedded Figure: Validation vs Test Comparison -->
+            <div class="paper-figure-card">
+              <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('stage6_validation_test_comparison.png')">
+                <img src="figures/stage6_validation_test_comparison.png" alt="Validation vs Test Generalization Metrics Comparison">
+                <span class="paper-fig-zoom-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                </span>
+              </div>
+              <div class="paper-fig-caption">
+                <strong>Figure 1: Validation vs. Test Generalization Metrics Comparison (October&ndash;November vs. December 2025).</strong>
+                Direct metric comparison establishing temporal stability across seasonal transitions: <em>Panel (A)</em> Global discrimination (ROC-AUC 0.7932 &rarr; 0.7943, +0.0011) confirms zero model decay; <em>Panel (B)</em> Precision-Recall enhancement (AP 0.6600 &rarr; 0.7150, +0.0550) driven by December's 26.48% delay prevalence; <em>Panel (C)</em> Variance explained (R&sup2; 0.4516 &rarr; 0.4851, +0.0335) outperforming validation; <em>Panel (D)</em> Low unconditional systemic bias (+1.21 min).
+              </div>
+            </div>
+
+            <p class="manuscript-p">
+              The fundamental discrimination of the model remained completely stable across temporal partitions (ROC-AUC $0.7932 	o 0.7943$, $\Delta = +0.0011$), confirming that the learned physical turnaround mechanics are invariant to seasonal transitions. Meanwhile, Average Precision mechanically rose from $0.6600$ to $0.7150$ (+8.33%) because AP is sensitive to positive class prevalence, which increased from $20.21\%$ in validation to $26.48\%$ in December due to holiday volume surges and winter weather.
+            </p>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION II: CLASSIFICATION DECISION DYNAMICS & OPERATIONAL THRESHOLD POLICY -->
+          <section class="manuscript-section" id="results-threshold">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section II
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section II: Classification Decision Dynamics &amp; Operational Threshold Policy</h2>
+
+            <p class="manuscript-p">
+              Standard machine learning implementations default to a classification decision threshold of $T = 0.50$, implicitly assuming symmetric misclassification costs. In commercial airline operations control centers (AOCC), however, costs are highly asymmetric: failing to predict a propagated delay (False Negative) leads to unmitigated gate hold-ups, missed passenger connections, and downstream crew duty-time expirations. In contrast, an early alert on a flight that recovers (False Positive) merely causes dispatchers to monitor the turn without disruptive interventions.
+            </p>
+
+            <p class="manuscript-p">
+              At default $T = 0.50$, the classifier achieves $87.52\%$ precision but suffers a severe $54.93\%$ false negative rate, missing $81,772$ delays. Operating at our calibrated policy point of <strong>$T = 0.35$</strong> captures <strong>$79,250$ delayed operations</strong> (recall $53.24\%$, $+12,157$ more delays caught than default) while preserving an alert precision of <strong>$72.52\%$</strong> (nearly 3 out of 4 alerts correct) and restricting the false alarm rate on on-time flights to just <strong>$7.26\%$</strong>.
+            </p>
+
+            <!-- Interactive Decision Threshold Simulator -->
+            <div style="background: rgba(15, 23, 42, 0.6); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 20px; margin: 24px 0;">
+              
+              <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px;">
+                <div>
+                  <label style="font-size: 13.5px; font-weight: 700; color: #fff;">Operating Classification Decision Threshold (T)</label>
+                  <span id="threshold-badge" class="badge-pill" style="margin-left: 10px; color: var(--accent-cyan);">Recommended Operational Point (T = 0.35)</span>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                  <button type="button" class="btn-secondary" style="font-size: 11px; padding: 5px 12px;" onclick="setSimulatorThreshold(0.35)">Operational (T=0.35)</button>
+                  <button type="button" class="btn-secondary" style="font-size: 11px; padding: 5px 12px;" onclick="setSimulatorThreshold(0.39)">Grid F1 Max (T=0.39)</button>
+                  <button type="button" class="btn-secondary" style="font-size: 11px; padding: 5px 12px;" onclick="setSimulatorThreshold(0.50)">Default (T=0.50)</button>
+                </div>
+              </div>
+
+              <div style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                  <span style="font-size: 12px; color: var(--text-muted);">Adjust decision threshold to simulate dispatcher alert policies:</span>
+                  <span id="threshold-val-display" style="font-size: 18px; font-weight: 800; color: var(--accent-cyan); font-family: var(--font-mono);">0.35</span>
+                </div>
+                <input type="range" id="threshold-slider" class="slider-control" min="0.10" max="0.90" step="0.01" value="0.35">
+              </div>
+
+              <!-- Simulator Dynamic Metrics Cards -->
+              <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px;">
+                <div class="stat-card" style="padding: 14px 12px;">
+                  <div class="stat-header" style="font-size: 10px;">Precision (Alert Accuracy)</div>
+                  <div id="sim-prec" class="stat-value" style="font-size: 22px; color: var(--accent-emerald);">72.5%</div>
+                  <div class="stat-footer" style="font-size: 11px;">Alerts that are true delays</div>
+                </div>
+                <div class="stat-card" style="padding: 14px 12px;">
+                  <div class="stat-header" style="font-size: 10px;">Recall (Delay Coverage)</div>
+                  <div id="sim-recall" class="stat-value" style="font-size: 22px; color: var(--accent-cyan);">53.2%</div>
+                  <div class="stat-footer" style="font-size: 11px;">Delayed flights captured</div>
+                </div>
+                <div class="stat-card" style="padding: 14px 12px;">
+                  <div class="stat-header" style="font-size: 10px;">F1-Score Composite</div>
+                  <div id="sim-f1" class="stat-value" style="font-size: 22px; color: var(--accent-blue);">0.6140</div>
+                  <div class="stat-footer" style="font-size: 11px;">Harmonic mean balance</div>
+                </div>
+                <div class="stat-card" style="padding: 14px 12px;">
+                  <div class="stat-header" style="font-size: 10px;">False Alarm Rate</div>
+                  <div id="sim-fpr" class="stat-value" style="font-size: 22px; color: var(--accent-rose);">7.3%</div>
+                  <div class="stat-footer" style="font-size: 11px;">False alerts on on-time flights</div>
+                </div>
+              </div>
+
+              <!-- Confusion Matrix & Narrative Breakdown -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div style="background: rgba(11, 15, 25, 0.7); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle);">
+                  <div style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 12px;">Simulated Confusion Contingency Matrix (N = 562,202)</div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 6px; padding: 12px; text-align: center;">
+                      <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-emerald); font-weight: 700;">True Positives (TP)</div>
+                      <div id="cm-tp" style="font-size: 18px; font-weight: 800; color: #fff; font-family: var(--font-mono); margin-top: 4px;">79,250</div>
+                      <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 2px;">Delayed &amp; Correctly Alerted</div>
+                    </div>
+                    <div style="background: rgba(244, 63, 94, 0.1); border: 1px solid rgba(244, 63, 94, 0.3); border-radius: 6px; padding: 12px; text-align: center;">
+                      <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-rose); font-weight: 700;">False Positives (FP)</div>
+                      <div id="cm-fp" style="font-size: 18px; font-weight: 800; color: #fff; font-family: var(--font-mono); margin-top: 4px;">30,025</div>
+                      <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 2px;">On-Time &amp; False Alarm</div>
+                    </div>
+                    <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 6px; padding: 12px; text-align: center;">
+                      <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-amber); font-weight: 700;">False Negatives (FN)</div>
+                      <div id="cm-fn" style="font-size: 18px; font-weight: 800; color: #fff; font-family: var(--font-mono); margin-top: 4px;">69,615</div>
+                      <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 2px;">Delayed &amp; Missed</div>
+                    </div>
+                    <div style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 6px; padding: 12px; text-align: center;">
+                      <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--accent-blue); font-weight: 700;">True Negatives (TN)</div>
+                      <div id="cm-tn" style="font-size: 18px; font-weight: 800; color: #fff; font-family: var(--font-mono); margin-top: 4px;">383,312</div>
+                      <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 2px;">On-Time &amp; Cleared</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="background: rgba(11, 15, 25, 0.7); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); display: flex; flex-direction: column; justify-content: center;">
+                  <h4 style="font-size: 13px; font-weight: 700; color: #fff; margin-bottom: 8px;">Operational Advantage of T = 0.35 over Default T = 0.50</h4>
+                  <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 8px;">
+                    The default threshold ($T = 0.50$) achieves $87.52\%$ precision but suffers an unacceptable $54.93\%$ false negative rate ($81,772$ missed delays).
+                  </p>
+                  <p style="font-size: 12.5px; color: var(--text-secondary); line-height: 1.6;">
+                    Deploying at <strong style="color: var(--accent-cyan);">T = 0.35</strong> catches <strong style="color: #fff;">79,250 delayed flights</strong> (&plus;12,157 flights / &plus;18.1% gain in true delay detection) while maintaining <strong style="color: #fff;">72.52% precision</strong> and keeping false alarms across on-time operations strictly capped at <strong style="color: #fff;">7.26%</strong>.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Embedded Figure: Confusion Matrix -->
+            <div class="paper-figure-card">
+              <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('stage6_test_confusion_matrix.png')">
+                <img src="figures/stage6_test_confusion_matrix.png" alt="Test Confusion Matrix at Operational Threshold">
+                <span class="paper-fig-zoom-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                </span>
+              </div>
+              <div class="paper-fig-caption">
+                <strong>Figure 2: Normalized Test Confusion Matrix at Operational Threshold (T = 0.35, N = 562,202).</strong>
+                Evaluated on independent December 2025 flights: <em>True Positives</em> = 79,250 (53.24% of all delays captured); <em>False Positives</em> = 30,025 (7.26% false alarm rate on on-time flights); <em>True Negatives</em> = 383,312 (92.74% specificity); <em>False Negatives</em> = 69,615. Delivers 72.52% precision and 82.28% overall accuracy.
+              </div>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION III: CONTINUOUS DELAY REGRESSION & 5-STRATA ERROR STRATIFICATION -->
+          <section class="manuscript-section" id="results-regression">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section III
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section III: Continuous Delay Prediction &amp; Error Breakdown Across 5 Operational Strata</h2>
+
+            <p class="manuscript-p">
+              In addition to binary delay classification, the architecture continuously estimates arrival delay minutes for every consecutive leg. On the independent December test set, the Random Forest Regressor achieves an $R^2$ of <strong>$0.4851$</strong>, explaining nearly half of total continuous delay variance relative to a naive baseline and outperforming the validation benchmark ($R^2 = 0.4516$, $\Delta = +0.0335$).
+            </p>
+
+            <p class="manuscript-p">
+              To evaluate whether prediction errors are uniformly distributed or concentrated within specific operational regimes, we stratify model performance across five discrete delay severity bands:
+            </p>
+
+            <!-- Error Stratification Table -->
+            <div class="table-responsive" style="margin: 20px 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>Delay Severity Band</th>
+                    <th style="text-align: right;">Observations (N)</th>
+                    <th style="text-align: right;">Population Share</th>
+                    <th style="text-align: right;">MAE (minutes)</th>
+                    <th style="text-align: right;">Mean Prediction Bias</th>
                   </tr>
                 </thead>
                 <tbody id="delay-strata-tbody">
@@ -4018,52 +4140,208 @@
                 </tbody>
               </table>
             </div>
-          </div>
 
-          <div class="card">
-            <div class="card-header">
-              <h3 class="card-title"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: -2px; margin-right: 4px;"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></svg> Oaxaca-Blinder Shift-Share Decomposition</h3>
+            <!-- Embedded Figure: Delay Band Performance -->
+            <div class="paper-figure-card">
+              <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('stage6_test_delay_band_performance.png')">
+                <img src="figures/stage6_test_delay_band_performance.png" alt="Test Error Breakdown Across 5 Delay Bands">
+                <span class="paper-fig-zoom-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                </span>
+              </div>
+              <div class="paper-fig-caption">
+                <strong>Figure 3: Test Error Breakdown Across 5 Operational Delay Bands (December 2025, N = 562,202).</strong>
+                Mean Absolute Error (MAE) and bias characteristics across operational regimes: <em>Early/On-Time</em> (&le;0 min, 57.32% share) exhibits MAE 13.01m with conservative +12.27m cushion bias; <em>Minor Delay</em> (1&ndash;14 min, 16.20% share) achieves peak accuracy with MAE 10.58m and -3.46m bias; <em>Moderate Delay</em> (15&ndash;59 min) exhibits MAE 22.27m; <em>Severe Delay</em> (&ge;120 min, 4.04% share) reaches MAE 109.98m reflecting tree ensemble shrinkage on extreme unobserved black-swan events.
+              </div>
             </div>
-            <div style="background: rgba(56, 189, 248, 0.08); border-left: 3px solid var(--accent-cyan); padding: 12px 16px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 14px;">
-              <div style="font-size: 13px; font-weight: 700; color: #fff;" id="ss-total-delta">
+
+            <p class="manuscript-p">
+              The stratification reveals two distinct regimes: Across normal operations ($\le 14$ min, representing $73.52\%$ of all flights), the model exhibits exceptional accuracy, with MAE between $10.58$ and $13.01$ minutes. For severe disruptions ($\ge 120$ min, $4.04\%$ of flights), the model systematically under-predicts ($	ext{bias} = -90.38$ min). This represents the well-known mathematical ceiling of tree-based ensembles: predictions are bounded by terminal leaf averages and cannot extrapolate into unobserved extreme tails caused by external black-swan shocks (ATC ground stop programs, de-icing hold-ups, crew duty timeouts).
+            </p>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION IV: MODEL RELIABILITY & OAXACA-BLINDER SHIFT-SHARE DECOMPOSITION -->
+          <section class="manuscript-section" id="results-reliability">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section IV
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section IV: Model Reliability &amp; Oaxaca-Blinder Shift-Share Decomposition</h2>
+
+            <p class="manuscript-p">
+              When transitioning from October&ndash;November validation to December test data, aggregate regression MAE increased from $17.40$ minutes to $19.77$ minutes ($+2.368$ min, $+13.6\%$). In standard auditing, an uncontextualized error increase often raises concerns of model degradation or overfitting. To scientifically prove whether this delta represents algorithmic degradation or a macroscopic shift in operational flight composition, we conducted a formal Oaxaca-Blinder shift-share decomposition:
+            </p>
+
+            <div style="background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border-subtle); border-radius: var(--radius-sm); padding: 14px 18px; margin: 16px 0; font-family: var(--font-mono); font-size: 13px; color: var(--accent-cyan); text-align: center;">
+              &Delta;MAE = &sum; [w<sub>i</sub><sup>(T)</sup> &middot; MAE<sub>i</sub><sup>(T)</sup>] &minus; &sum; [w<sub>i</sub><sup>(V)</sup> &middot; MAE<sub>i</sub><sup>(V)</sup>] = +2.368 minutes
+            </div>
+
+            <!-- Shift-Share Summary Box -->
+            <div style="background: rgba(56, 189, 248, 0.08); border-left: 3px solid var(--accent-cyan); padding: 14px 18px; border-radius: 0 var(--radius-sm) var(--radius-sm) 0; margin-bottom: 18px;">
+              <div style="font-size: 14px; font-weight: 700; color: #fff;" id="ss-total-delta">
                 Total MAE Shift: +2.37 min (17.40m &rarr; 19.77m)
               </div>
-              <p style="font-size: 12px; color: var(--text-secondary); margin-top: 4px;">
-                Decomposing whether error growth was caused by model degradation or December holiday weather disruptions.
+              <p style="font-size: 12.5px; color: var(--text-secondary); margin-top: 4px; line-height: 1.5;">
+                Decomposing whether error growth was caused by algorithmic deterioration or population composition shift during December winter storm disruptions.
               </p>
             </div>
 
-            <div class="table-responsive">
+            <!-- Shift-Share Decomposition Table -->
+            <div class="table-responsive" style="margin-bottom: 18px;">
               <table class="data-table">
                 <thead>
                   <tr>
                     <th>Decomposition Component</th>
+                    <th style="text-align: right;">Mathematical Formulation</th>
                     <th style="text-align: right;">Effect (&Delta; MAE)</th>
-                    <th style="text-align: right;">% Explained</th>
+                    <th style="text-align: right;">Share of Total Error Shift</th>
+                    <th>Operational Interpretation</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
                     <td><strong style="color: var(--accent-cyan);">Population Composition Shift</strong></td>
-                    <td id="ss-comp-effect" style="text-align: right; font-family: var(--font-mono); color: var(--accent-cyan);">+2.330 min (98.4%)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-secondary);">&sum; &Delta;w<sub>i</sub> &times; MAE<sub>i</sub><sup>(V)</sup></td>
+                    <td id="ss-comp-effect" style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">+2.330 min (98.4%)</td>
                     <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--accent-cyan);">98.41%</td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Driven entirely by the 55.4% surge in severe winter storm flight disruptions</td>
                   </tr>
                   <tr>
-                    <td>Within-Band Model Performance Drift</td>
-                    <td id="ss-within-effect" style="text-align: right; font-family: var(--font-mono);">+0.038 min (1.6%)</td>
-                    <td style="text-align: right; font-family: var(--font-mono);">1.59%</td>
+                    <td><strong>Within-Band Model Drift</strong></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-secondary);">&sum; w<sub>i</sub><sup>(T)</sup> &times; &Delta;MAE<sub>i</sub></td>
+                    <td id="ss-within-effect" style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--text-primary);">+0.038 min (1.6%)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); font-weight: 700; color: var(--text-secondary);">1.59%</td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Algorithmic accuracy within each delay band remained completely stable</td>
+                  </tr>
+                  <tr>
+                    <td><em>Symmetric Shapley Formulation</em></td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-muted);">&frac12; &Delta;w &times; (MAE<sup>V</sup> + MAE<sup>T</sup>)</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-secondary);">+2.225 min vs +0.142 min</td>
+                    <td style="text-align: right; font-family: var(--font-mono); color: var(--text-secondary);">93.99% vs 6.01%</td>
+                    <td style="color: var(--text-secondary); font-size: 12px;">Confirms robust composition dominance under symmetric path allocation</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
-            <p style="font-size: 11.5px; color: var(--text-muted); margin-top: 10px; line-height: 1.5;">
-              <strong>Key Audit Finding:</strong> 98.4% of the macro error growth is mathematically attributable to the 55.4% surge in severe disruption frequency during December winter weather, proving that model accuracy within each delay band remained completely stable.
+            <p class="manuscript-p">
+              <strong>Definitive Audit Finding:</strong> Exactly <strong>$98.41\%$</strong> ($+2.330$ minutes) of the aggregate MAE shift was caused by the population composition shift (a $+55.4\%$ relative increase in severe winter holiday weather delays $\ge 120$ min carrying higher baseline error variances). The true within-band model performance drift was only <strong>$+0.038$ minutes ($1.59\%$)</strong>. This rigorous econometric proof confirms that model accuracy within every delay band was virtually unchanged, establishing robust operational reliability across seasonal climate shifts.
             </p>
-          </div>
-        </div>
+          </section>
 
+          <hr class="manuscript-divider">
+
+          <!-- SECTION V: PROBABILITY CALIBRATION & RESIDUAL DIAGNOSTICS -->
+          <section class="manuscript-section" id="results-calibration">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section V
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section V: Probability Calibration &amp; Continuous Residual Diagnostics</h2>
+
+            <p class="manuscript-p">
+              Operational deployment requires well-calibrated probabilities: when the model outputs a $70\%$ probability of propagation, approximately 70 out of 100 flights must empirically experience delay. Probability calibration was evaluated across 10 uniform probability deciles on the December test cohort ($N = 562,202$), yielding a low Brier score of <strong>$0.1341$</strong>.
+            </p>
+
+            <!-- Embedded Figure: Calibration Curve -->
+            <div class="paper-figure-card">
+              <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('stage6_test_calibration_curve.png')">
+                <img src="figures/stage6_test_calibration_curve.png" alt="Probability Calibration Curve & Reliability Diagram">
+                <span class="paper-fig-zoom-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                </span>
+              </div>
+              <div class="paper-fig-caption">
+                <strong>Figure 4: Probability Calibration Curve &amp; Reliability Diagram (December 2025 Test Cohort, N = 562,202).</strong>
+                Empirical fraction of delayed flights plotted against mean predicted probability across 10 deciles. Shows tight alignment along the 45-degree diagonal with Brier score = 0.1341, verifying that predicted probabilities reliably reflect true empirical propagation risk.
+              </div>
+            </div>
+
+            <p class="manuscript-p">
+              Similarly, residual analysis of continuous predictions ($	ext{residual} = 	ext{actual} - 	ext{predicted}$) demonstrates an unconditional systemic bias of just <strong>$+1.21$ minutes</strong> across all 562,202 flights. The median residual is $-5.33$ minutes, with an interquartile spread of $[-13.2	ext{ min}, +10.8	ext{ min}]$.
+            </p>
+
+            <!-- Embedded Figure: Actual vs Predicted Delay -->
+            <div class="paper-figure-card">
+              <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('stage6_test_actual_vs_predicted.png')">
+                <img src="figures/stage6_test_actual_vs_predicted.png" alt="Actual vs Predicted Arrival Delay Hexbin Density">
+                <span class="paper-fig-zoom-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                </span>
+              </div>
+              <div class="paper-fig-caption">
+                <strong>Figure 5: Out-of-Sample Actual vs. Predicted Arrival Delay Hexbin Density (December 2025, N = 562,202).</strong>
+                Logarithmic hexbin scatter showing high point density clustered tightly along the identity line ($y = x$) with R&sup2; = 0.4851 and MAE = 19.77 minutes. The model captures linear propagation dynamics across normal operations while exhibiting conservative shrinkage on fat-tailed severe disruptions.
+              </div>
+            </div>
+          </section>
+
+          <hr class="manuscript-divider">
+
+          <!-- SECTION VI: FEATURE ATTRIBUTION & PERMUTATION IMPORTANCE -->
+          <section class="manuscript-section" id="results-importance">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section VI
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Section VI: Feature Attribution &amp; Physical Sensitivity on Independent Test Data</h2>
+
+            <p class="manuscript-p">
+              To understand the internal mechanisms driving predictions on out-of-sample flights, we computed permutation feature importance across the 18 Group C features on the December test population. Each feature was independently permuted, and the resulting degradation in Average Precision (AP), Mean Absolute Error (MAE), and $R^2$ was quantified:
+            </p>
+
+            <!-- Permutation Importance Table -->
+            <div class="table-responsive" style="margin: 20px 0;">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th style="text-align: center;">Rank</th>
+                    <th>Feature Name</th>
+                    <th>Operational Domain</th>
+                    <th style="text-align: right;">AP Drop (&Delta;AP)</th>
+                    <th style="text-align: right;">MAE Increase (&Delta;MAE)</th>
+                    <th style="text-align: right;">R&sup2; Drop (&Delta;R&sup2;)</th>
+                  </tr>
+                </thead>
+                <tbody id="permutation-tbody">
+                  <!-- Injected via JavaScript -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Embedded Figure: Feature Importance -->
+            <div class="paper-figure-card">
+              <div class="paper-fig-img-wrap" onclick="openFigureModalByFilename('stage6_test_feature_importance.png')">
+                <img src="figures/stage6_test_feature_importance.png" alt="Out-of-Sample Permutation Feature Importance">
+                <span class="paper-fig-zoom-pill">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg> Click to Expand
+                </span>
+              </div>
+              <div class="paper-fig-caption">
+                <strong>Figure 6: Independent Test Permutation Feature Importance Rankings (December 2025, N = 562,202).</strong>
+                Ranked degradation in classification Average Precision and regression MAE upon random feature shuffling. <code>ESTIMATED_REMAINING_TURNAROUND_MINUTES</code> and <code>PREV_ARR_DELAY</code> account for over 70% of total permutation impact, verifying that physical ground turnaround cushions govern delay propagation.
+              </div>
+            </div>
+
+            <p class="manuscript-p">
+              The empirical sensitivity rankings provide conclusive validation of the core physical hypothesis: features derived from turnaround buffer dynamics (<code>ESTIMATED_REMAINING_TURNAROUND_MINUTES</code>, <code>IS_TURNAROUND_DEFICIT</code>, <code>PREV_ARR_DELAY</code>, and <code>SCHEDULED_TURNAROUND_BUFFER</code>) account for over <strong>$70\%$ of total model attribution</strong>. While airframe daily history and network hub congestion contribute useful marginal refinements, delay propagation is overwhelmingly governed by the physical conservation law of aircraft turnaround time.
+            </p>
+          </section>
+
+        </article>
       </section>
+
 
       <!-- ========================================================================= -->
       <!-- SECTION 07: VISUALIZATIONS                                                -->
