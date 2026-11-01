@@ -100,7 +100,7 @@ function switchView(viewName) {
     eda: "04 \u2014 Exploratory Analysis: Delay Propagation Patterns",
     models: "05 \u2014 Models: Training & Model Comparison",
     results: "06 \u2014 Results: Test Metrics & Evaluation",
-    visualizations: "07 \u2014 Visualizations: Figures & Interactive Charts",
+    visualizations: "07 \u2014 Visualizations: Research Figures & Empirical Findings",
     conclusion: "08 \u2014 Conclusion: Findings & Limitations"
   };
   const titleEl = document.getElementById("top-bar-page-title");
@@ -881,14 +881,12 @@ async function loadFiguresCatalog() {
 function filterAndRenderFigures() {
   const { catalog, activeCategory, searchQuery } = state.figures;
   
-  let filtered = catalog;
+  let filtered = catalog || [];
 
-  // Filter by category
   if (activeCategory && activeCategory !== "all") {
     filtered = filtered.filter(f => f.category_id === activeCategory);
   }
 
-  // Filter by search query
   if (searchQuery) {
     filtered = filtered.filter(f => {
       const titleMatch = (f.title || "").toLowerCase().includes(searchQuery);
@@ -902,88 +900,50 @@ function filterAndRenderFigures() {
 
   state.figures.filtered = filtered;
 
+  // Filter sections and cards in the DOM
+  const sections = document.querySelectorAll("#visualizations-view .manuscript-section[data-phase]");
+  let totalVisible = 0;
+
+  sections.forEach(sec => {
+    const phase = sec.getAttribute("data-phase");
+    const phaseAllowed = (!activeCategory || activeCategory === "all" || activeCategory === phase);
+    const cards = sec.querySelectorAll(".figure-gallery-card");
+    let visibleInSec = 0;
+
+    cards.forEach(card => {
+      const fn = card.getAttribute("data-filename");
+      const isCardInFiltered = filtered.length === 0 && !searchQuery && activeCategory === "all" 
+        ? true 
+        : filtered.some(f => f.filename === fn);
+        
+      if (phaseAllowed && isCardInFiltered) {
+        card.style.display = "";
+        visibleInSec++;
+        totalVisible++;
+      } else {
+        card.style.display = "none";
+      }
+    });
+
+    sec.style.display = visibleInSec > 0 ? "" : "none";
+    const divider = sec.nextElementSibling;
+    if (divider && divider.classList.contains("manuscript-divider")) {
+      divider.style.display = visibleInSec > 0 ? "" : "none";
+    }
+  });
+
   // Update gallery counter badge
   const counterBadge = document.getElementById("gallery-count-badge");
   if (counterBadge) {
-    counterBadge.textContent = `Showing ${filtered.length} of ${catalog.length} Figures`;
+    const totalCatalog = (catalog && catalog.length > 0) ? catalog.length : 40;
+    counterBadge.textContent = `Showing ${totalVisible} of ${totalCatalog} Figures`;
   }
 
-  renderFiguresGrid(filtered);
-}
-
-function renderFiguresGrid(figures) {
-  const grid = document.getElementById("figures-gallery-grid");
-  if (!grid) return;
-
-  if (figures.length === 0) {
-    grid.innerHTML = `
-      <div style="grid-column: 1 / -1; text-align: center; padding: 48px; background: var(--bg-card); border-radius: var(--radius-md); border: 1px dashed var(--border-color);">
-        <p style="font-size: 16px; color: var(--text-muted); margin-bottom: 8px;">No research figures match the selected filter criteria.</p>
-        <button class="btn-secondary" onclick="resetFigureFilters()">Reset All Filters</button>
-      </div>
-    `;
-    return;
+  // Toggle empty state
+  const emptyState = document.getElementById("figures-empty-state");
+  if (emptyState) {
+    emptyState.style.display = totalVisible === 0 ? "block" : "none";
   }
-
-  grid.innerHTML = figures.map((fig, idx) => {
-    // Stage color accents
-    let stageColor = "var(--accent-blue)";
-    let stageBg = "rgba(56, 189, 248, 0.1)";
-    let stageBorder = "rgba(56, 189, 248, 0.3)";
-
-    if (fig.stage.includes("Stage 6") || fig.stage.includes("Test")) {
-      stageColor = "var(--accent-emerald)";
-      stageBg = "rgba(16, 185, 129, 0.1)";
-      stageBorder = "rgba(16, 185, 129, 0.3)";
-    } else if (fig.stage.includes("Tuning") || fig.stage.includes("Stage 5")) {
-      stageColor = "var(--accent-purple)";
-      stageBg = "rgba(168, 85, 247, 0.1)";
-      stageBorder = "rgba(168, 85, 247, 0.3)";
-    } else if (fig.stage.includes("IEEE") || fig.stage.includes("Paper")) {
-      stageColor = "var(--accent-amber)";
-      stageBg = "rgba(245, 158, 11, 0.1)";
-      stageBorder = "rgba(245, 158, 11, 0.3)";
-    }
-
-    const imgPath = `figures/${fig.filename}`;
-
-    return `
-      <div class="figure-gallery-card">
-        <div class="figure-card-img-wrap" onclick="openFigureModal(${idx})">
-          <img src="${imgPath}" alt="${fig.title}" loading="lazy" onerror="this.src='figures/fig01_target_distributions.png'">
-          <div class="figure-card-overlay">
-            <button class="figure-overlay-btn">&#128269; View Full Resolution</button>
-          </div>
-        </div>
-
-        <div class="figure-card-body">
-          <div class="figure-card-meta">
-            <span class="badge-pill" style="font-size: 10px; padding: 2px 8px; color: ${stageColor}; background: ${stageBg}; border-color: ${stageBorder};">
-              ${fig.stage}
-            </span>
-            <span style="font-size: 11px; color: var(--text-muted);">${fig.source}</span>
-          </div>
-
-          <h4 class="figure-card-title">${fig.title}</h4>
-          
-          <p class="figure-card-desc" title="${fig.description}">
-            ${fig.description}
-          </p>
-
-          <div class="figure-card-takeaway">
-            <strong>Key Insight:</strong> ${fig.takeaway}
-          </div>
-
-          <div class="figure-card-footer">
-            <span style="font-family: monospace; font-size: 10px; color: var(--accent-blue);">${fig.filename}</span>
-            <button class="btn-secondary" style="padding: 4px 10px; font-size: 11px;" onclick="openFigureModal(${idx})">
-              Inspect &rarr;
-            </button>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join("");
 }
 
 function resetFigureFilters() {
