@@ -1,0 +1,24 @@
+# Heavy local datasets and environments
+data/
+.venv/
+env/
+venv/
+models/
+notebooks/
+src/
+paper/
+results/
+tests/
+__pycache__/
+*.parquet
+*.csv.gz
+*.joblib
+*.pdf
+!web/static/flight_delay_propagation_ieee_paper.pdf
+!public/flight_delay_propagation_ieee_paper.pdf
+.git/
+.DS_Store
+INT234CA2Report.pdf
+web/
+requirements.txt
+*Report.pdf

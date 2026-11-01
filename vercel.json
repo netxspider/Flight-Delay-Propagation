@@ -1,12 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "outputDirectory": "web/static",
-  "installCommand": "echo 'Skipping serverless pip install - standard library only'",
   "cleanUrls": true,
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/index.py"
+      "destination": "/api/index.py?endpoint=$1"
     }
   ],
   "headers": [

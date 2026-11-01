@@ -46,6 +46,14 @@ class handler(BaseHTTPRequestHandler):
         path = parsed.path
         query = urllib.parse.parse_qs(parsed.query)
 
+        endpoint = query.get("endpoint", [""])[0]
+        if endpoint:
+            path = f"/api/{endpoint}"
+        else:
+            matched = self.headers.get("x-matched-path") or self.headers.get("x-vercel-matched-path")
+            if matched:
+                path = matched
+
         # Normalize path
         if path.endswith("/") and len(path) > 1:
             path = path[:-1]
@@ -67,18 +75,28 @@ class handler(BaseHTTPRequestHandler):
             self.send_header("Location", "/flight_delay_propagation_ieee_paper.pdf")
             self.end_headers()
         else:
-            self.send_json({"error": "Endpoint not found", "path": path}, status_code=404)
+            self.send_json({"error": "Endpoint not found", "path": path, "original": self.path}, status_code=404)
 
     def do_POST(self):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
+        query = urllib.parse.parse_qs(parsed.query)
+
+        endpoint = query.get("endpoint", [""])[0]
+        if endpoint:
+            path = f"/api/{endpoint}"
+        else:
+            matched = self.headers.get("x-matched-path") or self.headers.get("x-vercel-matched-path")
+            if matched:
+                path = matched
+
         if path.endswith("/") and len(path) > 1:
             path = path[:-1]
 
         if path == "/api/predict":
             self.handle_predict()
         else:
-            self.send_json({"error": "Endpoint not found", "path": path}, status_code=404)
+            self.send_json({"error": "Endpoint not found", "path": path, "original": self.path}, status_code=404)
 
     def send_json(self, data, status_code=200):
         body = json.dumps(data, indent=2, default=str).encode("utf-8")
@@ -504,3 +522,4 @@ class handler(BaseHTTPRequestHandler):
             self.send_json(response_data)
         except Exception as e:
             self.send_json({"error": f"Prediction failed: {str(e)}"}, status_code=500)
+

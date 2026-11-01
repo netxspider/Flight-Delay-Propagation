@@ -36,7 +36,6 @@ INT234CA2Report.pdf
 
 # Vercel and Node artifacts
 .vercel/
+.vercel
 node_modules/
 .env*.local
-
-
