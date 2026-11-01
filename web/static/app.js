@@ -436,6 +436,7 @@ function renderModelsSection(data) {
         <tr style="${isSelected ? 'background: rgba(56, 189, 248, 0.08); font-weight: 600;' : ''}">
           <td style="color: ${isSelected ? 'var(--accent-blue)' : '#fff'};">${row.estimator}</td>
           <td><span class="brand-badge" style="padding: 2px 6px;">${row.group}</span></td>
+          <td style="text-align: right; font-family: monospace; color: var(--text-secondary);">${row.train_n ? row.train_n.toLocaleString() : '5,065,376'}</td>
           <td style="text-align: right; font-family: monospace;">${row.accuracy.toFixed(2)}%</td>
           <td style="text-align: right; font-family: monospace;">${row.precision.toFixed(2)}%</td>
           <td style="text-align: right; font-family: monospace;">${row.recall.toFixed(2)}%</td>
@@ -457,6 +458,7 @@ function renderModelsSection(data) {
         <tr style="${isSelected ? 'background: rgba(56, 189, 248, 0.08); font-weight: 600;' : ''}">
           <td style="color: ${isSelected ? 'var(--accent-blue)' : '#fff'};">${row.model}</td>
           <td><span class="brand-badge" style="padding: 2px 6px;">${row.group}</span></td>
+          <td style="text-align: right; font-family: monospace; color: var(--text-secondary);">${row.train_n ? row.train_n.toLocaleString() : '5,065,376'}</td>
           <td style="text-align: right; font-family: monospace;">${row.mae.toFixed(2)} min</td>
           <td style="text-align: right; font-family: monospace;">${row.rmse.toFixed(2)} min</td>
           <td style="text-align: right; font-family: monospace; color: ${row.r2 > 0 ? 'var(--accent-emerald)' : 'var(--accent-rose)'};">${row.r2.toFixed(4)}</td>
