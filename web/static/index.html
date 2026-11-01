@@ -112,43 +112,26 @@
 
           <!-- Manuscript Academic Header -->
           <header class="manuscript-header" style="padding-bottom: 24px; border-bottom: 1px solid var(--border-subtle);">
-            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px;">
-              <span class="badge-pill" style="color: var(--accent-cyan); border-color: rgba(56,189,248,0.3); background: rgba(56,189,248,0.08);">
-                IEEE Conference Format
-              </span>
-              <span class="badge-pill" style="color: var(--accent-emerald); border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.08);">
-                Camera-Ready 6-Page Manuscript
-              </span>
-              <span class="badge-pill" style="color: var(--text-muted); border-color: var(--border-subtle); background: rgba(255,255,255,0.03);">
-                BTS TranStats 2025 Census
-              </span>
-            </div>
-
             <h1 style="font-size: 26px; font-weight: 800; color: #fff; line-height: 1.35; margin-bottom: 12px; letter-spacing: -0.02em;">
               Flight Delays Are Contagious: Predicting Delay Propagation Across Consecutive Aircraft Operations
             </h1>
 
-            <div style="font-size: 13.5px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px;">
-              <strong style="color: #fff;">Arnav Raj</strong> &bull; 
-              <span>Department of Computer Science and Engineering</span> &bull; 
-              <span>School of Computer Science Engineering and Information Systems</span> &bull; 
-              <span>Vellore Institute of Technology, Vellore, India</span> &bull; 
-              <span style="font-family: var(--font-mono); color: var(--accent-cyan); font-size: 12.5px;">arnav.raj2023@vitstudent.ac.in</span>
-            </div>
-
-            <p style="font-size: 14px; color: var(--text-secondary); max-width: 900px; line-height: 1.7;">
+            <p style="font-size: 14px; color: var(--text-secondary); max-width: 900px; line-height: 1.7; margin-bottom: 10px;">
               An empirical investigation into reactionary delay contagion across 6,768,487 commercial aircraft rotations in the United States airspace, evaluating pre-departure prediction mechanics at incoming gate arrival.
             </p>
+
+            <div style="font-size: 12.5px; font-style: italic; color: #94a3b8; line-height: 1.6;">
+              Arnav Raj &bull; Department of Computer Science and Engineering &bull; Lovely Professional University, Jalandhar Punjab &bull; <a href="mailto:netxspider@gmail.com" style="color: inherit; text-decoration: none;">netxspider@gmail.com</a>
+            </div>
           </header>
 
-          <!-- 1. ABSTRACT -->
+          <!-- ABSTRACT -->
           <section class="manuscript-section" id="manuscript-abstract">
             <div class="manuscript-sec-header">
               <span class="manuscript-sec-tag">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                 Abstract
               </span>
-              <span class="badge-pill" style="color: var(--accent-emerald);">Authoritative Verbatim</span>
             </div>
 
             <h2 class="manuscript-sec-title">Abstract</h2>
@@ -167,14 +150,13 @@
 
           <hr class="manuscript-divider">
 
-          <!-- 2. INTRODUCTION -->
+          <!-- SECTION I: INTRODUCTION -->
           <section class="manuscript-section" id="manuscript-introduction">
             <div class="manuscript-sec-header">
               <span class="manuscript-sec-tag">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                 Section I
               </span>
-              <span class="badge-pill" style="color: var(--accent-cyan);">Theoretical Foundation</span>
             </div>
 
             <h2 class="manuscript-sec-title">Introduction</h2>
@@ -225,10 +207,7 @@
               Predictions are generated immediately upon the aircraft&rsquo;s actual gate arrival (<strong>t<sub>pred</sub> = Leg k Gate Arrival</strong>), providing airline operations control centers (AOCCs) with actionable advance notice before the next flight departs. We enforce strict data hygiene: avoiding post-departure telemetry, evaluating unregularized linear and non-linear ensembles, and testing temporal generalization on a held-out December 2025 dataset (<em>N</em> = 562,202).
             </p>
 
-            <div class="manuscript-subsec-title">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
-              Primary Scientific Contributions
-            </div>
+            <div class="manuscript-subsec-title">Primary Scientific Contributions</div>
             <ol style="margin-left: 20px; font-size: 13.5px; line-height: 1.75; color: var(--text-secondary);">
               <li style="margin-bottom: 10px;">
                 <strong style="color: #fff;">Scale and Empirical Rigor:</strong> We construct a verified national rotational dataset of 6,768,487 valid consecutive flight pairs across 352 airports and 14 carriers, establishing descriptive propagation bounds.
@@ -244,14 +223,13 @@
 
           <hr class="manuscript-divider">
 
-          <!-- 3. RELATED WORK -->
+          <!-- SECTION II: RELATED WORK -->
           <section class="manuscript-section" id="manuscript-related-work">
             <div class="manuscript-sec-header">
               <span class="manuscript-sec-tag">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                 Section II
               </span>
-              <span class="badge-pill" style="color: var(--accent-purple);">Literature Review</span>
             </div>
 
             <h2 class="manuscript-sec-title">Related Work</h2>
@@ -282,23 +260,23 @@
 
           <hr class="manuscript-divider">
 
-          <!-- 4. PROBLEM FOUNDATION -->
-          <section class="manuscript-section" id="manuscript-problem-foundation">
+          <!-- SECTION III: DATASET AND PREPROCESSING -->
+          <section class="manuscript-section" id="manuscript-dataset-preprocessing">
             <div class="manuscript-sec-header">
               <span class="manuscript-sec-tag">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
-                Sections III, IV &amp; V
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section III
               </span>
-              <span class="badge-pill" style="color: var(--accent-emerald);">Theoretical Foundation</span>
             </div>
 
-            <h2 class="manuscript-sec-title">Problem Foundation</h2>
+            <h2 class="manuscript-sec-title">Dataset and Preprocessing</h2>
 
-            <div class="manuscript-subsec-title">A. Data Source, Scale and Preprocessing</div>
+            <div class="manuscript-subsec-title">A. Data Source and Scale</div>
             <p class="manuscript-p">
               The empirical foundation of this study is the 2025 Airline On-Time Performance database published by the U.S. Department of Transportation Bureau of Transportation Statistics (BTS). The raw dataset comprises <strong>6,898,741 flight records</strong> across 14 commercial reporting carriers and 352 commercial airports from January 1 to December 31, 2025.
             </p>
 
+            <div class="manuscript-subsec-title">B. Data Cleaning and Filtering</div>
             <p class="manuscript-p">
               Flights that did not complete standard operational cycles were systematically isolated:
             </p>
@@ -311,8 +289,13 @@
               Records containing missing operational timestamps were audited; exactly 37 records with corrupted negative elapsed flight durations were discarded. BTS causal delay fields (<code>WEATHER_DELAY</code>, <code>LATE_AIRCRAFT_DELAY</code>) were excluded to ensure all predictors reflect pre-departure observational states.
             </p>
 
+            <div class="manuscript-subsec-title">C. Temporal Normalization and DST Resolution</div>
             <p class="manuscript-p">
-              To reconstruct exact operational timelines, all local clock readings were mapped to Universal Coordinated Time (UTC) using IANA timezone identifiers mapped from airport IATA coordinates via <code>timezonefinder</code>. Daylight Saving Time (DST) transitions (March 9 and November 2, 2025) introduce potential one-hour temporal ambiguities. Transition intervals were audited by computing elapsed block times against geographical airport distances; all ambiguous records were resolved without synthetic negative durations or discontinuous temporal shifts.
+              BTS flight records record scheduled and actual departure and arrival times in local airport time. To reconstruct exact operational timelines, all local clock readings were mapped to Universal Coordinated Time (UTC) using IANA timezone identifiers mapped from airport IATA coordinates via <code>timezonefinder</code>. 
+            </p>
+
+            <p class="manuscript-p">
+              Daylight Saving Time (DST) transitions (March 9 and November 2, 2025) introduce potential one-hour temporal ambiguities. Transition intervals were audited by computing elapsed block times against geographical airport distances; all ambiguous records were resolved without synthetic negative durations or discontinuous temporal shifts.
             </p>
 
             <!-- Table I: Chronological Partitioning -->
@@ -369,8 +352,22 @@
                 </table>
               </div>
             </div>
+          </section>
 
-            <div class="manuscript-subsec-title">B. Aircraft Rotation Pairing Constraints</div>
+          <hr class="manuscript-divider">
+
+          <!-- SECTION IV: AIRCRAFT ROTATION RECONSTRUCTION -->
+          <section class="manuscript-section" id="manuscript-rotation-reconstruction">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section IV
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Aircraft Rotation Reconstruction</h2>
+
+            <div class="manuscript-subsec-title">A. Rotation Pairing Logic</div>
             <p class="manuscript-p">
               An aircraft rotation represents the sequence of commercial flight segments operated by a single airframe throughout an operational day. Consecutive flight legs (denoted Leg <em>k</em> and Leg <em>k+1</em>) were chained under three physical constraints:
             </p>
@@ -455,7 +452,7 @@
               </div>
             </div>
 
-            <div class="manuscript-subsec-title">C. Ground Turnaround Mechanics &amp; Formulation</div>
+            <div class="manuscript-subsec-title">B. Ground Turnaround Mechanics &amp; Formulation</div>
             <p class="manuscript-p">
               For each rotation pair, scheduled turnaround buffer (<strong>Buffer</strong>) and remaining turnaround cushion (<strong>RemTurn</strong>) are mathematically defined as:
             </p>
@@ -482,10 +479,29 @@
             <div class="manuscript-callout alert">
               <strong style="color: #fff;">The 99.50% Deficit Propagation Bottleneck:</strong> Descriptive inspection reveals that <strong>382,937 rotations (5.66%)</strong> operated in turnaround deficit. Among these operations, exactly <strong>99.50% (381,022 flights)</strong> of subsequent flights arrived late (&ge; 15 min), with an extreme mean arrival delay of <strong>+121.86 minutes</strong>. This empirical observation confirms that turnaround deficits represent acute, non-linear structural bottlenecks in commercial airline networks.
             </div>
+          </section>
 
-            <div class="manuscript-subsec-title">D. Feature Engineering &amp; Leakage-Safe Hierarchies</div>
+          <hr class="manuscript-divider">
+
+          <!-- SECTION V: FEATURE ENGINEERING AND PROBLEM FORMULATION -->
+          <section class="manuscript-section" id="manuscript-feature-engineering">
+            <div class="manuscript-sec-header">
+              <span class="manuscript-sec-tag">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Section V
+              </span>
+            </div>
+
+            <h2 class="manuscript-sec-title">Feature Engineering and Problem Formulation</h2>
+
+            <div class="manuscript-subsec-title">A. Formal Prediction Point</div>
             <p class="manuscript-p">
-              Predictions are evaluated at the exact timestamp when Leg <em>k</em> docks at the gate (<strong>t<sub>pred</sub> = Leg k Gate Arrival</strong>). At this point, the inbound delay and actual ground cushion are fixed, while Leg <em>k+1</em> remains pre-departure. To quantify the incremental predictive value of operational information, we developed three hierarchical feature groups:
+              Predictions are evaluated at the exact timestamp when Leg <em>k</em> docks at the gate (<strong>t<sub>pred</sub> = Leg k Gate Arrival</strong>). At this point, the inbound delay and actual ground cushion are fixed, while Leg <em>k+1</em> remains pre-departure.
+            </p>
+
+            <div class="manuscript-subsec-title">B. Hierarchical Feature Groups</div>
+            <p class="manuscript-p">
+              To quantify the incremental predictive value of operational information, we developed three hierarchical feature groups:
             </p>
 
             <!-- Table III: Hierarchical Feature Representation Groups -->
@@ -533,6 +549,7 @@
               </div>
             </div>
 
+            <div class="manuscript-subsec-title">C. Leakage Prevention Audit</div>
             <p class="manuscript-p">
               All airframe history metrics were computed using strictly causal expanding window operations grouped by <code>TAIL_NUM</code> and operational date. Target variables for Leg <em>k+1</em> (<code>NEXT_ARR_DEL15</code>, <code>NEXT_ARR_DELAY</code>) were fully isolated from input feature vectors. Post-departure telemetry (such as actual departure delay or airborne flight time of Leg <em>k+1</em>) was rigorously excluded.
             </p>
@@ -540,14 +557,13 @@
 
           <hr class="manuscript-divider">
 
-          <!-- 5. THREATS TO VALIDITY & LIMITATIONS -->
+          <!-- SECTION VIII: THREATS TO VALIDITY & LIMITATIONS -->
           <section class="manuscript-section" id="manuscript-threats">
             <div class="manuscript-sec-header">
               <span class="manuscript-sec-tag">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
                 Section VIII
               </span>
-              <span class="badge-pill" style="color: var(--accent-rose);">Critical Caveats</span>
             </div>
 
             <h2 class="manuscript-sec-title">Threats to Validity &amp; Limitations</h2>
@@ -571,14 +587,13 @@
 
           <hr class="manuscript-divider">
 
-          <!-- 6. RESOURCES -->
+          <!-- RESOURCES -->
           <section class="manuscript-section" id="manuscript-resources">
             <div class="manuscript-sec-header">
               <span class="manuscript-sec-tag">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-                Resources &amp; Data Assets
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                Resources
               </span>
-              <span class="badge-pill" style="color: var(--accent-cyan);">Open Source &amp; Data</span>
             </div>
 
             <h2 class="manuscript-sec-title">Resources</h2>

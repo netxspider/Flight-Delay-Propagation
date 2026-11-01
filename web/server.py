@@ -126,9 +126,8 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             "author": {
                 "name": "Arnav Raj",
                 "department": "Department of Computer Science and Engineering",
-                "school": "School of Computer Science Engineering and Information Systems",
-                "institution": "Vellore Institute of Technology, Vellore, India",
-                "email": "arnav.raj2023@vitstudent.ac.in"
+                "institution": "Lovely Professional University, Jalandhar Punjab",
+                "email": "netxspider@gmail.com"
             },
             "executive_summary": "Commercial airline schedules operate on interconnected networks where aircraft fly consecutive flight segments (rotations) with limited ground turnaround buffers. This research analyzes 6.77 million verified rotation pairs across 352 U.S. airports from the Bureau of Transportation Statistics (BTS) 2025 dataset to quantify the predictive mechanics of delay propagation.",
             "core_equations": [
