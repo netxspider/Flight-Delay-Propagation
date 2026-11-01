@@ -1541,9 +1541,8 @@
                     <th class="sortable" data-col="PREV_ARR_DELAY" style="text-align: right;">Inbound Delay</th>
                     <th class="sortable" data-col="SCHEDULED_TURNAROUND_BUFFER" style="text-align: right;">Sched Buffer</th>
                     <th class="sortable" data-col="ESTIMATED_REMAINING_TURNAROUND_MINUTES" style="text-align: right;">Remaining Cushion</th>
+                    <th style="text-align: center;">Turnaround State</th>
                     <th class="sortable" data-col="NEXT_CRS_DEP_HOUR" style="text-align: right;">Sched Hour</th>
-                    <th class="sortable" data-col="NEXT_DISTANCE" style="text-align: right;">Distance</th>
-                    <th style="text-align: center;">Prior Delays</th>
                     <th class="sortable" data-col="NEXT_ARR_DELAY" style="text-align: right;">Next Arrival Delay</th>
                     <th style="text-align: center;">Delay Outcome</th>
                   </tr>
@@ -1568,133 +1567,7 @@
             </div>
           </section>
 
-          <hr class="manuscript-divider">
-
-          <!-- SECTION V: CLOUD DATASET HOSTING (GOOGLE DRIVE INTEGRATION) -->
-          <section class="manuscript-section" id="dataset-drive">
-            <div class="manuscript-sec-header">
-              <span class="manuscript-sec-tag">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                Section V
-              </span>
-            </div>
-
-            <h2 class="manuscript-sec-title">Section V: Cloud Dataset Hosting (Google Drive Integration)</h2>
-
-            <p class="manuscript-p">
-              The processed, leak-free Parquet datasets for training, validation, and independent test partitions are hosted on Google Drive for streaming and reproducible local verification. Access each partition directly using its verified Google Drive file ID:
-            </p>
-
-            <!-- 3 Google Drive Cards Grid -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin: 20px 0 28px 0;">
-              
-              <!-- Train Card -->
-              <div class="stat-card" style="padding: 18px 20px; border-color: rgba(56, 189, 248, 0.25); background: rgba(56, 189, 248, 0.03);">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                  <div>
-                    <div style="font-size: 15px; font-weight: 700; color: #fff;">modeling_train.parquet</div>
-                    <div style="font-size: 12px; color: var(--accent-cyan);">Training Partition (Jan 1 &ndash; Sep 30, 2025)</div>
-                  </div>
-                  <span class="badge-pill" style="color: var(--accent-cyan);">137 MB</span>
-                </div>
-                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
-                  <strong>5,065,376</strong> rotation records &bull; Used for baseline models, Random Forest fitting, and Group A/B/C scaling.
-                </div>
-                <div style="font-family: var(--font-mono); font-size: 11px; color: #94a3b8; background: rgba(0,0,0,0.4); padding: 6px 8px; border-radius: 4px; margin-bottom: 14px; word-break: break-all;">
-                  File ID: 1DlPLZFxDJeY0isP79fFx4hxZ2eiWLva4
-                </div>
-                <div style="display: flex; gap: 8px;">
-                  <a href="https://drive.google.com/file/d/1DlPLZFxDJeY0isP79fFx4hxZ2eiWLva4/view?usp=sharing" target="_blank" class="btn-primary" style="flex: 1; text-align: center; text-decoration: none; font-size: 12px; padding: 7px 12px;">
-                    Open in Drive &rarr;
-                  </a>
-                </div>
-              </div>
-
-              <!-- Validation Card -->
-              <div class="stat-card" style="padding: 18px 20px; border-color: rgba(168, 85, 247, 0.25); background: rgba(168, 85, 247, 0.03);">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                  <div>
-                    <div style="font-size: 15px; font-weight: 700; color: #fff;">modeling_validation.parquet</div>
-                    <div style="font-size: 12px; color: var(--accent-purple);">Validation Partition (Oct 1 &ndash; Nov 30, 2025)</div>
-                  </div>
-                  <span class="badge-pill" style="color: var(--accent-purple);">28 MB</span>
-                </div>
-                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
-                  <strong>1,140,909</strong> rotation records &bull; Used for hyperparameter tuning and threshold selection (T = 0.35).
-                </div>
-                <div style="font-family: var(--font-mono); font-size: 11px; color: #94a3b8; background: rgba(0,0,0,0.4); padding: 6px 8px; border-radius: 4px; margin-bottom: 14px; word-break: break-all;">
-                  File ID: 1myTISeNO9h3YnzJg2yqPn907LoEX3nvg
-                </div>
-                <div style="display: flex; gap: 8px;">
-                  <a href="https://drive.google.com/file/d/1myTISeNO9h3YnzJg2yqPn907LoEX3nvg/view?usp=sharing" target="_blank" class="btn-primary" style="flex: 1; text-align: center; text-decoration: none; font-size: 12px; padding: 7px 12px; background: #9333ea;">
-                    Open in Drive &rarr;
-                  </a>
-                </div>
-              </div>
-
-              <!-- Test Card -->
-              <div class="stat-card" style="padding: 18px 20px; border-color: rgba(52, 211, 153, 0.25); background: rgba(52, 211, 153, 0.03);">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
-                  <div>
-                    <div style="font-size: 15px; font-weight: 700; color: #fff;">modeling_test.parquet</div>
-                    <div style="font-size: 12px; color: var(--accent-emerald);">Independent Test (Dec 1 &ndash; Dec 31, 2025)</div>
-                  </div>
-                  <span class="badge-pill" style="color: var(--accent-emerald);">12 MB</span>
-                </div>
-                <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 12px;">
-                  <strong>562,202</strong> rotation records &bull; Held-out benchmark for final generalization and error decomposition.
-                </div>
-                <div style="font-family: var(--font-mono); font-size: 11px; color: #94a3b8; background: rgba(0,0,0,0.4); padding: 6px 8px; border-radius: 4px; margin-bottom: 14px; word-break: break-all;">
-                  File ID: 1hxUP4auEMeFNIdvSoDv8doRYLHZbq1JK
-                </div>
-                <div style="display: flex; gap: 8px;">
-                  <a href="https://drive.google.com/file/d/1hxUP4auEMeFNIdvSoDv8doRYLHZbq1JK/view?usp=sharing" target="_blank" class="btn-primary" style="flex: 1; text-align: center; text-decoration: none; font-size: 12px; padding: 7px 12px; background: #059669;">
-                    Open in Drive &rarr;
-                  </a>
-                </div>
-              </div>
-
-            </div>
-
-            <div class="manuscript-subsec-title">Programmatic Streaming via DuckDB &amp; gdown</div>
-            <p class="manuscript-p">
-              Download or stream the Parquet archives directly into Python, Google Colab, or Jupyter notebooks without manual browser downloads:
-            </p>
-
-            <div style="position: relative; margin-top: 12px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                <span style="font-family: var(--font-mono); font-size: 12px; color: #94a3b8;">drive_stream_sample.py</span>
-                <button class="btn-secondary" style="padding: 3px 10px; font-size: 11px;" onclick="copySnippet('drive-code-snippet')">Copy Code</button>
-              </div>
-              <pre id="drive-code-snippet" style="background: rgba(0,0,0,0.6); padding: 16px; border-radius: var(--radius-sm); font-family: var(--font-mono); font-size: 12px; color: #38bdf8; overflow-x: auto; border: 1px solid var(--border-subtle); line-height: 1.6;">
-import gdown, duckdb
-
-# Verified Google Drive File IDs
-FILES = {
-    "train": "1DlPLZFxDJeY0isP79fFx4hxZ2eiWLva4",
-    "val":   "1myTISeNO9h3YnzJg2yqPn907LoEX3nvg",
-    "test":  "1hxUP4auEMeFNIdvSoDv8doRYLHZbq1JK"
-}
-
-# Download held-out December test partition (12 MB)
-gdown.download(f"https://drive.google.com/uc?id={FILES['test']}", "modeling_test.parquet", quiet=False)
-
-# Query immediately using DuckDB columnar engine
-con = duckdb.connect()
-df = con.execute("""
-    SELECT NEXT_CARRIER, NEXT_ORIGIN, NEXT_DEST, 
-           PREV_ARR_DELAY, ESTIMATED_REMAINING_TURNAROUND_MINUTES, NEXT_ARR_DELAY
-    FROM 'modeling_test.parquet'
-    WHERE IS_TURNAROUND_DEFICIT = 1
-    LIMIT 10
-""").df()
-
-print(df)
-              </pre>
-            </div>
-          </section>
-
-        </article>
+          </article>
 
       </section>
 

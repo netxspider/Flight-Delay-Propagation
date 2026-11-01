@@ -223,14 +223,16 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             DUCKDB_CON = duckdb.connect()
 
         partition = query.get("partition", ["test"])[0].lower()
-        parquet_file = "data/processed/modeling_test.parquet"
-        if partition == "val" or partition == "validation":
-            parquet_file = "data/processed/modeling_validation.parquet"
-        elif partition == "train":
-            parquet_file = "data/processed/modeling_train.parquet"
-
+        file_map = {
+            "test": "modeling_test.parquet",
+            "val": "modeling_validation.parquet",
+            "validation": "modeling_validation.parquet",
+            "train": "modeling_train.parquet"
+        }
+        target_name = file_map.get(partition, "modeling_test.parquet")
+        parquet_file = os.path.join(BASE_DIR, "data", "processed", target_name)
         if not os.path.exists(parquet_file):
-            parquet_file = "data/processed/modeling_test.parquet"
+            parquet_file = os.path.join(BASE_DIR, "data", "processed", "modeling_test.parquet")
 
         # Filters
         carrier = query.get("carrier", [""])[0].upper()
@@ -308,6 +310,7 @@ class DashboardHandler(SimpleHTTPRequestHandler):
             """
             exec_params = params + [page_size, offset]
             df = DUCKDB_CON.execute(select_sql, exec_params).df()
+            df = df.fillna(0)
             records = df.to_dict(orient="records")
 
             total_pages = max(1, (total_records + page_size - 1) // page_size)

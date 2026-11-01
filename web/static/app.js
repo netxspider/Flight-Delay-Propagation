@@ -88,6 +88,10 @@ function switchView(viewName) {
     page.classList.toggle("active", page.id === `${viewName}-view`);
   });
 
+  if (viewName === "dataset") {
+    loadDatasetSample();
+  }
+
   // Update top bar title
   const titles = {
     overview: "01 \u2014 Overview: Research Question & Abstract",
@@ -195,41 +199,42 @@ function renderDatasetSummary(data) {
 async function loadDatasetSample() {
   const tbody = document.getElementById("dataset-sample-tbody");
   if (tbody) {
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 24px; color: var(--text-muted);">
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 28px; color: var(--text-muted);">
       <div class="radar-beacon" style="display: inline-block; margin-right: 8px;"></div> Querying Parquet partition via DuckDB engine...
     </td></tr>`;
   }
 
   const p = state.dataset;
   const params = new URLSearchParams({
-    partition: p.partition,
-    page: p.page,
-    page_size: p.pageSize,
-    sort_by: p.sortBy,
-    order: p.order,
-    carrier: p.carrier,
-    origin: p.origin,
-    dest: p.dest,
-    status: p.status,
-    deficit: p.deficit,
-    search: p.search
+    partition: p.partition || "test",
+    page: p.page || 1,
+    page_size: p.pageSize || 15,
+    sort_by: p.sortBy || "NEXT_ARR_DELAY",
+    order: p.order || "desc",
+    carrier: p.carrier || "",
+    status: p.status || "all",
+    deficit: p.deficit || "all",
+    search: p.search || ""
   });
 
   try {
     const res = await fetch(`${API_BASE}/api/dataset/sample?${params.toString()}`);
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    }
     const data = await res.json();
     if (data.error) {
-      if (tbody) tbody.innerHTML = `<tr><td colspan="10" style="color: var(--accent-rose); padding: 16px;">Query error: ${data.error}</td></tr>`;
+      if (tbody) tbody.innerHTML = `<tr><td colspan="10" style="color: var(--accent-rose); text-align: center; padding: 20px;">Query error: ${data.error}</td></tr>`;
       return;
     }
 
-    state.dataset.totalRecords = data.total;
-    state.dataset.totalPages = data.total_pages;
+    state.dataset.totalRecords = data.total || 0;
+    state.dataset.totalPages = data.total_pages || 1;
 
     renderSampleTable(data);
   } catch (err) {
     console.error("DuckDB query failed:", err);
-    if (tbody) tbody.innerHTML = `<tr><td colspan="10" style="color: var(--accent-rose); padding: 16px;">Error querying dataset. Ensure server.py is running.</td></tr>`;
+    if (tbody) tbody.innerHTML = `<tr><td colspan="10" style="color: var(--accent-rose); text-align: center; padding: 20px;">Error querying dataset. Ensure server.py is running.</td></tr>`;
   }
 }
 
@@ -237,79 +242,101 @@ function renderSampleTable(data) {
   const tbody = document.getElementById("dataset-sample-tbody");
   if (!tbody) return;
 
-  if (!data.data || data.data.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 24px; color: var(--text-muted);">No matching flights found for the current filter criteria.</td></tr>`;
+  const records = data.data || [];
+  if (records.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="10" style="text-align: center; padding: 28px; color: var(--text-muted);">No matching flights found for the current filter criteria.</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = data.data.map(row => {
+  tbody.innerHTML = records.map(row => {
     const isDelayed = row.NEXT_ARR_DEL15 === 1;
     const isDeficit = row.IS_TURNAROUND_DEFICIT === 1;
-    const cushion = row.ESTIMATED_REMAINING_TURNAROUND_MINUTES;
+    const cushion = Number(row.ESTIMATED_REMAINING_TURNAROUND_MINUTES || 0);
+    const prevDelay = Number(row.PREV_ARR_DELAY || 0);
+    const buffer = Number(row.SCHEDULED_TURNAROUND_BUFFER || 0);
+    const nextDelay = Number(row.NEXT_ARR_DELAY || 0);
+    const depHour = Number(row.NEXT_CRS_DEP_HOUR || 0);
 
     return `
       <tr>
-        <td style="font-family: monospace; font-weight: 600; color: #fff;">${row.TAIL_NUM || "N/A"}</td>
-        <td><span class="brand-badge" style="padding: 2px 6px; font-size: 10px;">${row.NEXT_CARRIER}</span></td>
-        <td><strong>${row.NEXT_ORIGIN}</strong> &rarr; <strong>${row.NEXT_DEST}</strong></td>
-        <td style="font-family: monospace; text-align: right; color: ${row.PREV_ARR_DELAY >= 15 ? 'var(--accent-rose)' : 'var(--text-secondary)'};">
-          ${row.PREV_ARR_DELAY > 0 ? '+' : ''}${row.PREV_ARR_DELAY.toFixed(0)}m
+        <td style="font-family: var(--font-mono); font-weight: 600; color: #fff;">${row.TAIL_NUM || "N/A"}</td>
+        <td><span class="badge-pill" style="color: var(--accent-cyan); font-size: 11px; padding: 2px 7px;">${row.NEXT_CARRIER || "N/A"}</span></td>
+        <td><strong style="color: #fff;">${row.NEXT_ORIGIN || "---"}</strong> &rarr; <strong style="color: #fff;">${row.NEXT_DEST || "---"}</strong></td>
+        <td style="font-family: var(--font-mono); text-align: right; color: ${prevDelay >= 15 ? 'var(--accent-rose)' : 'var(--text-secondary)'};">
+          ${prevDelay > 0 ? '+' : ''}${prevDelay.toFixed(0)}m
         </td>
-        <td style="font-family: monospace; text-align: right;">${row.SCHEDULED_TURNAROUND_BUFFER.toFixed(0)}m</td>
-        <td style="font-family: monospace; text-align: right; font-weight: 600; color: ${cushion < 0 ? 'var(--accent-crimson)' : 'var(--accent-emerald)'};">
+        <td style="font-family: var(--font-mono); text-align: right;">${buffer.toFixed(0)}m</td>
+        <td style="font-family: var(--font-mono); text-align: right; font-weight: 600; color: ${cushion < 0 ? 'var(--accent-rose)' : 'var(--accent-emerald)'};">
           ${cushion > 0 ? '+' : ''}${cushion.toFixed(0)}m
         </td>
-        <td>
+        <td style="text-align: center;">
           ${isDeficit 
-            ? `<span class="status-pill deficit">DEFICIT</span>` 
-            : `<span class="status-pill ontime">BUFFER OK</span>`}
+            ? `<span class="badge-pill" style="color: var(--accent-rose); border-color: rgba(244,63,94,0.3); background: rgba(244,63,94,0.08); font-size: 10.5px;">DEFICIT</span>` 
+            : `<span class="badge-pill" style="color: var(--accent-emerald); border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.08); font-size: 10.5px;">BUFFER OK</span>`}
         </td>
-        <td style="font-family: monospace; text-align: right;">${row.NEXT_CRS_DEP_HOUR}:00</td>
-        <td style="font-family: monospace; text-align: right; font-weight: 700; color: ${isDelayed ? 'var(--accent-rose)' : 'var(--accent-emerald)'};">
-          ${row.NEXT_ARR_DELAY > 0 ? '+' : ''}${row.NEXT_ARR_DELAY.toFixed(0)}m
+        <td style="font-family: var(--font-mono); text-align: right;">${depHour}:00</td>
+        <td style="font-family: var(--font-mono); text-align: right; font-weight: 700; color: ${nextDelay >= 15 ? 'var(--accent-rose)' : 'var(--accent-emerald)'};">
+          ${nextDelay > 0 ? '+' : ''}${nextDelay.toFixed(0)}m
         </td>
-        <td>
+        <td style="text-align: center;">
           ${isDelayed 
-            ? `<span class="status-pill delayed">DELAYED</span>` 
-            : `<span class="status-pill ontime">ON-TIME</span>`}
+            ? `<span class="badge-pill" style="color: var(--accent-rose); border-color: rgba(244,63,94,0.3); background: rgba(244,63,94,0.08); font-size: 10.5px;">DELAYED</span>` 
+            : `<span class="badge-pill" style="color: var(--accent-emerald); border-color: rgba(52,211,153,0.3); background: rgba(52,211,153,0.08); font-size: 10.5px;">ON-TIME</span>`}
         </td>
       </tr>
     `;
   }).join("");
 
-  // Update pagination indicators
-  document.getElementById("pagination-info").textContent = 
-    `Page ${data.page.toLocaleString()} of ${data.total_pages.toLocaleString()} (${data.total.toLocaleString()} matching flights)`;
-  
-  document.getElementById("btn-prev-page").disabled = (data.page <= 1);
-  document.getElementById("btn-next-page").disabled = (data.page >= data.total_pages);
+  // Update pagination indicators safely
+  const page = data.page || 1;
+  const totalPages = data.total_pages || 1;
+  const totalRecords = data.total || 0;
+
+  const elCurrent = document.getElementById("page-current");
+  if (elCurrent) elCurrent.textContent = page.toLocaleString();
+
+  const elTotal = document.getElementById("page-total");
+  if (elTotal) elTotal.textContent = totalPages.toLocaleString();
+
+  const elCount = document.getElementById("record-count");
+  if (elCount) elCount.textContent = totalRecords.toLocaleString();
+
+  const elFilterCount = document.getElementById("dataset-filter-count");
+  if (elFilterCount) elFilterCount.textContent = `${totalRecords.toLocaleString()} Matching Flights`;
+
+  const btnPrev = document.getElementById("btn-prev");
+  if (btnPrev) btnPrev.disabled = (page <= 1);
+
+  const btnNext = document.getElementById("btn-next");
+  if (btnNext) btnNext.disabled = (page >= totalPages);
+
+  const btnFirst = document.getElementById("btn-first");
+  if (btnFirst) btnFirst.disabled = (page <= 1);
+
+  const btnLast = document.getElementById("btn-last");
+  if (btnLast) btnLast.disabled = (page >= totalPages);
 }
 
 // Dataset Filters
 function initDatasetFilters() {
   const partitionSelect = document.getElementById("filter-partition");
   const carrierSelect = document.getElementById("filter-carrier");
-  const originSelect = document.getElementById("filter-origin");
-  const destSelect = document.getElementById("filter-dest");
   const statusSelect = document.getElementById("filter-status");
   const deficitSelect = document.getElementById("filter-deficit");
   const searchInput = document.getElementById("filter-search");
-  const pageSizeSelect = document.getElementById("filter-page-size");
+  const resetBtn = document.getElementById("filter-reset-btn");
 
   const triggerUpdate = () => {
     state.dataset.page = 1;
-    state.dataset.partition = partitionSelect.value;
-    state.dataset.carrier = carrierSelect.value;
-    state.dataset.origin = originSelect.value;
-    state.dataset.dest = destSelect.value;
-    state.dataset.status = statusSelect.value;
-    state.dataset.deficit = deficitSelect.value;
-    state.dataset.search = searchInput.value;
-    state.dataset.pageSize = parseInt(pageSizeSelect.value, 10);
+    if (partitionSelect) state.dataset.partition = partitionSelect.value;
+    if (carrierSelect) state.dataset.carrier = carrierSelect.value;
+    if (statusSelect) state.dataset.status = statusSelect.value;
+    if (deficitSelect) state.dataset.deficit = deficitSelect.value;
+    if (searchInput) state.dataset.search = searchInput.value.trim();
     loadDatasetSample();
   };
 
-  [partitionSelect, carrierSelect, originSelect, destSelect, statusSelect, deficitSelect, pageSizeSelect].forEach(el => {
+  [partitionSelect, carrierSelect, statusSelect, deficitSelect].forEach(el => {
     if (el) el.addEventListener("change", triggerUpdate);
   });
 
@@ -317,14 +344,26 @@ function initDatasetFilters() {
     let debounceTimer;
     searchInput.addEventListener("input", () => {
       clearTimeout(debounceTimer);
-      debounceTimer = setTimeout(triggerUpdate, 350);
+      debounceTimer = setTimeout(triggerUpdate, 300);
+    });
+  }
+
+  if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+      if (partitionSelect) partitionSelect.value = "test";
+      if (carrierSelect) carrierSelect.value = "";
+      if (statusSelect) statusSelect.value = "all";
+      if (deficitSelect) deficitSelect.value = "all";
+      if (searchInput) searchInput.value = "";
+      triggerUpdate();
     });
   }
 
   // Sortable headers
   document.querySelectorAll("th.sortable").forEach(th => {
     th.addEventListener("click", () => {
-      const sortField = th.getAttribute("data-sort");
+      const sortField = th.getAttribute("data-col") || th.getAttribute("data-sort");
+      if (!sortField) return;
       if (state.dataset.sortBy === sortField) {
         state.dataset.order = (state.dataset.order === "desc") ? "asc" : "desc";
       } else {
@@ -336,8 +375,19 @@ function initDatasetFilters() {
   });
 
   // Pagination buttons
-  const btnPrev = document.getElementById("btn-prev-page");
-  const btnNext = document.getElementById("btn-next-page");
+  const btnFirst = document.getElementById("btn-first");
+  const btnPrev = document.getElementById("btn-prev");
+  const btnNext = document.getElementById("btn-next");
+  const btnLast = document.getElementById("btn-last");
+
+  if (btnFirst) {
+    btnFirst.addEventListener("click", () => {
+      if (state.dataset.page > 1) {
+        state.dataset.page = 1;
+        loadDatasetSample();
+      }
+    });
+  }
   if (btnPrev) {
     btnPrev.addEventListener("click", () => {
       if (state.dataset.page > 1) {
@@ -350,6 +400,14 @@ function initDatasetFilters() {
     btnNext.addEventListener("click", () => {
       if (state.dataset.page < state.dataset.totalPages) {
         state.dataset.page++;
+        loadDatasetSample();
+      }
+    });
+  }
+  if (btnLast) {
+    btnLast.addEventListener("click", () => {
+      if (state.dataset.page < state.dataset.totalPages) {
+        state.dataset.page = state.dataset.totalPages;
         loadDatasetSample();
       }
     });
