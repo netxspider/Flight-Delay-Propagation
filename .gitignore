@@ -39,3 +39,7 @@ INT234CA2Report.pdf
 .vercel
 node_modules/
 .env*.local
+
+# Brag video work directories and large uncompressed audio
+brag-output/work/
+brag-output/*.wav
